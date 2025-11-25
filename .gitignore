@@ -1,4 +1,6 @@
 data_raw/
+data_normalized/
+data_public/
 logs/
 __pycache__/
 *.pyc
