@@ -24,12 +24,12 @@ def wma(series, window):
 def calculate_hma(close_series, span=16):
     """
     Calcula Hull Moving Average (HMA) con WMA real:
-      1) WMA(span/2)
-      2) WMA(span)
-      3) Diff = 2 * WMA(span/2) - WMA(span)
-      4) HMA = WMA(Diff, sqrt(span))
+    1) WMA(span/2)
+    2) WMA(span)
+    3) Diff = 2 * WMA(span/2) - WMA(span)
+    4) HMA = WMA(Diff, sqrt(span))
     Ejemplo para HMA16:
-      WMA8, WMA16, Diff, WMA4(Diff)
+    WMA8, WMA16, Diff, WMA4(Diff)
     """
     half_span = span // 2          # 8 para 16
     sqrt_span = int(np.sqrt(span)) # 4 para 16
@@ -108,14 +108,14 @@ def calculate_hma_trend(hma_series):
                         trend.append('Compra')
                     else:
                         trend.append('Alcista')
-                    down_turn_count = 0
+                        down_turn_count = 0
                 elif slope == 'down':
                     if 0 < down_turn_count < 2:
                         down_turn_count += 1
                         trend.append('Venta')
                     else:
                         trend.append('Bajista')
-                    up_turn_count = 0
+                        up_turn_count = 0
                 else:
                     trend.append(trend[-1])
 
@@ -185,14 +185,14 @@ def calculate_ema_crossover_trend_12_26(ema12_series, ema26_series):
                         trend.append('Compra')
                     else:
                         trend.append('Alcista')
-                    down_turn_count = 0
+                        down_turn_count = 0
                 elif position == 'below':
                     if 0 < down_turn_count < 2:
                         down_turn_count += 1
                         trend.append('Venta')
                     else:
                         trend.append('Bajista')
-                    up_turn_count = 0
+                        up_turn_count = 0
                 else:
                     trend.append(trend[-1])
 
@@ -208,7 +208,7 @@ def calculate_ema_crossover_trend_10_50_100(ema10_series, ema50_series):
     - Venta: primeras ruedas de cruce de arriba hacia abajo
     - Compra: primeras ruedas de cruce de abajo hacia arriba
     - Alcista: EMA10 > EMA50, fase establecida
-    
+
     EMA100 se calcula pero no interviene en la lógica de estado.
     """
     trend = []
@@ -264,14 +264,14 @@ def calculate_ema_crossover_trend_10_50_100(ema10_series, ema50_series):
                         trend.append('Compra')
                     else:
                         trend.append('Alcista')
-                    down_turn_count = 0
+                        down_turn_count = 0
                 elif position == 'below':
                     if 0 < down_turn_count < 2:
                         down_turn_count += 1
                         trend.append('Venta')
                     else:
                         trend.append('Bajista')
-                    up_turn_count = 0
+                        up_turn_count = 0
                 else:
                     trend.append(trend[-1])
 
@@ -299,61 +299,64 @@ def categorize_vma20(vma20_series):
     Medio:    0.9 <= vma20 < 1.3
     Alto:     1.3 <= vma20 < 2.0
     Muy Alto: vma20 >= 2.0
+    
+    Si vma20 es NaN, devuelve cadena vacía.
     """
     conditions = [
+        vma20_series.isna(),  # Primera condición: si es NaN
         vma20_series < 0.7,
         (vma20_series >= 0.7) & (vma20_series < 0.9),
         (vma20_series >= 0.9) & (vma20_series < 1.3),
         (vma20_series >= 1.3) & (vma20_series < 2.0),
         vma20_series >= 2.0
     ]
-    choices = ['Muy Bajo', 'Bajo', 'Medio', 'Alto', 'Muy Alto']
-    return np.select(conditions, choices, default='Medio')
+    choices = ['', 'Muy Bajo', 'Bajo', 'Medio', 'Alto', 'Muy Alto']
+    return np.select(conditions, choices, default='')
 
 
 def identify_candle_pattern(df):
     """
     Identifica patrones de velas:
-    
+
     Patrones de una vela:
     - Doji: cuerpo muy pequeño relativo al rango (body_pct < 0.1)
     - Marubozu_Alc: cuerpo grande alcista sin sombras (body_pct > 0.8, close > open)
     - Marubozu_Baj: cuerpo grande bajista sin sombras (body_pct > 0.8, close < open)
-    
+
     Patrones de dos velas:
     - Engulfing_Alc: cuerpo alcista actual envuelve completamente el cuerpo bajista anterior
     - Engulfing_Baj: cuerpo bajista actual envuelve completamente el cuerpo alcista anterior
-    
+
     Prioridad: Engulfing > patrones de una vela > ''
     """
     body = (df['close'] - df['open']).values
     range_val = (df['high'] - df['low']).values
-    
+
     body_pct = np.where(range_val > 0, np.abs(body) / range_val, 0)
-    
+
     upper_shadow = (df['high'] - df[['open', 'close']].max(axis=1)).values
     lower_shadow = (df[['open', 'close']].min(axis=1) - df['low']).values
-    
+
     open_vals = df['open'].values
     close_vals = df['close'].values
-    
+
     patterns = []
-    
+
     for i in range(len(df)):
         pattern = ''
-        
+
         # Primero verificar patrones de dos velas (Engulfing)
         if i > 0:
             # Datos de hoy
             open_today = open_vals[i]
             close_today = close_vals[i]
             body_today = body[i]
-            
+
             # Datos de ayer
             open_yesterday = open_vals[i - 1]
             close_yesterday = close_vals[i - 1]
             body_yesterday = body[i - 1]
-            
+
             # Engulfing Alcista:
             # - Ayer bajista (close < open)
             # - Hoy alcista (close > open)
@@ -362,7 +365,7 @@ def identify_candle_pattern(df):
                 close_today > open_yesterday and
                 open_today < close_yesterday):
                 pattern = 'Engulfing_Alc'
-            
+
             # Engulfing Bajista:
             # - Ayer alcista (close > open)
             # - Hoy bajista (close < open)
@@ -371,7 +374,7 @@ def identify_candle_pattern(df):
                   open_today > close_yesterday and
                   close_today < open_yesterday):
                 pattern = 'Engulfing_Baj'
-        
+
         # Si no hay Engulfing, verificar patrones de una vela
         if pattern == '':
             r = range_val[i]
@@ -379,7 +382,7 @@ def identify_candle_pattern(df):
             b = body[i]
             us = upper_shadow[i]
             ls = lower_shadow[i]
-            
+
             # Doji
             if bp < 0.1 and r > 0:
                 pattern = 'Doji'
@@ -389,9 +392,9 @@ def identify_candle_pattern(df):
             # Marubozu Bajista
             elif bp > 0.8 and b < 0 and us < 0.1 * r and ls < 0.1 * r:
                 pattern = 'Marubozu_Baj'
-        
+
         patterns.append(pattern)
-    
+
     return patterns
 
 
@@ -469,38 +472,38 @@ def process_ticker(ticker, input_dir, output_dir):
     if not input_file.exists():
         print(f"  ⚠️  Archivo no encontrado: {input_file}")
         return
-    
+
     df = pd.read_csv(input_file)
     required_cols = ['date', 'open', 'high', 'low', 'close', 'volume', 'ticker']
     if not all(col in df.columns for col in required_cols):
         print(f"  ⚠️  Faltan columnas requeridas en {input_file}")
         return
-    
+
     df['date'] = pd.to_datetime(df['date'])
     df = df.sort_values('date').reset_index(drop=True)
-    
+
     # HMA16 + tendencia
     df['hma16'] = calculate_hma(df['close'], span=16)
     df['T_hma16'] = calculate_hma_trend(df['hma16'])
-    
+
     # EMAs con ventana mínima
     for span in [10, 12, 26, 50, 100]:
         ema = df['close'].ewm(span=span, adjust=False).mean()
         ema.iloc[:span-1] = np.nan
         df[f'ema{span}'] = ema.round(2)
-    
+
     # Tendencias por cruces EMAs
     df['T_ema12_26'] = calculate_ema_crossover_trend_12_26(df['ema12'], df['ema26'])
     df['T_ema10_50_100'] = calculate_ema_crossover_trend_10_50_100(df['ema10'], df['ema50'])
-    
+
     # VMA20
     df['vma20'] = calculate_vma20(df)
     df['vma20_cat'] = categorize_vma20(df['vma20'])
-    
+
     # Velas (ahora incluye Engulfing)
     df['candle_pattern'] = identify_candle_pattern(df)
     df['candle_signal'] = calculate_candle_signal(df['candle_pattern'])
-    
+
     # Orden de columnas solicitado
     output_cols = [
         'date', 'open', 'high', 'low', 'close', 'volume', 'ticker',
@@ -512,7 +515,7 @@ def process_ticker(ticker, input_dir, output_dir):
     ]
     df_output = df[output_cols].copy()
     df_output['date'] = df_output['date'].dt.strftime('%Y-%m-%d')
-    
+
     output_file = output_dir / f"{ticker}_indicators.csv"
     df_output.to_csv(output_file, index=False)
     print(f"  ✓ {ticker}: {len(df_output)} filas → {output_file.name}")
@@ -523,24 +526,24 @@ def main():
     input_dir = base_dir / 'data_normalized'
     output_dir = base_dir / 'data_indicators'
     output_dir.mkdir(exist_ok=True)
-    
+
     print("=" * 60)
     print("MÓDULO 3: Cálculo de indicadores técnicos")
     print("=" * 60)
     print(f"Entrada:  {input_dir}")
     print(f"Salida:   {output_dir}\n")
-    
+
     normalized_files = list(input_dir.glob('*_normalized.csv'))
     if not normalized_files:
         print("⚠️  No se encontraron archivos *_normalized.csv")
         return
-    
+
     print(f"Archivos encontrados: {len(normalized_files)}\n")
-    
+
     for file in normalized_files:
         ticker = file.stem.replace('_normalized', '')
         process_ticker(ticker, input_dir, output_dir)
-    
+
     print("\n" + "=" * 60)
     print("✓ Módulo 3 completado")
     print("=" * 60)
