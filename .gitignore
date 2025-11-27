@@ -1,5 +1,7 @@
 data_raw/
 data_normalized/
+data_indicators/
+data_signals/
 data_public/
 logs/
 __pycache__/
