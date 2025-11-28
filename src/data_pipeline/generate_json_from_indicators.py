@@ -1,182 +1,163 @@
 #!/usr/bin/env python3
-"""
-generate_json_from_indicators.py
-Lee CSV *_indicators.csv y genera un JSON por ticker en data_public/json/.
-Comportamiento:
- - entrada: carpeta con CSV (por defecto data_indicators/)
- - salida: data_public/json/{TICKER}.json
- - criterio de serie: elimina filas iniciales hasta la primera fila con EMA50 no nula
- - idempotencia: usa manifest (manifest.json) para evitar regenerar si no hay cambios
-Requisitos: pandas
-"""
-
-import pandas as pd
+import os
+import glob
 import json
 import hashlib
+from datetime import datetime, timezone
 from pathlib import Path
-from datetime import datetime
 
-INPUT_DIR = Path("data_indicators")
-OUTPUT_DIR = Path("data_public/json")
-MANIFEST_PATH = OUTPUT_DIR / "manifest.json"
+import pandas as pd
 
-PALETTE_DEFAULT = [
-    "#FF0000","#00CC66","#FFCC00","#0055FF","#AA00FF","#8B4513",
-    "#00AAAA","#FF66CC","#336600","#663399","#FF8800","#006600"
-]
-HMA_COLORS = {"up": "#00AA00", "down": "#CC0000"}
-EMA_DEFAULTS = {"EMA12": "#FFFF00", "EMA26": "#0000FF", "EMA10": "#FF7700", "EMA50": "#7A00FF", "EMA100": "#8B4513"}
+DATA_INDICATORS_DIR = Path("data_indicators")
+OUTPUT_JSON_DIR = Path("data_public/json")
+FUNDAMENTALS_CSV = Path("data_raw/events_fundamentales_ar.csv")
+MANIFEST_PATH = OUTPUT_JSON_DIR / "manifest.json"
 
-OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-
-def file_hash(path: Path) -> str:
+def file_hash(path):
     h = hashlib.md5()
-    with path.open("rb") as f:
-        while True:
-            chunk = f.read(8192)
-            if not chunk:
-                break
+    with open(path, "rb") as f:
+        for chunk in iter(lambda: f.read(8192), b""):
             h.update(chunk)
     return h.hexdigest()
 
-def load_manifest():
-    if MANIFEST_PATH.exists():
-        return json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
-    return {}
+def load_fundamentals(path):
+    if not path.exists():
+        return {}
+    df = pd.read_csv(path, dtype=str).fillna("")
+    cols_lower = {c.lower(): c for c in df.columns}
+    def get_col(*opts):
+        for o in opts:
+            if o and o.lower() in cols_lower:
+                return cols_lower[o.lower()]
+        return None
+    fecha_col = get_col("Fecha", "Date")
+    tickers_col = get_col("Ticker(s)", "Tickers", "ticker")
+    evento_col = get_col("Evento", "Event")
+    impacto_col = get_col("Impacto", "Impact")
+    fuente_col = get_col("Fuente", "Source")
+    if not (fecha_col and tickers_col and evento_col):
+        return {}
+    mapping = {}
+    for _, r in df.iterrows():
+        fecha = str(r.get(fecha_col, "")).strip()
+        tickers = str(r.get(tickers_col, "")).strip()
+        evento = str(r.get(evento_col, "")).strip()
+        impacto = str(r.get(impacto_col, "")).strip() if impacto_col else ""
+        fuente = str(r.get(fuente_col, "")).strip() if fuente_col else ""
+        if not tickers:
+            continue
+        for t in [x.strip() for x in tickers.split(",") if x.strip()]:
+            entry = {"date": fecha, "event": evento, "impact": impacto, "source": fuente}
+            mapping.setdefault(t, []).append(entry)
+    for t in mapping:
+        try:
+            mapping[t].sort(key=lambda e: e["date"])
+        except:
+            pass
+    return mapping
 
-def save_manifest(manifest):
-    MANIFEST_PATH.write_text(json.dumps(manifest, indent=2, ensure_ascii=False), encoding="utf-8")
-
-def compute_hma_trend(series_values):
-    # recibe pd.Series con valores HMA16 ordenados por fecha
-    prev = None
-    trends = []
-    for v in series_values:
-        if pd.isna(v):
-            trends.append(None)
-        else:
-            if prev is None:
-                trends.append(None)
-            else:
-                trends.append("up" if v > prev else "down")
-            prev = v
-    return trends
-
-def process_csv(path: Path):
+def _as_number_or_none(v):
+    if v is None:
+        return None
     try:
-        df = pd.read_csv(path, parse_dates=["date"])
-    except Exception as e:
-        print(f"ERROR leyendo {path}: {e}")
+        return float(v)
+    except:
+        try:
+            s = str(v).strip()
+            return float(s) if s != "" else None
+        except:
+            return None
+
+def _as_str_or_none(v):
+    if v is None:
         return None
+    s = str(v).strip()
+    return s if s != "" else None
 
-    ticker = path.stem  # assuming file is TICKER_indicators or just TICKER
-    # normalize column names to lower-case keys for JSON
-    # criterio: eliminar filas iniciales hasta que EMA50 sea no nula
-    if "EMA50" not in df.columns and "ema50" not in [c.lower() for c in df.columns]:
-        print(f"WARNING {path.name} no contiene EMA50, se salta")
-        return None
-
-    # aseguramos nombres estándar
-    cols = {c: c for c in df.columns}
-    # use case-insensitive lookup
-    def col(name):
-        for c in df.columns:
-            if c.lower() == name.lower():
-                return c
-        return None
-
-    ema50_col = col("EMA50")
-    hma_col = col("HMA16")
-    # drop leading rows until ema50 not null
-    first_valid_idx = df[ema50_col].first_valid_index()
-    if first_valid_idx is None:
-        print(f"WARNING {path.name} EMA50 nunca válida, se salta")
-        return None
-    df = df.loc[first_valid_idx:].reset_index(drop=True)
-
-    # compute HMA trend
-    if hma_col:
-        trends = compute_hma_trend(df[hma_col].tolist())
-    else:
-        trends = [None] * len(df)
-
+def build_series_from_df(df):
     series = []
-    for i, row in df.iterrows():
-        item = {
-            "date": pd.Timestamp(row[col("date")]).strftime("%Y-%m-%d"),
-            "open": None if pd.isna(row.get(col("open"), None)) else float(row.get(col("open"))),
-            "high": None if pd.isna(row.get(col("high"), None)) else float(row.get(col("high"))),
-            "low": None if pd.isna(row.get(col("low"), None)) else float(row.get(col("low"))),
-            "close": None if pd.isna(row.get(col("close"), None)) else float(row.get(col("close"))),
-            "volume": None if pd.isna(row.get(col("volume"), None)) else float(row.get(col("volume"))),
-            "HMA16": None if hma_col is None or pd.isna(row.get(hma_col)) else float(row.get(hma_col)),
-            "HMA16_trend": trends[i],
-        }
-        # add EMAs if present
-        for e in ["EMA10","EMA12","EMA26","EMA50","EMA100"]:
-            c = col(e)
-            if c:
-                val = row.get(c)
-                item[e] = None if pd.isna(val) else float(val)
-        # add VMA20 and candle signals if present
-        vma = col("VMA20")
-        if vma:
-            v = row.get(vma)
-            item["VMA20"] = None if pd.isna(v) else float(v)
-        cs = col("candle_signal")
-        if cs:
-            item["candle_signal"] = None if pd.isna(row.get(cs)) else str(row.get(cs))
-        cp = col("candle_pattern")
-        if cp:
-            item["candle_pattern"] = None if pd.isna(row.get(cp)) else str(row.get(cp))
-
+    for _, r in df.iterrows():
+        item = {}
+        date_col = next((c for c in r.index if c.lower() in ("date", "fecha")), None)
+        item["date"] = str(r[date_col]) if date_col else ""
+        for colname in r.index:
+            lname = colname.strip()
+            lcase = lname.lower()
+            val = r[colname]
+            if lcase in ("open", "open_price"):
+                item["open"] = _as_number_or_none(val)
+            elif lcase == "high":
+                item["high"] = _as_number_or_none(val)
+            elif lcase == "low":
+                item["low"] = _as_number_or_none(val)
+            elif lcase in ("close", "close_price"):
+                item["close"] = _as_number_or_none(val)
+            elif lcase in ("volume", "vol"):
+                item["volume"] = _as_number_or_none(val)
+            elif lcase == "hma16":
+                item["HMA16"] = _as_number_or_none(val)
+            elif lcase in ("hma16_trend", "hma16 trend"):
+                item["HMA16_trend"] = _as_str_or_none(val)
+            elif lcase.startswith("ema"):
+                item[lname.upper()] = _as_number_or_none(val)
+            elif lcase == "vma20":
+                item["VMA20"] = _as_number_or_none(val)
+            elif lcase == "candle_signal":
+                item["candle_signal"] = _as_str_or_none(val)
+            elif lcase == "candle_pattern":
+                item["candle_pattern"] = _as_str_or_none(val)
         series.append(item)
-
-    json_obj = {
-        "ticker": ticker,
-        "market": None,
-        "timezone": "America/Argentina/Buenos_Aires",
-        "source": str(path),
-        "generated_at": datetime.utcnow().isoformat() + "Z",
-        "defaults": {
-            "palette": PALETTE_DEFAULT,
-            "hma_colors": HMA_COLORS,
-            "ema_defaults": EMA_DEFAULTS
-        },
-        "series": series,
-        "ui_helpers": {
-            "available_views": ["candles", "line"],
-            "ema_groups": {
-                "pair_12_26": ["EMA12", "EMA26"],
-                "triple_10_50_100": ["EMA10", "EMA50", "EMA100"]
-            }
-        }
-    }
-    return json_obj
+    return series
 
 def main():
-    manifest = load_manifest()
-    updated = False
-    for csv_path in sorted(INPUT_DIR.glob("*_indicators.csv")):
-        h = file_hash(csv_path)
-        key = csv_path.name
-        if manifest.get(key, {}).get("hash") == h:
-            # no cambió
-            continue
-        print(f"Procesando {csv_path.name}")
-        j = process_csv(csv_path)
-        if j is None:
-            continue
-        out_file = OUTPUT_DIR / (csv_path.stem.split("_indicators")[0] + ".json")
-        out_file.write_text(json.dumps(j, indent=2, ensure_ascii=False), encoding="utf-8")
-        manifest[key] = {"hash": h, "json": str(out_file), "updated_at": datetime.utcnow().isoformat()}
-        updated = True
+    OUTPUT_JSON_DIR.mkdir(parents=True, exist_ok=True)
+    fundamentals = load_fundamentals(FUNDAMENTALS_CSV)
+    fundamentals_hash = file_hash(FUNDAMENTALS_CSV) if FUNDAMENTALS_CSV.exists() else None
+    manifest = {}
+    indicator_files = sorted(glob.glob(str(DATA_INDICATORS_DIR / "*_indicators.csv")) + glob.glob(str(DATA_INDICATORS_DIR / "*.csv")))
 
-    if updated:
-        save_manifest(manifest)
-        print("Generación completada, manifest actualizado")
-    else:
-        print("No hubo cambios, nada que generar")
+    for file_path in indicator_files:
+        try:
+            csv_path = Path(file_path)
+            df = pd.read_csv(csv_path, dtype=str).fillna("")
+            name = csv_path.name
+            if name.endswith("_indicators.csv"):
+                ticker = name[: -len("_indicators.csv")]
+            elif name.endswith(".csv"):
+                ticker = name[:-4]
+            else:
+                ticker = name
+            series = build_series_from_df(df)
+            json_obj = {
+                "ticker": ticker,
+                "generated_at": datetime.now(timezone.utc).isoformat(),
+                "series": series,
+                "defaults": {
+                    "hma_color_up": "#16a34a",
+                    "hma_color_down": "#ef4444",
+                    "ema_colors": {"EMA10": "#f59e0b", "EMA50": "#0ea5e9", "EMA100": "#8b5cf6"}
+                }
+            }
+            json_obj["fundamentals"] = fundamentals.get(ticker, [])
+            out_path = OUTPUT_JSON_DIR / f"{ticker}.json"
+            with open(out_path, "w", encoding="utf-8") as fh:
+                json.dump(json_obj, fh, ensure_ascii=False, indent=2)
+            manifest[csv_path.name] = {
+                "hash": file_hash(csv_path),
+                "json": str(out_path.as_posix()),
+                "updated_at": datetime.now(timezone.utc).isoformat()
+            }
+            print(f"[OK] {csv_path.name} -> {out_path.name}")
+        except Exception as e:
+            print(f"[ERROR] procesando {file_path}: {e}")
+
+    if fundamentals_hash:
+        manifest["fundamentals_csv_hash"] = fundamentals_hash
+
+    with open(MANIFEST_PATH, "w", encoding="utf-8") as mfh:
+        json.dump(manifest, mfh, ensure_ascii=False, indent=2)
+
+    print(f"Manifest escrito en {MANIFEST_PATH} con {len(manifest)} entradas.")
 
 if __name__ == "__main__":
     main()
