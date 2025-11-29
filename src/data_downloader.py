@@ -1,17 +1,41 @@
+#!/usr/bin/env python3
+"""
+data_downloader.py
+
+Descarga históricos desde yfinance y guarda:
+- data_raw/csv/<TICKER>.csv
+- data_raw/meta/<TICKER>.meta.json
+
+Uso:
+    python src/data_downloader.py [--hist-days N] [--tickers T1,T2] [--limit N] [--pause S] [--retries R]
+
+Notas:
+- Preserva el orden de PAIRS.
+- Guarda metadata con md5, filas y primer/última fecha.
+- No hace imputación de datos.
+"""
 from pathlib import Path
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
+import argparse
+import time
+import json
+import hashlib
+import logging
+import sys
+import traceback
 
 import yfinance as yf
+import pandas as pd
 
-
-# Carpeta base del proyecto (dos niveles arriba de este archivo)
+# Base del proyecto (dos niveles arriba de este archivo)
 BASE_DIR = Path(__file__).resolve().parents[1]
 
-# Carpeta donde se guardan los datos crudos
-DATA_RAW_DIR = BASE_DIR / "data_raw"
+# Rutas nuevas según estructura propuesta
+DATA_RAW_CSV_DIR = BASE_DIR / "data_raw" / "csv"
+DATA_RAW_META_DIR = BASE_DIR / "data_raw" / "meta"
+LOG_DIR = BASE_DIR / "logs"
 
-
-# Pares Local / ADR tomados del mock.html
+# Pares Local / ADR (orden preservado)
 PAIRS = [
     ("PAMP.BA", "PAM"),
     ("GGAL.BA", "GGAL"),
@@ -27,73 +51,185 @@ PAIRS = [
     ("TGSU2.BA", "TGS"),
 ]
 
-# A partir de los pares armamos la lista completa de tickers a descargar
-TICKERS = sorted({t for pair in PAIRS for t in pair})
+# Lista de tickers preservando el orden local/ADR
+TICKERS = [t for pair in PAIRS for t in pair]
 
-# Días de histórico a descargar (ajustable)
-HIST_DAYS = 365  # 1 año por ahora
+# Columnas mínimas esperadas tras reset_index
+REQUIRED_COLUMNS = {"Open", "High", "Low", "Close", "Volume"}
 
-
-def ensure_data_raw_dir():
-    """
-    Crea la carpeta data_raw si no existe.
-    """
-    DATA_RAW_DIR.mkdir(parents=True, exist_ok=True)
+LOGGER = None
 
 
-def download_history_for_ticker(ticker: str):
-    """
-    Descarga datos históricos para un ticker usando yfinance
-    y los guarda en un CSV dentro de data_raw.
+def ensure_dirs():
+    DATA_RAW_CSV_DIR.mkdir(parents=True, exist_ok=True)
+    DATA_RAW_META_DIR.mkdir(parents=True, exist_ok=True)
+    LOG_DIR.mkdir(parents=True, exist_ok=True)
 
-    Por ahora: baja hasta HIST_DAYS días hacia atrás.
-    """
+
+def setup_logger():
+    global LOGGER
+    if LOGGER:
+        return LOGGER
+    logger = logging.getLogger("data_downloader")
+    logger.setLevel(logging.INFO)
+    fmt = logging.Formatter("%(asctime)s %(levelname)s %(message)s")
+    fh = logging.FileHandler(LOG_DIR / "data_downloader.log", encoding="utf-8")
+    fh.setFormatter(fmt)
+    logger.addHandler(fh)
+    sh = logging.StreamHandler(sys.stdout)
+    sh.setFormatter(fmt)
+    logger.addHandler(sh)
+    LOGGER = logger
+    return logger
+
+
+def file_md5(path: Path, chunk_size: int = 8192) -> str:
+    h = hashlib.md5()
+    with open(path, "rb") as f:
+        for chunk in iter(lambda: f.read(chunk_size), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def save_raw_metadata(ticker: str, csv_path: Path, rows: int, first_date: str, last_date: str):
+    meta = {
+        "ticker": ticker,
+        "csv": str(csv_path.as_posix()),
+        "rows": rows,
+        "first_date": first_date,
+        "last_date": last_date,
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+    }
+    try:
+        meta["md5"] = file_md5(csv_path)
+    except Exception:
+        meta["md5"] = None
+    out_path = DATA_RAW_META_DIR / f"{csv_path.stem}.meta.json"
+    with open(out_path, "w", encoding="utf-8") as fh:
+        json.dump(meta, fh, ensure_ascii=False, indent=2)
+
+
+def _flatten_columns_if_needed(df: pd.DataFrame) -> pd.DataFrame:
+    if isinstance(df.columns, pd.MultiIndex):
+        df.columns = df.columns.get_level_values(0)
+    df.columns = [c if isinstance(c, str) else str(c) for c in df.columns]
+    return df
+
+
+def download_history_for_ticker(ticker: str, hist_days: int, max_retries: int = 3, pause: float = 0.5) -> bool:
+    logger = setup_logger()
     end_date = datetime.today().date()
-    start_date = end_date - timedelta(days=HIST_DAYS)
+    start_date = end_date - timedelta(days=hist_days)
+    logger.info("[%s] Descargando desde %s hasta %s", ticker, start_date, end_date)
 
-    print(f"[{ticker}] Descargando desde {start_date} hasta {end_date}...")
+    attempt = 0
+    last_exc = None
+    while attempt < max_retries:
+        attempt += 1
+        try:
+            data = yf.download(
+                ticker,
+                start=start_date.isoformat(),
+                end=end_date.isoformat(),
+                progress=False,
+                auto_adjust=True,
+                threads=False,
+            )
+            if data is None or data.empty:
+                logger.warning("[%s] yfinance devolvió DataFrame vacío (intento %d/%d)", ticker, attempt, max_retries)
+                last_exc = None
+                time.sleep(pause)
+                continue
 
-    data = yf.download(
-        ticker,
-        start=start_date.isoformat(),
-        end=end_date.isoformat(),
-        progress=True,
-        auto_adjust=True,
-    )
+            # Aplanar MultiIndex y normalizar nombres de columnas
+            data = _flatten_columns_if_needed(data)
 
-    if data.empty:
-        print(f"[{ticker}] Advertencia: yfinance devolvió un DataFrame vacío.")
-        return
+            # Asegurar índice como columna de fecha
+            data = data.reset_index()
 
-    # Aseguramos índice como columna para guardar la fecha
-    data.reset_index(inplace=True)
+            cols = {str(c).strip() for c in data.columns}
+            if not REQUIRED_COLUMNS.issubset(cols):
+                logger.warning(
+                    "[%s] Faltan columnas requeridas: esperado %s pero obtuvo %s. Archivo no guardado.",
+                    ticker, sorted(REQUIRED_COLUMNS), sorted(cols)
+                )
+                return False
 
-    # Reemplazamos el punto por guion bajo para el nombre del archivo
-    output_file = DATA_RAW_DIR / f"{ticker.replace('.', '_')}.csv"
-    data.to_csv(output_file, index=False)
-    print(f"[{ticker}] Datos guardados en: {output_file} (filas: {len(data)})")
+            # Guardar en archivo temporal y renombrar atómico
+            safe_name = ticker.replace(".", "_")
+            output_file = DATA_RAW_CSV_DIR / f"{safe_name}.csv"
+            tmp_file = DATA_RAW_CSV_DIR / f"{safe_name}.csv.tmp"
+            data.to_csv(tmp_file, index=False)
+            tmp_file.replace(output_file)
+
+            # Metadata: primero y último date si existen
+            first_date = ""
+            last_date = ""
+            try:
+                if "Date" in data.columns:
+                    first_date = str(pd.to_datetime(data["Date"]).min().date())
+                    last_date = str(pd.to_datetime(data["Date"]).max().date())
+                elif data.index.name and "date" in data.index.name.lower():
+                    idx = pd.to_datetime(data.index)
+                    first_date = str(idx.min().date())
+                    last_date = str(idx.max().date())
+            except Exception:
+                first_date = ""
+                last_date = ""
+
+            # Guardar metadata simple
+            save_raw_metadata(ticker, output_file, len(data), first_date, last_date)
+
+            logger.info("[%s] Datos guardados en: %s (filas: %d)", ticker, output_file, len(data))
+            return True
+
+        except Exception as e:
+            last_exc = e
+            logger.warning("[%s] Error en descarga intento %d/%d: %s", ticker, attempt, max_retries, str(e))
+            logger.debug(traceback.format_exc())
+            backoff = min(5, 0.5 * (2 ** (attempt - 1)))
+            time.sleep(backoff + pause)
+
+    logger.error("[%s] Falló la descarga después de %d intentos. Última excepción: %s", ticker, max_retries, last_exc)
+    return False
+
+
+def parse_args():
+    p = argparse.ArgumentParser(prog="data_downloader", description="Descarga históricos desde yfinance")
+    p.add_argument("--hist-days", type=int, default=365, help="Días de histórico a descargar")
+    p.add_argument("--tickers", type=str, help="Lista de tickers separados por comas. Si se omite usa PAIRS")
+    p.add_argument("--limit", type=int, default=0, help="Limitar número de tickers procesados (0 = todos)")
+    p.add_argument("--pause", type=float, default=0.35, help="Segundos a esperar entre descargas")
+    p.add_argument("--retries", type=int, default=3, help="Reintentos por ticker")
+    return p.parse_args()
 
 
 def main():
-    """
-    Flujo:
-      1. Asegura carpeta data_raw.
-      2. Usa la lista de tickers derivada de PAIRS (locales + ADR).
-      3. Descarga histórico para cada ticker y guarda CSVs.
-    """
-    ensure_data_raw_dir()
-    print(f"Carpeta de datos verificada en: {DATA_RAW_DIR}")
+    ensure_dirs()
+    logger = setup_logger()
+    args = parse_args()
 
-    if not TICKERS:
-        print("No hay tickers definidos en TICKERS. Revisar configuración.")
-        return
+    hist_days = args.hist_days
+    if args.tickers:
+        tickers = [t.strip() for t in args.tickers.split(",") if t.strip()]
+    else:
+        tickers = TICKERS.copy()
 
-    print(f"Tickers a procesar ({len(TICKERS)}): {', '.join(TICKERS)}")
+    if args.limit and args.limit > 0:
+        tickers = tickers[: args.limit]
 
-    for ticker in TICKERS:
-        download_history_for_ticker(ticker)
+    logger.info("Carpeta de raw CSV: %s", DATA_RAW_CSV_DIR)
+    logger.info("Carpeta de raw meta: %s", DATA_RAW_META_DIR)
+    logger.info("Tickers a procesar (%d): %s", len(tickers), ", ".join(tickers))
+    logger.info("Hist_days: %d", hist_days)
 
-    print("Descarga finalizada.")
+    processed = 0
+    for ticker in tickers:
+        download_history_for_ticker(ticker, hist_days, max_retries=args.retries, pause=args.pause)
+        processed += 1
+        time.sleep(args.pause)
+
+    logger.info("Descarga finalizada. Procesados: %d", processed)
 
 
 if __name__ == "__main__":
