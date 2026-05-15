@@ -1,9 +1,16 @@
+# Carpetas de datos
+BUs
+data_fundamentals/meta/
 data_raw/
 data_normalized/
 data_indicators/
 data_signals/
 data_public/
 logs/
+
+# Archivos de configuración y temporales
+.env
 __pycache__/
-*.pyc
 *.xlsx
+*.docx
+PanelMerval/

@@ -1,0 +1,74 @@
+[
+  {
+    "local_ticker": "BBAR_BA",
+    "mep_ticker": "BBAR_MEP",
+    "correlation": 0.6828224806697967,
+    "avg_lag": 0.0955829109341057
+  },
+  {
+    "local_ticker": "BMA_BA",
+    "mep_ticker": "BMA_MEP",
+    "correlation": 0.6702492670468317,
+    "avg_lag": 0.0782041998551774
+  },
+  {
+    "local_ticker": "CEPU_BA",
+    "mep_ticker": "CEPU_MEP",
+    "correlation": 0.6053408935383103,
+    "avg_lag": 0.1049963794351918
+  },
+  {
+    "local_ticker": "EDN_BA",
+    "mep_ticker": "EDN_MEP",
+    "correlation": 0.6126546263449606,
+    "avg_lag": 0.0680666183924692
+  },
+  {
+    "local_ticker": "GGAL_BA",
+    "mep_ticker": "GGAL_MEP",
+    "correlation": 0.6318524471384089,
+    "avg_lag": 0.1202027516292541
+  },
+  {
+    "local_ticker": "LOMA_BA",
+    "mep_ticker": "LOMA_MEP",
+    "correlation": 0.6201533522569963,
+    "avg_lag": 0.0897900072411296
+  },
+  {
+    "local_ticker": "PAMP_BA",
+    "mep_ticker": "PAMP_MEP",
+    "correlation": 0.6240089582442927,
+    "avg_lag": 0.1223750905141202
+  },
+  {
+    "local_ticker": "SUPV_BA",
+    "mep_ticker": "SUPV_MEP",
+    "correlation": 0.6474590190023736,
+    "avg_lag": 0.0405503258508327
+  },
+  {
+    "local_ticker": "TECO2_BA",
+    "mep_ticker": "TECO2_MEP",
+    "correlation": 0.6415730375570682,
+    "avg_lag": 0.1042722664735698
+  },
+  {
+    "local_ticker": "TGSU2_BA",
+    "mep_ticker": "TGSU2_MEP",
+    "correlation": 0.6824231954406138,
+    "avg_lag": 0.0868935553946415
+  },
+  {
+    "local_ticker": "TXAR_BA",
+    "mep_ticker": "TXAR_MEP",
+    "correlation": 0.5843462334047024,
+    "avg_lag": 0.057929036929761
+  },
+  {
+    "local_ticker": "YPFD_BA",
+    "mep_ticker": "YPFD_MEP",
+    "correlation": 0.6886206075989529,
+    "avg_lag": 0.1028240405503258
+  }
+]

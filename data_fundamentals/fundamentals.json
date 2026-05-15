@@ -1,0 +1,220 @@
+[
+  {
+    "fecha": "2026-03-20",
+    "tickers_afectados": [
+      "PAMP_BA",
+      "CEPU_BA",
+      "EDN_BA"
+    ],
+    "sector": "",
+    "evento": "Nuevos contratos de suministro eléctrico mejoran proyecciones de ingresos.",
+    "impacto": "Verde"
+  },
+  {
+    "fecha": "2026-02-10",
+    "tickers_afectados": [
+      "YPFD_BA"
+    ],
+    "sector": "",
+    "evento": "Expectativa por revisión de precios de combustibles; resultado aún incierto.",
+    "impacto": "Amarillo"
+  },
+  {
+    "fecha": "2026-01-15",
+    "tickers_afectados": [
+      "TXAR_BA",
+      "LOMA_BA"
+    ],
+    "sector": "",
+    "evento": "Aumento en demanda de construcción impulsa ventas de materiales.",
+    "impacto": "Verde"
+  },
+  {
+    "fecha": "2025-12-28",
+    "tickers_afectados": [
+      "BMA_BA",
+      "GGAL_BA",
+      "BBAR_BA"
+    ],
+    "sector": "",
+    "evento": "Regulación bancaria más estricta afecta márgenes operativos.",
+    "impacto": "Rojo"
+  },
+  {
+    "fecha": "2025-12-15",
+    "tickers_afectados": [
+      "PAMP_BA",
+      "CEPU_BA",
+      "EDN_BA",
+      "TGSU2_BA"
+    ],
+    "sector": "",
+    "evento": "Próximos resultados anuales del sector energía; se anticipan ajustes contables.",
+    "impacto": "Amarillo"
+  },
+  {
+    "fecha": "2025-11-22",
+    "tickers_afectados": [
+      "SUPV_BA"
+    ],
+    "sector": "",
+    "evento": "Expansión de red de sucursales aumenta participación de mercado.",
+    "impacto": "Verde"
+  },
+  {
+    "fecha": "2025-11-05",
+    "tickers_afectados": [
+      "YPFD_BA",
+      "PAM"
+    ],
+    "sector": "",
+    "evento": "Mercado expectante por licitación energética; impacto aún incierto hasta adjudicación.",
+    "impacto": "Amarillo"
+  },
+  {
+    "fecha": "2025-10-30",
+    "tickers_afectados": [
+      "TECO2_BA",
+      "TGSU2_BA"
+    ],
+    "sector": "",
+    "evento": "Demoras en aprobación de aumentos tarifarios afectan flujo de caja.",
+    "impacto": "Rojo"
+  },
+  {
+    "fecha": "2025-10-12",
+    "tickers_afectados": [
+      "GGAL_BA",
+      "BMA_BA"
+    ],
+    "sector": "",
+    "evento": "Reducción de morosidad mejora calidad de cartera crediticia.",
+    "impacto": "Verde"
+  },
+  {
+    "fecha": "2025-09-28",
+    "tickers_afectados": [
+      "EDN_BA"
+    ],
+    "sector": "",
+    "evento": "Negociaciones salariales en curso; resultado pendiente.",
+    "impacto": "Amarillo"
+  },
+  {
+    "fecha": "2025-09-20",
+    "tickers_afectados": [
+      "TXAR_BA",
+      "LOMA_BA"
+    ],
+    "sector": "",
+    "evento": "Crecen ventas industriales de acero y cemento, mejora interanual de márgenes.",
+    "impacto": "Verde"
+  },
+  {
+    "fecha": "2025-09-10",
+    "tickers_afectados": [
+      "BMA_BA",
+      "GGAL_BA"
+    ],
+    "sector": "",
+    "evento": "Nueva alza de tasas ajusta márgenes de los principales bancos.",
+    "impacto": "Rojo"
+  },
+  {
+    "fecha": "2025-08-25",
+    "tickers_afectados": [
+      "CEPU_BA",
+      "PAMP_BA"
+    ],
+    "sector": "",
+    "evento": "Inversión en infraestructura energética fortalece capacidad instalada.",
+    "impacto": "Verde"
+  },
+  {
+    "fecha": "2025-08-10",
+    "tickers_afectados": [
+      "BBAR_BA",
+      "SUPV_BA"
+    ],
+    "sector": "",
+    "evento": "Entidades financieras reportan menores gastos operativos y mejor resultado neto.",
+    "impacto": "Verde"
+  },
+  {
+    "fecha": "2025-07-28",
+    "tickers_afectados": [
+      "TECO2_BA",
+      "TGSU2_BA"
+    ],
+    "sector": "",
+    "evento": "Congelamiento tarifario impacta parcialmente en ingresos semestrales.",
+    "impacto": "Rojo"
+  },
+  {
+    "fecha": "2025-07-15",
+    "tickers_afectados": [
+      "PAMP_BA",
+      "CEPU_BA",
+      "EDN_BA",
+      "TGSU2_BA"
+    ],
+    "sector": "",
+    "evento": "Ajuste tarifario y mayor demanda eléctrica impulsan los ingresos.",
+    "impacto": "Verde"
+  },
+  {
+    "fecha": "2025-06-18",
+    "tickers_afectados": [
+      "YPFD_BA",
+      "PAM"
+    ],
+    "sector": "",
+    "evento": "Volatilidad en precios internacionales del petróleo genera incertidumbre.",
+    "impacto": "Amarillo"
+  },
+  {
+    "fecha": "2025-06-02",
+    "tickers_afectados": [
+      "YPFD_BA"
+    ],
+    "sector": "",
+    "evento": "Costos crecientes en refinación reducen márgenes de utilidad del trimestre.",
+    "impacto": "Rojo"
+  },
+  {
+    "fecha": "2025-05-20",
+    "tickers_afectados": [
+      "TXAR_BA"
+    ],
+    "sector": "",
+    "evento": "Acuerdos comerciales regionales favorecen exportaciones industriales.",
+    "impacto": "Verde"
+  },
+  {
+    "fecha": "2025-05-05",
+    "tickers_afectados": [
+      "SUPV_BA"
+    ],
+    "sector": "",
+    "evento": "Competencia de comercio electrónico erosiona ventas en tiendas físicas.",
+    "impacto": "Rojo"
+  },
+  {
+    "fecha": "2025-04-22",
+    "tickers_afectados": [
+      "LOMA_BA"
+    ],
+    "sector": "",
+    "evento": "Revisión de proyectos de inversión; decisión pendiente del directorio.",
+    "impacto": "Amarillo"
+  },
+  {
+    "fecha": "2025-04-15",
+    "tickers_afectados": [
+      "TXAR_BA"
+    ],
+    "sector": "",
+    "evento": "Menor ritmo de construcción; se espera recuperación en el tercer trimestre.",
+    "impacto": "Amarillo"
+  }
+]
