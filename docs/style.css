@@ -127,6 +127,7 @@ main {
 
 .table-wrap {
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
   background: var(--surface);
   border-radius: 8px;
   border: 1px solid var(--border);
@@ -134,6 +135,7 @@ main {
 
 table {
   width: 100%;
+  min-width: 800px;
   border-collapse: collapse;
   font-size: 13px;
 }
