@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Análisis técnico de acciones argentinas</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <header>
+    <h1>Análisis técnico de acciones argentinas</h1>
+    <nav class="tabs">
+      <button class="tab active" data-tab="tab1">1) Análisis General</button>
+      <button class="tab" data-tab="tab2">2) Análisis Individual</button>
+      <button class="tab" data-tab="tab3">3) Información Fundamental</button>
+      <button class="tab" data-tab="tab4">4) Resultados del Estudio</button>
+    </nav>
+  </header>
+
+  <main>
+    <section id="tab1" class="tab-content active">
+      <div class="controls">
+        <span class="snapshot-info">Snapshot: <span id="snapshotDate">—</span></span>
+        <span id="periodBadge" class="badge"></span>
+      </div>
+      <div id="loadingTab1" class="loading">Cargando…</div>
+      <div id="errorTab1" class="error" hidden></div>
+      <div class="table-wrap">
+        <table id="signalsTable" hidden>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Ticker</th>
+              <th>Mercado</th>
+              <th>HMA 16</th>
+              <th>EMA 12/26</th>
+              <th>SMA 10/50/100</th>
+              <th>VMA 20</th>
+              <th>Vela del día</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="tab2" class="tab-content">
+      <h2>Análisis Individual</h2>
+      <p class="placeholder">Contenido en desarrollo</p>
+    </section>
+
+    <section id="tab3" class="tab-content">
+      <h2>Información Fundamental</h2>
+      <p class="placeholder">Contenido en desarrollo</p>
+    </section>
+
+    <section id="tab4" class="tab-content">
+      <h2>Resultados del Estudio</h2>
+      <p class="placeholder">Contenido en desarrollo</p>
+    </section>
+  </main>
+
+  <footer id="appFooter"></footer>
+
+  <script src="./app.js" defer></script>
+</body>
+</html>
