@@ -520,6 +520,7 @@ function renderChart() {
     layout: {
       background: { color: "transparent" },
       textColor: "#e6e6e6",
+      panes: { separatorColor: "#232a3d", enableResize: false },
     },
     grid: {
       vertLines: { color: "#232a3d" },
@@ -532,9 +533,10 @@ function renderChart() {
 
   const ohlc = TICKER_DATA[CHART_TICKER].ohlc;
 
+  // Serie de precio en pane 0 (default)
   let priceSeries;
   if (CHART_MODE === "candles") {
-    priceSeries = CHART.addCandlestickSeries({
+    priceSeries = CHART.addSeries(LightweightCharts.CandlestickSeries, {
       upColor: "#34d399", downColor: "#f87171",
       borderUpColor: "#34d399", borderDownColor: "#f87171",
       wickUpColor: "#34d399", wickDownColor: "#f87171",
@@ -543,33 +545,64 @@ function renderChart() {
       time: d.time, open: d.open, high: d.high, low: d.low, close: d.close,
     })));
   } else {
-    priceSeries = CHART.addLineSeries({ color: "#3b82f6", lineWidth: 2 });
+    priceSeries = CHART.addSeries(LightweightCharts.LineSeries, {
+      color: "#60a5fa", lineWidth: 2,
+    });
     priceSeries.setData(ohlc.map((d) => ({ time: d.time, value: d.close })));
   }
 
+  // Indicadores en pane 0
   if (CHART_INDICATORS.hma) addHmaIndicator(ohlc);
   if (CHART_INDICATORS.ema) addEmaIndicator(ohlc);
   if (CHART_INDICATORS.sma) addSmaIndicator(ohlc);
 
+  // Pane 1 (markers): serie transparente con valor 0 constante
+  const markerSeries = CHART.addSeries(LightweightCharts.LineSeries, {
+    color: "transparent",
+    lineWidth: 1,
+    priceLineVisible: false,
+    lastValueVisible: false,
+    priceFormat: { type: "price", precision: 0, minMove: 1 },
+  }, 1);
+  markerSeries.setData(ohlc.map((d) => ({ time: d.time, value: 0 })));
+
+  // Markers EMA + SMA combinados sobre la serie de pane 1
   const markers = [];
   if (CHART_INDICATORS.ema) markers.push(...signalMarkers(ohlc, "T_ema12_26"));
   if (CHART_INDICATORS.sma) markers.push(...signalMarkers(ohlc, "T_sma10_50_100"));
   if (markers.length > 0) {
     markers.sort((a, b) => a.time.localeCompare(b.time));
-    priceSeries.setMarkers(markers);
+    LightweightCharts.createSeriesMarkers(markerSeries, markers);
   }
 
+  // Pane heights: 84% / 16% del container
+  const panes = CHART.panes();
+  if (panes.length >= 2) {
+    const h = container.clientHeight;
+    panes[0].setHeight(Math.round(h * 0.84));
+    panes[1].setHeight(Math.round(h * 0.16));
+  }
+
+  // Rango visible default: últimos 130 ruedas (~6 meses)
   const visibleBars = 130;
   CHART.timeScale().setVisibleLogicalRange({
     from: Math.max(0, ohlc.length - visibleBars),
     to: ohlc.length - 1,
   });
 
+  renderLegend();
+
   if (!renderChart._resizeAttached) {
     window.addEventListener("resize", () => {
       if (CHART) {
         const c = document.getElementById("chartContainer");
         CHART.resize(c.clientWidth, c.clientHeight);
+        const h = c.clientHeight;
+        const ps = CHART.panes();
+        if (ps.length >= 2) {
+          ps[0].setHeight(Math.round(h * 0.84));
+          ps[1].setHeight(Math.round(h * 0.16));
+        }
       }
     });
     renderChart._resizeAttached = true;
@@ -586,44 +619,90 @@ function hmaStateFromSignal(sig) {
 }
 
 function addHmaIndicator(ohlc) {
-  const seriesMap = { green: [], red: [], gray: [] };
+  const colors = { green: "#34d399", red: "#f87171", gray: "#a8b3c7" };
+  const dataByState = { green: [], red: [], gray: [] };
   let prevState = null;
 
   for (const day of ohlc) {
-    if (day.hma16 == null) continue;
-    const state = hmaStateFromSignal(day.T_hma16);
-    if (prevState && prevState !== state) {
-      seriesMap[prevState].push({ time: day.time, value: day.hma16 });
+    if (day.hma16 == null) {
+      for (const s of ["green", "red", "gray"]) {
+        dataByState[s].push({ time: day.time });
+      }
+      continue;
     }
-    seriesMap[state].push({ time: day.time, value: day.hma16 });
+    const state = hmaStateFromSignal(day.T_hma16);
+
+    for (const s of ["green", "red", "gray"]) {
+      if (s === state) {
+        dataByState[s].push({ time: day.time, value: day.hma16 });
+      } else if (s === prevState && prevState !== state) {
+        // Joiner: la serie anterior recibe este día para empalmar visualmente
+        dataByState[s].push({ time: day.time, value: day.hma16 });
+      } else {
+        // Whitespace: rompe conexión visual entre tramos no contiguos
+        dataByState[s].push({ time: day.time });
+      }
+    }
     prevState = state;
   }
 
-  const colors = { green: "#34d399", red: "#f87171", gray: "#a8b3c7" };
-  for (const [state, data] of Object.entries(seriesMap)) {
-    if (data.length === 0) continue;
-    const series = CHART.addLineSeries({
-      color: colors[state], lineWidth: 2,
+  for (const s of ["green", "red", "gray"]) {
+    const series = CHART.addSeries(LightweightCharts.LineSeries, {
+      color: colors[s], lineWidth: 2,
       lastValueVisible: false, priceLineVisible: false,
     });
-    series.setData(data);
+    series.setData(dataByState[s]);
   }
 }
 
 function addEmaIndicator(ohlc) {
   const ema12 = ohlc.filter((d) => d.ema12 != null).map((d) => ({ time: d.time, value: d.ema12 }));
   const ema26 = ohlc.filter((d) => d.ema26 != null).map((d) => ({ time: d.time, value: d.ema26 }));
-  CHART.addLineSeries({ color: "#60a5fa", lineWidth: 1.5, lastValueVisible: false, priceLineVisible: false }).setData(ema12);
-  CHART.addLineSeries({ color: "#3b82f6", lineWidth: 1.5, lastValueVisible: false, priceLineVisible: false }).setData(ema26);
+  CHART.addSeries(LightweightCharts.LineSeries, {
+    color: "#fde047", lineWidth: 1.5, lastValueVisible: false, priceLineVisible: false,
+  }).setData(ema12);
+  CHART.addSeries(LightweightCharts.LineSeries, {
+    color: "#FF66FF", lineWidth: 1.5, lastValueVisible: false, priceLineVisible: false,
+  }).setData(ema26);
 }
 
 function addSmaIndicator(ohlc) {
   const sma10  = ohlc.filter((d) => d.sma10  != null).map((d) => ({ time: d.time, value: d.sma10 }));
   const sma50  = ohlc.filter((d) => d.sma50  != null).map((d) => ({ time: d.time, value: d.sma50 }));
   const sma100 = ohlc.filter((d) => d.sma100 != null).map((d) => ({ time: d.time, value: d.sma100 }));
-  CHART.addLineSeries({ color: "#fbbf24", lineWidth: 1.5, lastValueVisible: false, priceLineVisible: false }).setData(sma10);
-  CHART.addLineSeries({ color: "#f97316", lineWidth: 1.5, lastValueVisible: false, priceLineVisible: false }).setData(sma50);
-  CHART.addLineSeries({ color: "#dc2626", lineWidth: 1.5, lastValueVisible: false, priceLineVisible: false }).setData(sma100);
+  CHART.addSeries(LightweightCharts.LineSeries, {
+    color: "#fbbf24", lineWidth: 1.5, lastValueVisible: false, priceLineVisible: false,
+  }).setData(sma10);
+  CHART.addSeries(LightweightCharts.LineSeries, {
+    color: "#CC66FF", lineWidth: 1.5, lastValueVisible: false, priceLineVisible: false,
+  }).setData(sma50);
+  CHART.addSeries(LightweightCharts.LineSeries, {
+    color: "#67e8f9", lineWidth: 1.5, lastValueVisible: false, priceLineVisible: false,
+  }).setData(sma100);
+}
+
+function renderLegend() {
+  const items = [];
+  if (CHART_MODE === "candles") {
+    items.push({ label: "Precio (velas)", color: "#34d399" });
+  } else {
+    items.push({ label: "Precio", color: "#60a5fa" });
+  }
+  if (CHART_INDICATORS.hma) {
+    items.push({ label: "HMA 16", color: "#34d399" });
+  }
+  if (CHART_INDICATORS.ema) {
+    items.push({ label: "EMA 12", color: "#fde047" });
+    items.push({ label: "EMA 26", color: "#FF66FF" });
+  }
+  if (CHART_INDICATORS.sma) {
+    items.push({ label: "SMA 10",  color: "#fbbf24" });
+    items.push({ label: "SMA 50",  color: "#CC66FF" });
+    items.push({ label: "SMA 100", color: "#67e8f9" });
+  }
+  document.querySelector(".chart-legend").innerHTML = items.map((i) =>
+    `<div class="legend-item"><span class="swatch" style="background:${i.color}"></span>${i.label}</div>`
+  ).join("");
 }
 
 const BUY_SIGNALS  = new Set(["Compra Confirmada", "Compra Temprana"]);
