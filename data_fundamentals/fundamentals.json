@@ -1,220 +1,128 @@
 [
   {
-    "fecha": "2026-03-20",
-    "tickers_afectados": [
-      "PAMP_BA",
-      "CEPU_BA",
-      "EDN_BA"
-    ],
-    "sector": "",
-    "evento": "Nuevos contratos de suministro eléctrico mejoran proyecciones de ingresos.",
-    "impacto": "Verde"
-  },
-  {
-    "fecha": "2026-02-10",
-    "tickers_afectados": [
-      "YPFD_BA"
-    ],
-    "sector": "",
-    "evento": "Expectativa por revisión de precios de combustibles; resultado aún incierto.",
-    "impacto": "Amarillo"
-  },
-  {
     "fecha": "2026-01-15",
-    "tickers_afectados": [
-      "TXAR_BA",
-      "LOMA_BA"
-    ],
-    "sector": "",
-    "evento": "Aumento en demanda de construcción impulsa ventas de materiales.",
-    "impacto": "Verde"
+    "tickers_afectados": ["TECO2_BA"],
+    "evento": "Telecom Argentina colocó Obligaciones Negociables por US$600M a 2036 en mercado internacional.",
+    "impacto": "Verde",
+    "fuente": "https://www.bloomberglinea.com/latinoamerica/telecom-argentina-se-suma-al-club-de-empresas-que-colocan-deuda-a-una-decada-en-wall-street/"
   },
   {
-    "fecha": "2025-12-28",
-    "tickers_afectados": [
-      "BMA_BA",
-      "GGAL_BA",
-      "BBAR_BA"
-    ],
-    "sector": "",
-    "evento": "Regulación bancaria más estricta afecta márgenes operativos.",
-    "impacto": "Rojo"
+    "fecha": "2026-02-18",
+    "tickers_afectados": ["TXAR_BA"],
+    "evento": "Ternium Argentina cerró 2025 con ganancia neta de $83.400M revirtiendo pérdidas operativas, alerta por competencia china.",
+    "impacto": "Amarillo",
+    "fuente": "https://www.ambito.com/negocios/siderurgia-ternium-revirtio-perdidas-operativas-2025-pero-sigue-alerta-el-avance-la-competencia-china-n6246970"
   },
   {
-    "fecha": "2025-12-15",
-    "tickers_afectados": [
-      "PAMP_BA",
-      "CEPU_BA",
-      "EDN_BA",
-      "TGSU2_BA"
-    ],
-    "sector": "",
-    "evento": "Próximos resultados anuales del sector energía; se anticipan ajustes contables.",
-    "impacto": "Amarillo"
+    "fecha": "2026-03-05",
+    "tickers_afectados": ["GGAL_BA"],
+    "evento": "Grupo Galicia reportó pérdida neta de ARS$83.544M en Q4 2025 y morosidad subió a 8,2%.",
+    "impacto": "Rojo",
+    "fuente": "https://www.bloomberglinea.com/latinoamerica/argentina/galicia-reporta-perdida-neta-mayor-a-la-esperada-en-el-cuarto-trimestre-y-sube-la-morosidad/"
   },
   {
-    "fecha": "2025-11-22",
-    "tickers_afectados": [
-      "SUPV_BA"
-    ],
-    "sector": "",
-    "evento": "Expansión de red de sucursales aumenta participación de mercado.",
-    "impacto": "Verde"
+    "fecha": "2026-03-22",
+    "tickers_afectados": ["GGAL_BA", "BMA_BA", "BBAR_BA", "SUPV_BA"],
+    "evento": "BCRA Com. A8410 autorizó a bancos distribuir 60% de utilidades 2025 en tres cuotas mensuales desde mayo.",
+    "impacto": "Amarillo",
+    "fuente": "https://www.bloomberglinea.com/latinoamerica/argentina/cuantos-dividendos-podran-pagar-los-bancos-argentinos-en-2026-tras-la-autorizacion-del-bcra/"
   },
   {
-    "fecha": "2025-11-05",
-    "tickers_afectados": [
-      "YPFD_BA",
-      "PAM"
-    ],
-    "sector": "",
-    "evento": "Mercado expectante por licitación energética; impacto aún incierto hasta adjudicación.",
-    "impacto": "Amarillo"
+    "fecha": "2026-03-31",
+    "tickers_afectados": ["EDN_BA"],
+    "evento": "ENRE oficializó aumento tarifario de Edenor de 2,04% vigente desde el 1 de abril.",
+    "impacto": "Verde",
+    "fuente": "https://www.ambito.com/energia/el-gobierno-oficializo-nuevas-subas-la-luz-abril-cuanto-aumentan-edenor-y-edesur-n6261558"
   },
   {
-    "fecha": "2025-10-30",
-    "tickers_afectados": [
-      "TECO2_BA",
-      "TGSU2_BA"
-    ],
-    "sector": "",
-    "evento": "Demoras en aprobación de aumentos tarifarios afectan flujo de caja.",
-    "impacto": "Rojo"
+    "fecha": "2026-05-05",
+    "tickers_afectados": ["LOMA_BA"],
+    "evento": "Loma Negra Q1 2026: EBITDA en dólares +11,5% interanual, utilidad neta +44%, acciones subieron 6,7%.",
+    "impacto": "Verde",
+    "fuente": "https://www.ambito.com/negocios/loma-negra-presento-un-balance-mejoras-significativas-y-sus-acciones-volaron-wall-street-n6274243"
   },
   {
-    "fecha": "2025-10-12",
-    "tickers_afectados": [
-      "GGAL_BA",
-      "BMA_BA"
-    ],
-    "sector": "",
-    "evento": "Reducción de morosidad mejora calidad de cartera crediticia.",
-    "impacto": "Verde"
+    "fecha": "2026-05-06",
+    "tickers_afectados": ["SUPV_BA"],
+    "evento": "Grupo Supervielle reportó pérdida neta de ARS$17,1B en Q1 2026, NPL en 5,6% y plan de reducción de personal del 9%.",
+    "impacto": "Rojo",
+    "fuente": "https://www.bloomberglinea.com/latinoamerica/argentina/supervielle-modera-perdidas-en-primer-trimestre-y-anticipa-mejoras-en-niveles-de-mora-desde-marzo/"
   },
   {
-    "fecha": "2025-09-28",
-    "tickers_afectados": [
-      "EDN_BA"
-    ],
-    "sector": "",
-    "evento": "Negociaciones salariales en curso; resultado pendiente.",
-    "impacto": "Amarillo"
+    "fecha": "2026-05-07",
+    "tickers_afectados": ["YPFD_BA"],
+    "evento": "YPF reportó Q1 2026 con EBITDA récord de US$1.594M y superó los 200.000 barriles diarios de shale.",
+    "impacto": "Verde",
+    "fuente": "https://www.ambito.com/energia/ypf-alcanzo-un-record-historico-ebitda-y-supero-los-200000-barriles-diarios-shale-n6275210"
   },
   {
-    "fecha": "2025-09-20",
-    "tickers_afectados": [
-      "TXAR_BA",
-      "LOMA_BA"
-    ],
-    "sector": "",
-    "evento": "Crecen ventas industriales de acero y cemento, mejora interanual de márgenes.",
-    "impacto": "Verde"
+    "fecha": "2026-05-12",
+    "tickers_afectados": ["BMA_BA", "BBAR_BA"],
+    "evento": "Fitch Ratings mejoró calificación de bancos argentinos Macro y BBVA tras suba soberana a B-.",
+    "impacto": "Verde",
+    "fuente": "https://www.bloomberglinea.com/latinoamerica/argentina/fitch-mejoro-la-nota-de-bancos-argentinos-tras-subirle-la-calificacion-al-pais/"
   },
   {
-    "fecha": "2025-09-10",
-    "tickers_afectados": [
-      "BMA_BA",
-      "GGAL_BA"
-    ],
-    "sector": "",
-    "evento": "Nueva alza de tasas ajusta márgenes de los principales bancos.",
-    "impacto": "Rojo"
+    "fecha": "2026-05-13",
+    "tickers_afectados": ["CEPU_BA"],
+    "evento": "Central Puerto Q1 2026: ingresos US$249M (+44% q/q), EBITDA US$120M (+42% q/q), ganancia neta US$142M.",
+    "impacto": "Verde",
+    "fuente": "https://www.bloomberglinea.com/latinoamerica/argentina/central-puerto-mostro-resultados-solidos-y-mantiene-atractivo-por-avance-de-desregulacion/"
   },
   {
-    "fecha": "2025-08-25",
-    "tickers_afectados": [
-      "CEPU_BA",
-      "PAMP_BA"
-    ],
-    "sector": "",
-    "evento": "Inversión en infraestructura energética fortalece capacidad instalada.",
-    "impacto": "Verde"
+    "fecha": "2026-05-13",
+    "tickers_afectados": ["TGSU2_BA"],
+    "evento": "Gobierno aprobó ingreso de TGS al RIGI para ampliar Gasoducto Perito Moreno por US$550M (operativo abr-2027).",
+    "impacto": "Verde",
+    "fuente": "https://www.ambito.com/energia/oficializan-ingreso-al-rigi-la-ampliacion-del-gasoducto-perito-moreno-us550-millones-n6276980"
   },
   {
-    "fecha": "2025-08-10",
-    "tickers_afectados": [
-      "BBAR_BA",
-      "SUPV_BA"
-    ],
-    "sector": "",
-    "evento": "Entidades financieras reportan menores gastos operativos y mejor resultado neto.",
-    "impacto": "Verde"
+    "fecha": "2026-05-14",
+    "tickers_afectados": ["PAMP_BA"],
+    "evento": "Pampa Energía reabrió bono internacional 2037 por US$500M con spread récord de 315bps en su historia.",
+    "impacto": "Verde",
+    "fuente": "https://ri.pampa.com/press-release/reapertura-del-bono-internacional-2037-por-500-millones/"
   },
   {
-    "fecha": "2025-07-28",
-    "tickers_afectados": [
-      "TECO2_BA",
-      "TGSU2_BA"
-    ],
-    "sector": "",
-    "evento": "Congelamiento tarifario impacta parcialmente en ingresos semestrales.",
-    "impacto": "Rojo"
+    "fecha": "2026-06-03",
+    "tickers_afectados": ["BMA_BA"],
+    "evento": "Banco Macro pone a disposición 2da cuota dividendo en efectivo en cumplimiento Com. A8410 del BCRA.",
+    "impacto": "Verde",
+    "fuente": "https://www.bloomberglinea.com/latinoamerica/argentina/cuantos-dividendos-podran-pagar-los-bancos-argentinos-en-2026-tras-la-autorizacion-del-bcra/"
   },
   {
-    "fecha": "2025-07-15",
-    "tickers_afectados": [
-      "PAMP_BA",
-      "CEPU_BA",
-      "EDN_BA",
-      "TGSU2_BA"
-    ],
-    "sector": "",
-    "evento": "Ajuste tarifario y mayor demanda eléctrica impulsan los ingresos.",
-    "impacto": "Verde"
+    "fecha": "2026-06-30",
+    "tickers_afectados": ["YPFD_BA"],
+    "evento": "YPF prevé puesta en operación del revamp de la planta de tratamiento de gas Loma La Lata durante Q2 2026.",
+    "impacto": "Verde",
+    "fuente": "https://www.sec.gov/Archives/edgar/data/0000904851/000155485526000937/MainDocument.htm"
   },
   {
-    "fecha": "2025-06-18",
-    "tickers_afectados": [
-      "YPFD_BA",
-      "PAM"
-    ],
-    "sector": "",
-    "evento": "Volatilidad en precios internacionales del petróleo genera incertidumbre.",
-    "impacto": "Amarillo"
+    "fecha": "2026-07-01",
+    "tickers_afectados": ["PAMP_BA"],
+    "evento": "Pampa Energía proyecta alcanzar 28.000 barriles diarios en Rincón de Aranda hacia mitad de 2026, desde 24.000 actuales.",
+    "impacto": "Verde",
+    "fuente": "https://www.cronista.com/negocios/pampa-gano-escala-en-petroleo-y-gas-y-mejoro-48-su-resultado-operativo-en-el-primer-trimestre/"
   },
   {
-    "fecha": "2025-06-02",
-    "tickers_afectados": [
-      "YPFD_BA"
-    ],
-    "sector": "",
-    "evento": "Costos crecientes en refinación reducen márgenes de utilidad del trimestre.",
-    "impacto": "Rojo"
+    "fecha": "2026-07-09",
+    "tickers_afectados": ["GGAL_BA", "BMA_BA", "BBAR_BA", "SUPV_BA"],
+    "evento": "Vencimiento semestral capital e intereses AL30/GD30 ~US$4.200M presiona bancos por exposición soberana.",
+    "impacto": "Amarillo",
+    "fuente": "https://www.ambito.com/economia/lanza-un-bono-dolares-buscara-captar-us2000-millones-pagar-vencimientos-julio-n6248579"
   },
   {
-    "fecha": "2025-05-20",
-    "tickers_afectados": [
-      "TXAR_BA"
-    ],
-    "sector": "",
-    "evento": "Acuerdos comerciales regionales favorecen exportaciones industriales.",
-    "impacto": "Verde"
+    "fecha": "2026-07-17",
+    "tickers_afectados": ["GGAL_BA", "YPFD_BA", "BMA_BA", "PAMP_BA", "BBAR_BA"],
+    "evento": "BYMA aplica nuevo régimen para opciones desde vencimiento JUL-26: ejercicio automático ITM y sin ajustes por dividendos ordinarios.",
+    "impacto": "Amarillo",
+    "fuente": "https://www.byma.com.ar/productos/productos-financieros/opciones"
   },
   {
-    "fecha": "2025-05-05",
-    "tickers_afectados": [
-      "SUPV_BA"
-    ],
-    "sector": "",
-    "evento": "Competencia de comercio electrónico erosiona ventas en tiendas físicas.",
-    "impacto": "Rojo"
-  },
-  {
-    "fecha": "2025-04-22",
-    "tickers_afectados": [
-      "LOMA_BA"
-    ],
-    "sector": "",
-    "evento": "Revisión de proyectos de inversión; decisión pendiente del directorio.",
-    "impacto": "Amarillo"
-  },
-  {
-    "fecha": "2025-04-15",
-    "tickers_afectados": [
-      "TXAR_BA"
-    ],
-    "sector": "",
-    "evento": "Menor ritmo de construcción; se espera recuperación en el tercer trimestre.",
-    "impacto": "Amarillo"
+    "fecha": "2026-08-15",
+    "tickers_afectados": ["YPFD_BA"],
+    "evento": "YPF prevé puesta en operación del proyecto La Angostura Sur de evacuación de shale oil durante Q3 2026.",
+    "impacto": "Verde",
+    "fuente": "https://www.sec.gov/Archives/edgar/data/0000904851/000155485526000937/MainDocument.htm"
   }
 ]
