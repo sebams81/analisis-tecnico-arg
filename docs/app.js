@@ -757,6 +757,7 @@ function variationPct(closes, lookback) {
 
 function setVariation(selector, v) {
   const el = document.querySelector(selector);
+  if (!el) return;
   if (v == null) {
     el.textContent = "—";
     el.className = "";
@@ -767,35 +768,48 @@ function setVariation(selector, v) {
 }
 
 function renderTickerState(ticker) {
+  const stateDate = document.querySelector(".state-date");
+  if (!stateDate) return;
   const data = TICKER_DATA[ticker];
   if (!data || !data.ohlc || data.ohlc.length === 0) return;
   const ohlc = data.ohlc;
   const last = ohlc[ohlc.length - 1];
   const closes = ohlc.map((d) => d.close);
 
-  document.querySelector(".state-date").textContent = formatDateDDMMYYYY(last.time);
-  document.querySelector(".price-value").textContent = fmtPrice(last.close);
+  stateDate.textContent = formatDateDDMMYYYY(last.time);
+  const priceValueEl = document.querySelector(".price-value");
+  if (priceValueEl) priceValueEl.textContent = fmtPrice(last.close);
 
   const dayVar = variationPct(closes, 1);
   const dayEl = document.querySelector(".price-change");
-  if (dayVar == null) {
-    dayEl.textContent = "—";
-    dayEl.className = "price-change";
-  } else {
-    const arrow = dayVar >= 0 ? "↑" : "↓";
-    dayEl.textContent = `${arrow} ${fmtPctSigned(dayVar)} día`;
-    dayEl.className = `price-change ${dayVar >= 0 ? "pos" : "neg"}`;
+  if (dayEl) {
+    if (dayVar == null) {
+      dayEl.textContent = "—";
+      dayEl.className = "price-change";
+    } else {
+      const arrow = dayVar >= 0 ? "↑" : "↓";
+      dayEl.textContent = `${arrow} ${fmtPctSigned(dayVar)} día`;
+      dayEl.className = `price-change ${dayVar >= 0 ? "pos" : "neg"}`;
+    }
   }
 
   setVariation(".var-week",  variationPct(closes, 5));
   setVariation(".var-month", variationPct(closes, 21));
   setVariation(".var-year",  variationPct(closes, 252));
 
-  document.querySelector(".state-hma").innerHTML = pillSignal(last.T_hma16);
-  document.querySelector(".state-ema").innerHTML = pillSignal(last.T_ema12_26);
-  document.querySelector(".state-sma").innerHTML = pillSignal(last.T_sma10_50_100);
-  document.querySelector(".state-vma").innerHTML = pillVma(last.vma20_cat);
-  document.querySelector(".state-candle").textContent = last.candle || "—";
+  const setHtml = (sel, html) => {
+    const el = document.querySelector(sel);
+    if (el) el.innerHTML = html;
+  };
+  const setText = (sel, txt) => {
+    const el = document.querySelector(sel);
+    if (el) el.textContent = txt;
+  };
+  setHtml(".state-hma", pillSignal(last.T_hma16));
+  setHtml(".state-ema", pillSignal(last.T_ema12_26));
+  setHtml(".state-sma", pillSignal(last.T_sma10_50_100));
+  setHtml(".state-vma", pillVma(last.vma20_cat));
+  setText(".state-candle", last.candle || "—");
 }
 
 function renderTickerEvents(ticker) {
