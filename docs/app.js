@@ -50,7 +50,6 @@ async function init() {
     SELECTED_TICKERS = new Set(SUMMARY.map((t) => t.ticker));
     CURRENT_DATE = snapshotDate();
 
-    populateFooter(meta);
     setupTickerFilter();
     setupDatePicker();
     renderSnapshotInfo();
@@ -101,7 +100,9 @@ function snapshotDate() {
 }
 
 function renderSnapshotInfo() {
-  document.getElementById("snapshotDate").textContent = CURRENT_DATE || snapshotDate();
+  const iso = CURRENT_DATE || snapshotDate();
+  document.getElementById("snapshotDate").textContent =
+    iso && iso !== "—" ? formatDateDDMMYYYY(iso) : "—";
 }
 
 function setupTickerFilter() {
@@ -285,12 +286,6 @@ function formatDateDDMMYYYY(iso) {
   const datePart = iso.split("T")[0];
   const [y, m, d] = datePart.split("-");
   return `${d}/${m}/${y}`;
-}
-
-function populateFooter(meta) {
-  const dateDDMMYYYY = formatDateDDMMYYYY(meta.pipeline_run_date);
-  document.getElementById("appFooter").innerHTML =
-    `Última actualización: ${dateDDMMYYYY}`;
 }
 
 async function ensureFundamentals() {
