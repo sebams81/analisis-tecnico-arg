@@ -6,9 +6,12 @@ let DAILY_PANEL_DATES = null;
 let SELECTED_TICKERS = null;
 let CURRENT_DATE = null;
 let FUNDAMENTALS = null;
+let SELECTED_FUND_TICKERS = null;
+let SELECTED_MONTH = "";
 
 async function init() {
   setupTabs();
+  setupInfoToggles();
   try {
     const [meta, summary, lvm] = await Promise.all([
       fetch("./data/_meta.json").then((r) => {
@@ -68,6 +71,15 @@ function setupTabs() {
       if (btn.dataset.tab === "tab3" && FUNDAMENTALS === null) {
         loadFundamentals();
       }
+    });
+  });
+}
+
+function setupInfoToggles() {
+  document.querySelectorAll(".info-toggle").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const panel = btn.nextElementSibling;
+      panel.hidden = !panel.hidden;
     });
   });
 }
@@ -282,6 +294,7 @@ async function loadFundamentals() {
       return r.json();
     });
     FUNDAMENTALS.sort((a, b) => b.fecha.localeCompare(a.fecha));
+    setupFundFilters();
     renderFundamentals();
     loading.hidden = true;
     table.hidden = false;
@@ -291,6 +304,66 @@ async function loadFundamentals() {
     err.hidden = false;
     FUNDAMENTALS = null;
   }
+}
+
+function cleanTicker(t) {
+  return t.replace(/_BA$/, "");
+}
+
+function setupFundFilters() {
+  const allTickers = [...new Set(
+    FUNDAMENTALS.flatMap((ev) => ev.tickers_afectados.map(cleanTicker))
+  )].sort();
+  SELECTED_FUND_TICKERS = new Set(allTickers);
+
+  const list = document.getElementById("fundTickerCheckboxes");
+  list.innerHTML = allTickers
+    .map((t) => `<label><input type="checkbox" value="${t}" checked> ${t}</label>`)
+    .join("");
+  document.getElementById("fundTickerCount").textContent = `${allTickers.length}/${allTickers.length}`;
+
+  document.getElementById("fundTickerFilterToggle").addEventListener("click", (e) => {
+    e.stopPropagation();
+    const panel = document.getElementById("fundTickerFilterPanel");
+    panel.hidden = !panel.hidden;
+  });
+  document.addEventListener("click", (e) => {
+    const panel = document.getElementById("fundTickerFilterPanel");
+    if (!panel.hidden && !panel.contains(e.target) && e.target.id !== "fundTickerFilterToggle") {
+      panel.hidden = true;
+    }
+  });
+
+  document.querySelectorAll("button[data-fund-action]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const checked = btn.dataset.fundAction === "all";
+      list.querySelectorAll('input[type="checkbox"]').forEach((cb) => (cb.checked = checked));
+      onFundTickerSelectionChange();
+    });
+  });
+  list.addEventListener("change", onFundTickerSelectionChange);
+
+  const months = [...new Set(FUNDAMENTALS.map((ev) => ev.fecha.slice(0, 7)))].sort().reverse();
+  const select = document.getElementById("monthSelect");
+  for (const m of months) {
+    const opt = document.createElement("option");
+    opt.value = m;
+    opt.textContent = monthYearLabel(m);
+    select.appendChild(opt);
+  }
+  select.addEventListener("change", (e) => {
+    SELECTED_MONTH = e.target.value;
+    renderFundamentals();
+  });
+}
+
+function onFundTickerSelectionChange() {
+  SELECTED_FUND_TICKERS = new Set(
+    [...document.querySelectorAll("#fundTickerCheckboxes input:checked")].map((cb) => cb.value)
+  );
+  const total = document.querySelectorAll("#fundTickerCheckboxes input").length;
+  document.getElementById("fundTickerCount").textContent = `${SELECTED_FUND_TICKERS.size}/${total}`;
+  renderFundamentals();
 }
 
 const MONTHS_ES = [
@@ -303,51 +376,31 @@ function monthYearLabel(iso) {
   return `${MONTHS_ES[parseInt(m, 10) - 1]} ${y}`;
 }
 
-function renderFundamentals() {
-  const tbody = document.querySelector("#fundamentalsTable tbody");
-  let lastMonthKey = null;
-  const rows = [];
-  for (const ev of FUNDAMENTALS) {
-    const monthKey = ev.fecha.slice(0, 7);
-    if (monthKey !== lastMonthKey) {
-      rows.push(`
-        <tr class="month-separator">
-          <td colspan="4">${monthYearLabel(ev.fecha)}</td>
-        </tr>
-      `);
-      lastMonthKey = monthKey;
-    }
-    rows.push(`
-      <tr>
-        <td>${formatDateDDMMYYYY(ev.fecha)}</td>
-        <td>${tickerChips(ev.tickers_afectados)}</td>
-        <td class="evento">${escapeHtml(ev.evento)}</td>
-        <td>${impactPill(ev.impacto)}</td>
-      </tr>
-    `);
-  }
-  tbody.innerHTML = rows.join("");
-}
-
-function tickerChips(arr) {
-  if (!arr || arr.length === 0) return "—";
-  if (arr.length <= 3) {
-    return arr.map((t) => `<span class="chip">${t}</span>`).join("");
-  }
-  const head = arr.slice(0, 3).map((t) => `<span class="chip">${t}</span>`).join("");
-  return `${head}<span class="chip-more">+${arr.length - 3} más</span>`;
-}
-
 const IMPACT_MAP = {
-  Verde:    { cls: "pill-buy",     label: "Positivo" },
-  Amarillo: { cls: "pill-neutral", label: "Neutro" },
-  Rojo:     { cls: "pill-sell",    label: "Negativo" },
+  Verde:    { cls: "impacto-verde",    icon: "↑" },
+  Amarillo: { cls: "impacto-amarillo", icon: "→" },
+  Rojo:     { cls: "impacto-rojo",     icon: "↓" },
 };
 
-function impactPill(impacto) {
-  const m = IMPACT_MAP[impacto];
-  if (!m) return `<span class="pill pill-neutral">—</span>`;
-  return `<span class="pill ${m.cls}">${m.label}</span>`;
+function renderFundamentals() {
+  const filtered = FUNDAMENTALS.filter((ev) => {
+    const tickerMatch = ev.tickers_afectados.some((t) => SELECTED_FUND_TICKERS.has(cleanTicker(t)));
+    const monthMatch = !SELECTED_MONTH || ev.fecha.startsWith(SELECTED_MONTH);
+    return tickerMatch && monthMatch;
+  });
+  const tbody = document.querySelector("#fundamentalsTable tbody");
+  tbody.innerHTML = filtered.map((ev) => {
+    const m = IMPACT_MAP[ev.impacto] || { cls: "", icon: "" };
+    const tickers = ev.tickers_afectados.map(cleanTicker).join(", ");
+    const prefix = m.icon ? `${m.icon} ` : "";
+    return `
+      <tr class="${m.cls}">
+        <td>${formatDateDDMMYYYY(ev.fecha)}</td>
+        <td>${escapeHtml(tickers)}</td>
+        <td>${prefix}${escapeHtml(ev.evento)}</td>
+      </tr>
+    `;
+  }).join("");
 }
 
 function escapeHtml(s) {

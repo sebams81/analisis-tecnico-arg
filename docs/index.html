@@ -18,6 +18,12 @@
 
   <main>
     <section id="tab1" class="tab-content active">
+      <div class="tab-info">
+        <button class="info-toggle" aria-label="Información">?</button>
+        <div class="info-panel" hidden>
+          <p>Señales técnicas del día por ticker. Cada acción se muestra en su versión local (sufijo BA, cotización en pesos argentinos) y MEP (sufijo MEP, cotización en dólares calculada por arbitraje de bonos AL30/AL30D). Los métodos HMA, EMA y SMA son distintos algoritmos de detección de tendencia; pueden coincidir o discrepar. VMA 20 indica la fuerza del volumen del día.</p>
+        </div>
+      </div>
       <div class="controls">
         <span class="snapshot-info">Datos al: <span id="snapshotDate">—</span></span>
 
@@ -63,11 +69,46 @@
     </section>
 
     <section id="tab2" class="tab-content">
+      <div class="tab-info">
+        <button class="info-toggle" aria-label="Información">?</button>
+        <div class="info-panel" hidden>
+          <p>Gráfico de un ticker en detalle. Permite alternar entre velas japonesas (muestra apertura, máximo, mínimo y cierre del día) o línea simple (solo cierre). Los indicadores se pueden activar/desactivar para ver cómo evolucionan junto al precio.</p>
+        </div>
+      </div>
       <h2>Análisis Individual</h2>
       <p class="placeholder">Contenido en desarrollo</p>
     </section>
 
     <section id="tab3" class="tab-content">
+      <div class="tab-info">
+        <button class="info-toggle" aria-label="Información">?</button>
+        <div class="info-panel" hidden>
+          <p>Eventos relevantes para las empresas analizadas: cambios regulatorios, resultados financieros, anuncios sectoriales. Cada evento tiene un impacto estimado: positivo (↑ verde), neutro/incierto (→ amarillo), negativo (↓ rojo). Información curada manualmente con fines demostrativos.</p>
+        </div>
+      </div>
+
+      <div class="controls">
+        <div class="ticker-filter">
+          <button id="fundTickerFilterToggle" class="filter-btn">
+            Tickers: <span id="fundTickerCount">—</span> ▼
+          </button>
+          <div id="fundTickerFilterPanel" class="filter-panel" hidden>
+            <div class="filter-actions">
+              <button data-fund-action="all">Todos</button>
+              <button data-fund-action="none">Ninguno</button>
+            </div>
+            <div id="fundTickerCheckboxes" class="checkbox-list"></div>
+          </div>
+        </div>
+
+        <div class="month-filter">
+          <label for="monthSelect">Mes:</label>
+          <select id="monthSelect">
+            <option value="">Todos los meses</option>
+          </select>
+        </div>
+      </div>
+
       <div id="loadingTab3" class="loading" hidden>Cargando…</div>
       <div id="errorTab3" class="error" hidden></div>
       <div class="table-wrap">
@@ -75,9 +116,8 @@
           <thead>
             <tr>
               <th>Fecha</th>
-              <th>Tickers afectados</th>
+              <th>Tickers</th>
               <th>Evento</th>
-              <th>Impacto</th>
             </tr>
           </thead>
           <tbody></tbody>
