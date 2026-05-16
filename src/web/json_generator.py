@@ -288,7 +288,12 @@ def gen_local_vs_mep():
 
 
 def gen_ticker(ticker):
-    """Un archivo por ticker con OHLC + indicadores + signals + trades."""
+    """Un archivo por ticker: OHLC + indicadores + señales mergeados por fecha + trades.
+
+    Cada entry del array `ohlc` contiene los campos OHLCV + los 7 indicadores
+    + las 3 señales por método + vma20_cat + candle. Pure merge: el generator
+    no recalcula nada, solo serializa los CSVs ya producidos por el pipeline.
+    """
     ind_path = INDICATORS_DIR / f"{ticker}_indicators.csv"
     sig_path = SIGNALS_DIR / f"{ticker}_signals.csv"
     if not ind_path.exists() or not sig_path.exists():
@@ -305,38 +310,34 @@ def gen_ticker(ticker):
     ind = ind[ind["date"] >= STUDY_START_DATE].reset_index(drop=True)
     sig = sig[sig["date"] >= STUDY_START_DATE].reset_index(drop=True)
 
-    # OHLC
+    # Merge por fecha. Inner join garantiza que cada día tenga ambos lados.
+    # Si signals tiene más fechas que indicators (raro), se pierden — pero
+    # eso preserva consistencia: cada entry del JSON tiene datos completos.
+    merged = ind.merge(sig, on="date", how="inner", suffixes=("", "_sig"))
+
+    # OHLC mergeado: cada entry contiene OHLCV + indicadores + señales.
+    # Renombre semántico: candle_pattern (CSV) → candle (consistente con summary.json).
     ohlc = []
-    for _, r in ind.iterrows():
+    for _, r in merged.iterrows():
         ohlc.append({
-            "time": str(r["date"]),
-            "open": _none_if_nan(r["open"]),
-            "high": _none_if_nan(r["high"]),
-            "low": _none_if_nan(r["low"]),
-            "close": _none_if_nan(r["close"]),
-        })
-
-    # Indicators (uno por col, formato {time, value})
-    indicators = {}
-    for col in INDICATOR_COLS:
-        if col in ind.columns:
-            indicators[col] = [
-                {"time": str(r["date"]), "value": _none_if_nan(r[col])}
-                for _, r in ind.iterrows()
-            ]
-        else:
-            indicators[col] = []
-
-    # Signals
-    signals = []
-    for _, r in sig.iterrows():
-        signals.append({
-            "time": str(r["date"]),
-            "T_hma16": _none_if_nan(r.get("T_hma16")),
-            "T_ema12_26": _none_if_nan(r.get("T_ema12_26")),
-            "T_sma10_50_100": _none_if_nan(r.get("T_sma10_50_100")),
-            "vma20_cat": _none_if_nan(r.get("vma20_cat")),
-            "candle_pattern": _none_if_nan(r.get("candle_pattern")),
+            "time":            str(r["date"]),
+            "open":            _none_if_nan(r.get("open")),
+            "high":            _none_if_nan(r.get("high")),
+            "low":             _none_if_nan(r.get("low")),
+            "close":           _none_if_nan(r.get("close")),
+            "volume":          _none_if_nan(r.get("volume")),
+            "hma16":           _none_if_nan(r.get("hma16")),
+            "ema12":           _none_if_nan(r.get("ema12")),
+            "ema26":           _none_if_nan(r.get("ema26")),
+            "sma10":           _none_if_nan(r.get("sma10")),
+            "sma50":           _none_if_nan(r.get("sma50")),
+            "sma100":          _none_if_nan(r.get("sma100")),
+            "vma20_ratio":     _none_if_nan(r.get("vma20_ratio")),
+            "vma20_cat":       _none_if_nan(r.get("vma20_cat")),
+            "T_hma16":         _none_if_nan(r.get("T_hma16")),
+            "T_ema12_26":      _none_if_nan(r.get("T_ema12_26")),
+            "T_sma10_50_100":  _none_if_nan(r.get("T_sma10_50_100")),
+            "candle":          _none_if_nan(r.get("candle_pattern")),
         })
 
     # Trades por método (3 métodos signal-driven; B&H se excluye)
@@ -349,24 +350,22 @@ def gen_ticker(ticker):
         td = pd.read_csv(trades_path)
         for _, r in td.iterrows():
             trades[method].append({
-                "entry_date": _none_if_nan(r.get("entry_date")),
-                "entry_price": _none_if_nan(r.get("entry_price")),
-                "exit_date": _none_if_nan(r.get("exit_date")),
-                "exit_price": _none_if_nan(r.get("exit_price")),
-                "return": _none_if_nan(r.get("return")),
-                "holding_days": _none_if_nan(r.get("holding_days")),
-                "entry_vma20": _none_if_nan(r.get("entry_vma20")),
-                "vma20_confirm": _none_if_nan(r.get("vma20_confirm")),
+                "entry_date":           _none_if_nan(r.get("entry_date")),
+                "entry_price":          _none_if_nan(r.get("entry_price")),
+                "exit_date":            _none_if_nan(r.get("exit_date")),
+                "exit_price":           _none_if_nan(r.get("exit_price")),
+                "return":               _none_if_nan(r.get("return")),
+                "holding_days":         _none_if_nan(r.get("holding_days")),
+                "entry_vma20":          _none_if_nan(r.get("entry_vma20")),
+                "vma20_confirm":        _none_if_nan(r.get("vma20_confirm")),
                 "entry_candle_pattern": _none_if_nan(r.get("entry_candle_pattern")),
-                "candle_aligned": _none_if_nan(r.get("candle_aligned")),
-                "is_in_sample": _none_if_nan(r.get("is_in_sample")),
+                "candle_aligned":       _none_if_nan(r.get("candle_aligned")),
+                "is_in_sample":         _none_if_nan(r.get("is_in_sample")),
             })
 
     out = {
         "ticker": ticker,
         "ohlc": ohlc,
-        "indicators": indicators,
-        "signals": signals,
         "trades": trades,
     }
     (OUT_DIR / f"ticker_{ticker}.json").write_text(
