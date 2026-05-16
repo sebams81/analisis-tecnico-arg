@@ -225,7 +225,7 @@ function renderTable() {
       (t, i) => `
     <tr>
       <td>${i + 1}</td>
-      <td><strong>${cleanTicker(t.ticker)}</strong></td>
+      <td><strong title="${getCompanyName(t.ticker)}">${cleanTicker(t.ticker)}</strong></td>
       <td>${t.mercado === "BA" ? "Local" : "MEP"}</td>
       <td>${pillSignal(t.signals.HMA16)}</td>
       <td>${pillSignal(t.signals.EMA_12_26)}</td>
@@ -329,6 +329,25 @@ async function loadFundamentals() {
 
 function cleanTicker(t) {
   return t.replace(/_(BA|MEP)$/, "");
+}
+
+const TICKER_NAMES = {
+  "BBAR":  "Banco BBVA Argentina",
+  "BMA":   "Banco Macro",
+  "CEPU":  "Central Puerto",
+  "EDN":   "Edenor",
+  "GGAL":  "Grupo Financiero Galicia",
+  "LOMA":  "Loma Negra",
+  "PAMP":  "Pampa Energía",
+  "SUPV":  "Grupo Supervielle",
+  "TECO2": "Telecom Argentina",
+  "TGSU2": "Transportadora de Gas del Sur",
+  "TXAR":  "Ternium Argentina",
+  "YPFD":  "YPF S.A.",
+};
+
+function getCompanyName(ticker) {
+  return TICKER_NAMES[cleanTicker(ticker)] || "";
 }
 
 function setupFundFilters() {
@@ -443,9 +462,10 @@ function setupTab2IfNeeded() {
   TAB2_INITIALIZED = true;
 
   const select = document.getElementById("chartTicker");
-  select.innerHTML = SUMMARY.map(
-    (t) => `<option value="${t.ticker}">${t.ticker}</option>`
-  ).join("");
+  select.innerHTML = SUMMARY.map((t) => {
+    const name = getCompanyName(t.ticker);
+    return `<option value="${t.ticker}">${t.ticker}${name ? ` — ${name}` : ""}</option>`;
+  }).join("");
   select.value = "BBAR_BA";
 
   select.addEventListener("change", () => loadAndRenderTicker(select.value));
