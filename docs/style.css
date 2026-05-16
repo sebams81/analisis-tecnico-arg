@@ -265,6 +265,46 @@ tbody tr:last-child td { border-bottom: none; }
 .pill-mercado-ba { background: var(--accent); color: white; }
 .pill-mercado-mep { background: var(--emerald); color: white; }
 
+/* Tab 3 — chip compacto de ticker */
+.chip {
+  display: inline-block;
+  background: var(--surface-2);
+  color: var(--text);
+  padding: 2px 7px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  margin-right: 4px;
+  white-space: nowrap;
+}
+
+.chip-more {
+  display: inline-block;
+  color: var(--muted);
+  font-size: 11px;
+  font-style: italic;
+  margin-left: 2px;
+}
+
+/* Tab 3 — separador visual de mes */
+.month-separator td {
+  background: var(--surface-2);
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* Tab 3 — evento permite wrap natural */
+#fundamentalsTable td.evento {
+  white-space: normal;
+  min-width: 280px;
+  max-width: 500px;
+}
+
 footer {
   position: fixed;
   bottom: 0;

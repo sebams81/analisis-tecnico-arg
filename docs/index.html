@@ -19,7 +19,7 @@
   <main>
     <section id="tab1" class="tab-content active">
       <div class="controls">
-        <span class="snapshot-info">Snapshot: <span id="snapshotDate">—</span></span>
+        <span class="snapshot-info">Datos al: <span id="snapshotDate">—</span></span>
 
         <div class="ticker-filter">
           <button id="tickerFilterToggle" class="filter-btn">
@@ -68,8 +68,21 @@
     </section>
 
     <section id="tab3" class="tab-content">
-      <h2>Información Fundamental</h2>
-      <p class="placeholder">Contenido en desarrollo</p>
+      <div id="loadingTab3" class="loading" hidden>Cargando…</div>
+      <div id="errorTab3" class="error" hidden></div>
+      <div class="table-wrap">
+        <table id="fundamentalsTable" hidden>
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Tickers afectados</th>
+              <th>Evento</th>
+              <th>Impacto</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
     </section>
 
   </main>
