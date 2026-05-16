@@ -75,8 +75,66 @@
           <p>Gráfico de un ticker en detalle. Permite alternar entre velas japonesas (muestra apertura, máximo, mínimo y cierre del día) o línea simple (solo cierre). Los indicadores se pueden activar/desactivar para ver cómo evolucionan junto al precio.</p>
         </div>
       </div>
-      <h2>Análisis Individual</h2>
-      <p class="placeholder">Contenido en desarrollo</p>
+
+      <div class="controls chart-controls">
+        <div class="chart-ticker">
+          <label for="chartTicker">Ticker:</label>
+          <select id="chartTicker"></select>
+        </div>
+
+        <div class="chart-mode">
+          <span class="chart-mode-label">Modo:</span>
+          <button type="button" id="chartModeCandles" class="filter-btn chart-mode-btn active">Velas</button>
+          <button type="button" id="chartModeLine" class="filter-btn chart-mode-btn">Línea</button>
+        </div>
+
+        <div class="chart-indicators">
+          <label><input type="checkbox" id="ind-hma"> HMA 16</label>
+          <label><input type="checkbox" id="ind-ema"> EMA 12/26</label>
+          <label><input type="checkbox" id="ind-sma"> SMA 10/50/100</label>
+        </div>
+      </div>
+
+      <div id="loadingTab2" class="loading" hidden>Cargando…</div>
+      <div id="errorTab2" class="error" hidden></div>
+
+      <div class="chart-layout">
+        <div id="chartContainer"></div>
+        <aside class="metrics-panel">
+          <h3>Métricas</h3>
+          <table id="metricsTable">
+            <thead>
+              <tr>
+                <th>Método</th>
+                <th>Trades</th>
+                <th>Win %</th>
+                <th>Retorno</th>
+                <th>DD</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </aside>
+      </div>
+
+      <details class="validators-section">
+        <summary>Efectividad de validadores</summary>
+        <div id="validatorsLoading" class="loading" hidden>Cargando validadores…</div>
+        <div id="validatorsError" class="error" hidden></div>
+        <table id="validatorsTable" hidden>
+          <thead>
+            <tr>
+              <th>Método</th>
+              <th>Validador</th>
+              <th>Trades validados</th>
+              <th>Win % validados</th>
+              <th>Trades NO val.</th>
+              <th>Win % NO val.</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </details>
     </section>
 
     <section id="tab3" class="tab-content">
@@ -129,6 +187,7 @@
 
   <footer id="appFooter"></footer>
 
+  <script src="./vendor/lightweight-charts.standalone.production.js"></script>
   <script src="./app.js" defer></script>
 </body>
 </html>

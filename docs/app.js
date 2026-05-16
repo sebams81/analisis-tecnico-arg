@@ -8,6 +8,13 @@ let CURRENT_DATE = null;
 let FUNDAMENTALS = null;
 let SELECTED_FUND_TICKERS = null;
 let SELECTED_MONTH = "";
+let TICKER_DATA = {};
+let VALIDATORS = null;
+let CHART = null;
+let CHART_TICKER = null;
+let CHART_MODE = "candles";
+let CHART_INDICATORS = { hma: false, ema: false, sma: false };
+let TAB2_INITIALIZED = false;
 
 async function init() {
   setupTabs();
@@ -68,6 +75,9 @@ function setupTabs() {
       btn.classList.add("active");
       document.getElementById(btn.dataset.tab).classList.add("active");
 
+      if (btn.dataset.tab === "tab2") {
+        setupTab2IfNeeded();
+      }
       if (btn.dataset.tab === "tab3" && FUNDAMENTALS === null) {
         loadFundamentals();
       }
@@ -415,6 +425,304 @@ function escapeHtml(s) {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
+}
+
+// ============== Tab 2 — Chart ==============
+
+function setupTab2IfNeeded() {
+  if (TAB2_INITIALIZED) return;
+  TAB2_INITIALIZED = true;
+
+  const select = document.getElementById("chartTicker");
+  select.innerHTML = SUMMARY.map(
+    (t) => `<option value="${t.ticker}">${t.ticker}</option>`
+  ).join("");
+  select.value = "BBAR_BA";
+
+  select.addEventListener("change", () => loadAndRenderTicker(select.value));
+
+  document.getElementById("chartModeCandles").addEventListener("click", () => setChartMode("candles"));
+  document.getElementById("chartModeLine").addEventListener("click", () => setChartMode("line"));
+
+  ["hma", "ema", "sma"].forEach((ind) => {
+    document.getElementById(`ind-${ind}`).addEventListener("change", (e) => {
+      CHART_INDICATORS[ind] = e.target.checked;
+      renderChart();
+    });
+  });
+
+  setupValidatorsSection();
+  loadAndRenderTicker("BBAR_BA");
+}
+
+function setChartMode(mode) {
+  CHART_MODE = mode;
+  document.getElementById("chartModeCandles").classList.toggle("active", mode === "candles");
+  document.getElementById("chartModeLine").classList.toggle("active", mode === "line");
+  renderChart();
+}
+
+async function loadAndRenderTicker(ticker) {
+  const loading = document.getElementById("loadingTab2");
+  const err = document.getElementById("errorTab2");
+  err.hidden = true;
+
+  if (!TICKER_DATA[ticker]) {
+    loading.hidden = false;
+    try {
+      TICKER_DATA[ticker] = await fetch(`./data/ticker_${ticker}.json`).then((r) => {
+        if (!r.ok) throw new Error(`No se pudo cargar ticker_${ticker}.json`);
+        return r.json();
+      });
+    } catch (e) {
+      loading.hidden = true;
+      err.textContent = `Error al cargar datos: ${e.message}`;
+      err.hidden = false;
+      return;
+    }
+    loading.hidden = true;
+  }
+
+  CHART_TICKER = ticker;
+  renderChart();
+  renderMetrics(ticker);
+
+  if (VALIDATORS !== null && document.querySelector(".validators-section").open) {
+    renderValidators(ticker);
+  }
+}
+
+function renderChart() {
+  if (!CHART_TICKER || !TICKER_DATA[CHART_TICKER]) return;
+
+  const container = document.getElementById("chartContainer");
+  if (CHART) {
+    CHART.remove();
+    CHART = null;
+  }
+
+  CHART = LightweightCharts.createChart(container, {
+    width: container.clientWidth,
+    height: container.clientHeight,
+    layout: {
+      background: { color: "transparent" },
+      textColor: "#e6e6e6",
+    },
+    grid: {
+      vertLines: { color: "#232a3d" },
+      horzLines: { color: "#232a3d" },
+    },
+    rightPriceScale: { borderColor: "#232a3d" },
+    timeScale: { borderColor: "#232a3d", timeVisible: false },
+    crosshair: { mode: 1 },
+  });
+
+  const ohlc = TICKER_DATA[CHART_TICKER].ohlc;
+
+  let priceSeries;
+  if (CHART_MODE === "candles") {
+    priceSeries = CHART.addCandlestickSeries({
+      upColor: "#34d399", downColor: "#f87171",
+      borderUpColor: "#34d399", borderDownColor: "#f87171",
+      wickUpColor: "#34d399", wickDownColor: "#f87171",
+    });
+    priceSeries.setData(ohlc.map((d) => ({
+      time: d.time, open: d.open, high: d.high, low: d.low, close: d.close,
+    })));
+  } else {
+    priceSeries = CHART.addLineSeries({ color: "#3b82f6", lineWidth: 2 });
+    priceSeries.setData(ohlc.map((d) => ({ time: d.time, value: d.close })));
+  }
+
+  if (CHART_INDICATORS.hma) addHmaIndicator(ohlc);
+  if (CHART_INDICATORS.ema) addEmaIndicator(ohlc);
+  if (CHART_INDICATORS.sma) addSmaIndicator(ohlc);
+
+  const markers = [];
+  if (CHART_INDICATORS.ema) markers.push(...signalMarkers(ohlc, "T_ema12_26"));
+  if (CHART_INDICATORS.sma) markers.push(...signalMarkers(ohlc, "T_sma10_50_100"));
+  if (markers.length > 0) {
+    markers.sort((a, b) => a.time.localeCompare(b.time));
+    priceSeries.setMarkers(markers);
+  }
+
+  const visibleBars = 130;
+  CHART.timeScale().setVisibleLogicalRange({
+    from: Math.max(0, ohlc.length - visibleBars),
+    to: ohlc.length - 1,
+  });
+
+  if (!renderChart._resizeAttached) {
+    window.addEventListener("resize", () => {
+      if (CHART) {
+        const c = document.getElementById("chartContainer");
+        CHART.resize(c.clientWidth, c.clientHeight);
+      }
+    });
+    renderChart._resizeAttached = true;
+  }
+}
+
+const HMA_GREEN_STATES = new Set(["Compra Confirmada", "Compra Temprana", "Señal Alcista"]);
+const HMA_RED_STATES   = new Set(["Venta Confirmada",  "Venta Temprana",  "Señal Bajista"]);
+
+function hmaStateFromSignal(sig) {
+  if (HMA_GREEN_STATES.has(sig)) return "green";
+  if (HMA_RED_STATES.has(sig))   return "red";
+  return "gray";
+}
+
+function addHmaIndicator(ohlc) {
+  const seriesMap = { green: [], red: [], gray: [] };
+  let prevState = null;
+
+  for (const day of ohlc) {
+    if (day.hma16 == null) continue;
+    const state = hmaStateFromSignal(day.T_hma16);
+    if (prevState && prevState !== state) {
+      seriesMap[prevState].push({ time: day.time, value: day.hma16 });
+    }
+    seriesMap[state].push({ time: day.time, value: day.hma16 });
+    prevState = state;
+  }
+
+  const colors = { green: "#34d399", red: "#f87171", gray: "#a8b3c7" };
+  for (const [state, data] of Object.entries(seriesMap)) {
+    if (data.length === 0) continue;
+    const series = CHART.addLineSeries({
+      color: colors[state], lineWidth: 2,
+      lastValueVisible: false, priceLineVisible: false,
+    });
+    series.setData(data);
+  }
+}
+
+function addEmaIndicator(ohlc) {
+  const ema12 = ohlc.filter((d) => d.ema12 != null).map((d) => ({ time: d.time, value: d.ema12 }));
+  const ema26 = ohlc.filter((d) => d.ema26 != null).map((d) => ({ time: d.time, value: d.ema26 }));
+  CHART.addLineSeries({ color: "#60a5fa", lineWidth: 1.5, lastValueVisible: false, priceLineVisible: false }).setData(ema12);
+  CHART.addLineSeries({ color: "#3b82f6", lineWidth: 1.5, lastValueVisible: false, priceLineVisible: false }).setData(ema26);
+}
+
+function addSmaIndicator(ohlc) {
+  const sma10  = ohlc.filter((d) => d.sma10  != null).map((d) => ({ time: d.time, value: d.sma10 }));
+  const sma50  = ohlc.filter((d) => d.sma50  != null).map((d) => ({ time: d.time, value: d.sma50 }));
+  const sma100 = ohlc.filter((d) => d.sma100 != null).map((d) => ({ time: d.time, value: d.sma100 }));
+  CHART.addLineSeries({ color: "#fbbf24", lineWidth: 1.5, lastValueVisible: false, priceLineVisible: false }).setData(sma10);
+  CHART.addLineSeries({ color: "#f97316", lineWidth: 1.5, lastValueVisible: false, priceLineVisible: false }).setData(sma50);
+  CHART.addLineSeries({ color: "#dc2626", lineWidth: 1.5, lastValueVisible: false, priceLineVisible: false }).setData(sma100);
+}
+
+const BUY_SIGNALS  = new Set(["Compra Confirmada", "Compra Temprana"]);
+const SELL_SIGNALS = new Set(["Venta Confirmada",  "Venta Temprana"]);
+
+function signalMarkers(ohlc, signalField) {
+  const markers = [];
+  for (const day of ohlc) {
+    const sig = day[signalField];
+    if (BUY_SIGNALS.has(sig)) {
+      markers.push({ time: day.time, position: "belowBar", color: "#34d399", shape: "arrowUp" });
+    } else if (SELL_SIGNALS.has(sig)) {
+      markers.push({ time: day.time, position: "aboveBar", color: "#f87171", shape: "arrowDown" });
+    }
+  }
+  return markers;
+}
+
+const METHOD_LABELS = {
+  HMA16:         "HMA 16",
+  EMA_12_26:     "EMA 12/26",
+  SMA_10_50_100: "SMA 10/50/100",
+};
+
+function fmtPct(v) {
+  if (v == null) return "—";
+  return `${(v * 100).toFixed(1)}%`;
+}
+function fmtRet(v) {
+  if (v == null) return "—";
+  const sign = v >= 0 ? "+" : "";
+  return `${sign}${(v * 100).toFixed(1)}%`;
+}
+
+function renderMetrics(ticker) {
+  const entry = SUMMARY.find((t) => t.ticker === ticker);
+  const tbody = document.querySelector("#metricsTable tbody");
+  if (!entry || !entry.metrics) { tbody.innerHTML = ""; return; }
+
+  const rows = ["HMA16", "EMA_12_26", "SMA_10_50_100"].map((m) => {
+    const t = entry.metrics[m] && entry.metrics[m].total;
+    if (!t) return `<tr><td>${METHOD_LABELS[m]}</td><td colspan="4">—</td></tr>`;
+    const retClass = t.cumulative_return >= 0 ? "pos" : "neg";
+    return `
+      <tr>
+        <td>${METHOD_LABELS[m]}</td>
+        <td>${t.n_trades}</td>
+        <td>${fmtPct(t.win_rate)}</td>
+        <td class="${retClass}">${fmtRet(t.cumulative_return)}</td>
+        <td class="neg">${fmtRet(t.max_drawdown)}</td>
+      </tr>
+    `;
+  });
+  tbody.innerHTML = rows.join("");
+}
+
+function setupValidatorsSection() {
+  const details = document.querySelector(".validators-section");
+  details.addEventListener("toggle", async () => {
+    if (!details.open) return;
+    if (VALIDATORS === null) {
+      const loading = document.getElementById("validatorsLoading");
+      const err = document.getElementById("validatorsError");
+      loading.hidden = false;
+      err.hidden = true;
+      try {
+        VALIDATORS = await fetch("./data/validators.json").then((r) => {
+          if (!r.ok) throw new Error("No se pudo cargar validators.json");
+          return r.json();
+        });
+        loading.hidden = true;
+      } catch (e) {
+        loading.hidden = true;
+        err.textContent = `Error al cargar validadores: ${e.message}`;
+        err.hidden = false;
+        return;
+      }
+    }
+    renderValidators(CHART_TICKER);
+  });
+}
+
+function renderValidators(ticker) {
+  const table = document.getElementById("validatorsTable");
+  const tbody = table.querySelector("tbody");
+  const entries = VALIDATORS.filter((v) => v.ticker === ticker);
+
+  const rows = [];
+  for (const m of ["HMA16", "EMA_12_26", "SMA_10_50_100"]) {
+    const e = entries.find((x) => x.method === m);
+    if (!e) continue;
+    rows.push(`
+      <tr>
+        <td>${METHOD_LABELS[m]}</td>
+        <td>Volumen</td>
+        <td>${e.vma.n_confirmed}</td>
+        <td>${fmtPct(e.vma.win_rate_confirmed)}</td>
+        <td>${e.vma.n_not_confirmed}</td>
+        <td>${fmtPct(e.vma.win_rate_not_confirmed)}</td>
+      </tr>
+      <tr>
+        <td>${METHOD_LABELS[m]}</td>
+        <td>Velas</td>
+        <td>${e.candle.n_aligned}</td>
+        <td>${fmtPct(e.candle.win_rate_aligned)}</td>
+        <td>${e.candle.n_not_aligned}</td>
+        <td>${fmtPct(e.candle.win_rate_not_aligned)}</td>
+      </tr>
+    `);
+  }
+  tbody.innerHTML = rows.join("");
+  table.hidden = false;
 }
 
 init();
