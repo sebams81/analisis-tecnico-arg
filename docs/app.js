@@ -216,7 +216,7 @@ function renderTable() {
     <tr>
       <td>${i + 1}</td>
       <td><strong>${cleanTicker(t.ticker)}</strong></td>
-      <td>${pillMercado(t.mercado)}</td>
+      <td>${t.mercado === "BA" ? "Local" : "MEP"}</td>
       <td>${pillSignal(t.signals.HMA16)}</td>
       <td>${pillSignal(t.signals.EMA_12_26)}</td>
       <td>${pillSignal(t.signals.SMA_10_50_100)}</td>
@@ -228,14 +228,20 @@ function renderTable() {
     .join("");
 }
 
-const SIGNAL_GREENS = ["Compra Temprana", "Compra Confirmada", "Señal Alcista"];
-const SIGNAL_REDS = ["Venta Temprana", "Venta Confirmada", "Señal Bajista"];
+const SIGNAL_PILL_CLASS = {
+  "Compra Confirmada": "buy-conf",
+  "Compra Temprana":   "buy-temp",
+  "Señal Alcista":     "bull-soft",
+  "Venta Confirmada":  "sell-conf",
+  "Venta Temprana":    "sell-temp",
+  "Señal Bajista":     "bear-soft",
+  "Neutra":            "neutral",
+};
 
-function pillSignal(s) {
-  if (!s) return '<span class="pill pill-neutral">—</span>';
-  if (SIGNAL_GREENS.includes(s)) return `<span class="pill pill-buy">${s}</span>`;
-  if (SIGNAL_REDS.includes(s)) return `<span class="pill pill-sell">${s}</span>`;
-  return `<span class="pill pill-neutral">${s}</span>`;
+function pillSignal(signal) {
+  if (!signal) return '<span class="pill neutral">—</span>';
+  const cls = SIGNAL_PILL_CLASS[signal] || "neutral";
+  return `<span class="pill ${cls}">${signal}</span>`;
 }
 
 const VMA_CLASS = {
@@ -247,13 +253,9 @@ const VMA_CLASS = {
 };
 
 function pillVma(cat) {
-  if (!cat) return '<span class="pill pill-neutral">—</span>';
+  if (!cat) return '<span class="pill neutral">—</span>';
   const cls = VMA_CLASS[cat] || "vma-n";
   return `<span class="pill ${cls}">${cat}</span>`;
-}
-
-function pillMercado(m) {
-  return `<span class="pill pill-mercado-${m.toLowerCase()}">${m}</span>`;
 }
 
 const CANDLE_LABELS = {
@@ -393,13 +395,13 @@ function renderFundamentals() {
     const m = IMPACT_MAP[ev.impacto] || { cls: "", icon: "" };
     const tickers = ev.tickers_afectados
       .map(cleanTicker)
-      .map((t) => `<strong>${t}</strong>`)
+      .map((t) => `<strong>${escapeHtml(t)}</strong>`)
       .join(", ");
     const prefix = m.icon ? `${m.icon} ` : "";
     return `
       <tr class="${m.cls}">
         <td>${formatDateDDMMYYYY(ev.fecha)}</td>
-        <td>${escapeHtml(tickers)}</td>
+        <td>${tickers}</td>
         <td>${prefix}${escapeHtml(ev.evento)}</td>
       </tr>
     `;

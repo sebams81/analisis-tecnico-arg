@@ -1,12 +1,12 @@
 * { box-sizing: border-box; }
 
 :root {
-  --bg: #0f172a;
-  --surface: #1e293b;
-  --surface-2: #334155;
-  --text: #f1f5f9;
-  --muted: #94a3b8;
-  --border: #334155;
+  --bg: #0e1117;
+  --surface: #151a23;
+  --surface-2: #1a2130;
+  --text: #e6e6e6;
+  --muted: #a8b3c7;
+  --border: #232a3d;
   --accent: #3b82f6;
 
   --green: #16a34a;
@@ -246,28 +246,30 @@ tbody tr:last-child td { border-bottom: none; }
 
 .pill {
   display: inline-block;
-  padding: 3px 10px;
-  border-radius: 12px;
+  padding: 2px 10px;
+  border-radius: 999px;
   font-size: 12px;
   font-weight: 600;
+  border: 1px solid #2a3043;
+  background: #121827;
   white-space: nowrap;
 }
 
-/* Señal: verde / rojo / amarillo (paleta apagada coherente con Tab 3) */
-.pill-buy     { background: #0f1b17; color: #34d399; }
-.pill-sell    { background: #1b1210; color: #f87171; }
-.pill-neutral { background: #1b1810; color: #facc15; }
+/* Señal: 7 categorías con paleta del mock */
+.pill.buy-conf  { color: #eafff1; background: #0f261b; border-color: #14633a; }
+.pill.buy-temp  { color: #eafff1; background: #112d1f; border-color: #1a7b45; }
+.pill.bull-soft { color: #34d399; background: #0f1b17; border-color: #1e5a40; }
+.pill.sell-conf { color: #ffecec; background: #2a1212; border-color: #7a2222; }
+.pill.sell-temp { color: #ffecec; background: #321717; border-color: #922828; }
+.pill.bear-soft { color: #f87171; background: #1b1210; border-color: #5a2d1e; }
+.pill.neutral   { color: #facc15; background: #121827; border-color: #574c1a; }
 
-/* VMA20 (paleta apagada coherente con señales) */
-.pill.vma-mh { background: #0a1d24; color: #22d3ee; }
-.pill.vma-h  { background: #0a1828; color: #60a5fa; }
-.pill.vma-n  { background: #1a1d24; color: #94a3b8; }
-.pill.vma-l  { background: #1c1410; color: #fb923c; }
-.pill.vma-ml { background: #1b1210; color: #f87171; }
-
-/* Mercado (paleta apagada coherente con señales) */
-.pill-mercado-ba  { background: #0a1828; color: #60a5fa; }
-.pill-mercado-mep { background: #0a1d18; color: #34d399; }
+/* VMA20 (5 categorías con jerarquía visual del mock) */
+.pill.vma-mh { color: #6ee7b7; background: #0a1d12; border-color: #1f7a4d; }
+.pill.vma-h  { color: #34d399; background: #0f1b17; border-color: #20553f; }
+.pill.vma-n  { color: #facc15; background: #121827; border-color: #574c1a; }
+.pill.vma-l  { color: #f87171; background: #1b1210; border-color: #553020; }
+.pill.vma-ml { color: #fda4af; background: #2a1212; border-color: #7a2222; }
 
 /* Tab 3 — coloreado de fila por impacto */
 .impacto-verde td    { background: #0f1b17; color: #34d399; }
