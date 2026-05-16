@@ -88,11 +88,17 @@
           <button type="button" id="chartModeLine" class="filter-btn chart-mode-btn">Línea</button>
         </div>
 
-        <div class="chart-indicators">
+        <fieldset class="indicator-group">
+          <legend>Método de Hull</legend>
           <label><input type="checkbox" id="ind-hma"> HMA 16</label>
-          <label><input type="checkbox" id="ind-ema"> EMA 12/26</label>
-          <label><input type="checkbox" id="ind-sma"> SMA 10/50/100</label>
-        </div>
+        </fieldset>
+
+        <fieldset class="indicator-group">
+          <legend>Métodos de Medias Móviles Clásicas</legend>
+          <label><input type="radio" name="classic" value="ema" id="classic-ema"> EMA 12/26</label>
+          <label><input type="radio" name="classic" value="sma" id="classic-sma"> SMA 10/50/100</label>
+          <label><input type="radio" name="classic" value="none" id="classic-none" checked> Ninguna</label>
+        </fieldset>
       </div>
 
       <div id="loadingTab2" class="loading" hidden>Cargando…</div>

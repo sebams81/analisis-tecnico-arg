@@ -13,7 +13,8 @@ let VALIDATORS = null;
 let CHART = null;
 let CHART_TICKER = null;
 let CHART_MODE = "candles";
-let CHART_INDICATORS = { hma: false, ema: false, sma: false };
+let CHART_INDICATORS = { hma: false };
+let CHART_CLASSIC_METHOD = "none";
 let TAB2_INITIALIZED = false;
 
 async function init() {
@@ -454,9 +455,13 @@ function setupTab2IfNeeded() {
   document.getElementById("chartModeCandles").addEventListener("click", () => setChartMode("candles"));
   document.getElementById("chartModeLine").addEventListener("click", () => setChartMode("line"));
 
-  ["hma", "ema", "sma"].forEach((ind) => {
-    document.getElementById(`ind-${ind}`).addEventListener("change", (e) => {
-      CHART_INDICATORS[ind] = e.target.checked;
+  document.getElementById("ind-hma").addEventListener("change", (e) => {
+    CHART_INDICATORS.hma = e.target.checked;
+    renderChart();
+  });
+  document.querySelectorAll('input[name="classic"]').forEach((radio) => {
+    radio.addEventListener("change", (e) => {
+      CHART_CLASSIC_METHOD = e.target.value;
       renderChart();
     });
   });
@@ -553,8 +558,8 @@ function renderChart() {
 
   // Indicadores en pane 0
   if (CHART_INDICATORS.hma) addHmaIndicator(ohlc);
-  if (CHART_INDICATORS.ema) addEmaIndicator(ohlc);
-  if (CHART_INDICATORS.sma) addSmaIndicator(ohlc);
+  if (CHART_CLASSIC_METHOD === "ema") addEmaIndicator(ohlc);
+  if (CHART_CLASSIC_METHOD === "sma") addSmaIndicator(ohlc);
 
   // Pane 1 (markers): serie transparente con valor 0 constante
   const markerSeries = CHART.addSeries(LightweightCharts.LineSeries, {
@@ -568,8 +573,8 @@ function renderChart() {
 
   // Markers EMA + SMA combinados sobre la serie de pane 1
   const markers = [];
-  if (CHART_INDICATORS.ema) markers.push(...signalMarkers(ohlc, "T_ema12_26"));
-  if (CHART_INDICATORS.sma) markers.push(...signalMarkers(ohlc, "T_sma10_50_100"));
+  if (CHART_CLASSIC_METHOD === "ema") markers.push(...signalMarkers(ohlc, "T_ema12_26"));
+  if (CHART_CLASSIC_METHOD === "sma") markers.push(...signalMarkers(ohlc, "T_sma10_50_100"));
   if (markers.length > 0) {
     markers.sort((a, b) => a.time.localeCompare(b.time));
     LightweightCharts.createSeriesMarkers(markerSeries, markers);
@@ -677,7 +682,7 @@ function addSmaIndicator(ohlc) {
     autoscaleInfoProvider: () => null,
   }).setData(sma50);
   CHART.addSeries(LightweightCharts.LineSeries, {
-    color: "#67e8f9", lineWidth: 1.5, lastValueVisible: false, priceLineVisible: false,
+    color: "#FF66FF", lineWidth: 1.5, lastValueVisible: false, priceLineVisible: false,
     autoscaleInfoProvider: () => null,
   }).setData(sma100);
 }
@@ -692,14 +697,14 @@ function renderLegend() {
   if (CHART_INDICATORS.hma) {
     items.push({ label: "HMA 16", color: "#34d399" });
   }
-  if (CHART_INDICATORS.ema) {
+  if (CHART_CLASSIC_METHOD === "ema") {
     items.push({ label: "EMA 12", color: "#60a5fa" });
     items.push({ label: "EMA 26", color: "#dc2626" });
   }
-  if (CHART_INDICATORS.sma) {
+  if (CHART_CLASSIC_METHOD === "sma") {
     items.push({ label: "SMA 10",  color: "#fbbf24" });
     items.push({ label: "SMA 50",  color: "#CC66FF" });
-    items.push({ label: "SMA 100", color: "#67e8f9" });
+    items.push({ label: "SMA 100", color: "#FF66FF" });
   }
   document.querySelector(".chart-legend").innerHTML = items.map((i) =>
     `<div class="legend-item"><span class="swatch" style="background:${i.color}"></span>${i.label}</div>`

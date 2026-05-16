@@ -356,17 +356,29 @@ tbody tr:last-child td { border-bottom: none; }
   color: white;
   border-color: var(--accent);
 }
-.chart-indicators {
-  display: flex;
-  gap: 12px;
-  align-items: center;
+.chart-controls fieldset.indicator-group {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 4px 12px 6px;
+  margin: 0;
 }
-.chart-indicators label {
-  display: flex;
+.indicator-group legend {
+  color: var(--muted);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 0 6px;
+}
+.indicator-group label {
+  display: inline-flex;
   align-items: center;
   gap: 4px;
+  margin-right: 12px;
+  font-size: 13px;
   cursor: pointer;
+  color: var(--text);
 }
+.indicator-group label:last-child { margin-right: 0; }
 
 /* Tab 2 — layout chart + panel */
 .chart-layout {
