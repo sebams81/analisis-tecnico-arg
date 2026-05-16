@@ -285,6 +285,13 @@ tbody tr:last-child td { border-bottom: none; }
   min-width: 280px;
   max-width: 600px;
 }
+#fundamentalsTable a {
+  color: inherit;
+  text-decoration: underline;
+}
+#fundamentalsTable a:hover {
+  opacity: 0.8;
+}
 
 /* Tab 3 — filtro por mes */
 .month-filter label {

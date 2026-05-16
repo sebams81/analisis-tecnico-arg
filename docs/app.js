@@ -417,6 +417,14 @@ const IMPACT_MAP = {
   Rojo:     { cls: "impacto-rojo",     icon: "↓" },
 };
 
+function formatFuente(fuente) {
+  if (!fuente) return "—";
+  if (/^https?:\/\//i.test(fuente)) {
+    return `<a href="${escapeHtml(fuente)}" target="_blank" rel="noopener noreferrer">Ver fuente</a>`;
+  }
+  return escapeHtml(fuente);
+}
+
 function renderFundamentals() {
   const filtered = FUNDAMENTALS.filter((ev) => {
     const tickerMatch = ev.tickers_afectados.some((t) => SELECTED_FUND_TICKERS.has(cleanTicker(t)));
@@ -436,6 +444,7 @@ function renderFundamentals() {
         <td>${formatDateDDMMYYYY(ev.fecha)}</td>
         <td>${tickers}</td>
         <td>${prefix}${escapeHtml(ev.evento)}</td>
+        <td>${formatFuente(ev.fuente)}</td>
       </tr>
     `;
   }).join("");
