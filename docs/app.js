@@ -1,6 +1,10 @@
-const META = { studyCutoffDate: null, studyEndDate: null };
+const META = { studyCutoffDate: null, studyEndDate: null, warmupEndDate: null };
 let SUMMARY = null;
 let LOCAL_VS_MEP = null;
+let DAILY_PANEL = null;
+let DAILY_PANEL_DATES = null;
+let SELECTED_TICKERS = null;
+let CURRENT_DATE = null;
 
 async function init() {
   setupTabs();
@@ -21,6 +25,7 @@ async function init() {
     ]);
     META.studyCutoffDate = meta.study_cutoff_date;
     META.studyEndDate = meta.study_end_date;
+    META.warmupEndDate = meta.warmup_end_date;
     SUMMARY = summary;
     LOCAL_VS_MEP = lvm;
 
@@ -31,7 +36,12 @@ async function init() {
       return a.mercado.localeCompare(b.mercado);
     });
 
+    SELECTED_TICKERS = new Set(SUMMARY.map((t) => t.ticker));
+    CURRENT_DATE = snapshotDate();
+
     populateFooter(meta);
+    setupTickerFilter();
+    setupDatePicker();
     renderSnapshotInfo();
     renderTable();
     document.getElementById("loadingTab1").hidden = true;
@@ -64,13 +74,128 @@ function snapshotDate() {
 }
 
 function renderSnapshotInfo() {
-  document.getElementById("snapshotDate").textContent = snapshotDate();
+  document.getElementById("snapshotDate").textContent = CURRENT_DATE || snapshotDate();
+}
+
+function setupTickerFilter() {
+  const list = document.getElementById("tickerCheckboxes");
+  list.innerHTML = SUMMARY.map(
+    (t) =>
+      `<label><input type="checkbox" value="${t.ticker}" checked> ${t.ticker}</label>`
+  ).join("");
+
+  document.getElementById("tickerFilterToggle").addEventListener("click", (e) => {
+    e.stopPropagation();
+    const panel = document.getElementById("tickerFilterPanel");
+    panel.hidden = !panel.hidden;
+  });
+  document.addEventListener("click", (e) => {
+    const panel = document.getElementById("tickerFilterPanel");
+    if (
+      !panel.hidden &&
+      !panel.contains(e.target) &&
+      e.target.id !== "tickerFilterToggle"
+    ) {
+      panel.hidden = true;
+    }
+  });
+
+  document.querySelectorAll(".filter-actions button").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const checked = btn.dataset.action === "all";
+      list
+        .querySelectorAll('input[type="checkbox"]')
+        .forEach((cb) => (cb.checked = checked));
+      onTickerSelectionChange();
+    });
+  });
+  list.addEventListener("change", onTickerSelectionChange);
+}
+
+function onTickerSelectionChange() {
+  SELECTED_TICKERS = new Set(
+    [...document.querySelectorAll("#tickerCheckboxes input:checked")].map((cb) => cb.value)
+  );
+  document.getElementById("tickerCount").textContent = `${SELECTED_TICKERS.size}/24`;
+  renderTable();
+}
+
+function setupDatePicker() {
+  const input = document.getElementById("dateInput");
+  input.min = META.warmupEndDate;
+  input.max = snapshotDate();
+  input.value = snapshotDate();
+  input.addEventListener("change", onDateChange);
+}
+
+async function onDateChange() {
+  const input = document.getElementById("dateInput");
+  const requested = input.value;
+  const lastDate = snapshotDate();
+
+  if (requested === lastDate) {
+    CURRENT_DATE = requested;
+    renderSnapshotInfo();
+    renderTable();
+    return;
+  }
+
+  if (!DAILY_PANEL) {
+    showToast("Cargando histórico…");
+    try {
+      DAILY_PANEL = await fetch("./data/daily_panel.json").then((r) => {
+        if (!r.ok) throw new Error("No se pudo cargar daily_panel.json");
+        return r.json();
+      });
+      DAILY_PANEL_DATES = Object.keys(DAILY_PANEL).sort();
+    } catch (e) {
+      showToast(`Error al cargar histórico: ${e.message}`);
+      return;
+    }
+  }
+
+  let target = null;
+  for (let i = DAILY_PANEL_DATES.length - 1; i >= 0; i--) {
+    if (DAILY_PANEL_DATES[i] <= requested) {
+      target = DAILY_PANEL_DATES[i];
+      break;
+    }
+  }
+  if (!target) {
+    showToast("No hay datos disponibles antes de esa fecha");
+    return;
+  }
+  if (target !== requested) {
+    showToast(`Rueda hábil más cercana: ${formatDateDDMMYYYY(target)}`);
+    input.value = target;
+  }
+  CURRENT_DATE = target;
+  renderSnapshotInfo();
+  renderTable();
+}
+
+function showToast(msg) {
+  const toast = document.getElementById("toast");
+  toast.textContent = msg;
+  toast.hidden = false;
+  clearTimeout(showToast._t);
+  showToast._t = setTimeout(() => {
+    toast.hidden = true;
+  }, 3000);
 }
 
 function renderTable() {
+  const lastDate = snapshotDate();
+  const source =
+    CURRENT_DATE === lastDate || !DAILY_PANEL
+      ? SUMMARY
+      : DAILY_PANEL[CURRENT_DATE] || [];
+
+  const filtered = source.filter((t) => SELECTED_TICKERS.has(t.ticker));
   const tbody = document.querySelector("#signalsTable tbody");
-  tbody.innerHTML = SUMMARY.map(
-    (t, i) => `
+  tbody.innerHTML = filtered
+    .map(
+      (t, i) => `
     <tr>
       <td>${i + 1}</td>
       <td><strong>${t.ticker}</strong></td>
@@ -82,7 +207,8 @@ function renderTable() {
       <td>${candleLabel(t.candle)}</td>
     </tr>
   `
-  ).join("");
+    )
+    .join("");
 }
 
 const SIGNAL_GREENS = ["Compra Temprana", "Compra Confirmada", "Señal Alcista"];

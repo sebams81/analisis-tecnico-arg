@@ -1,8 +1,9 @@
 {
-  "pipeline_run_date": "2026-05-15T17:40:45+00:00",
+  "pipeline_run_date": "2026-05-16T01:05:11+00:00",
   "study_start_date": "2020-09-14",
   "study_cutoff_date": "2024-08-28",
   "study_end_date": "2026-05-12",
+  "warmup_end_date": "2021-02-10",
   "tickers_count": 24,
   "period": "2020-09-14 to 2026-05-12",
   "methods": [

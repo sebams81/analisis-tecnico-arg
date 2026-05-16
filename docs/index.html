@@ -20,7 +20,27 @@
     <section id="tab1" class="tab-content active">
       <div class="controls">
         <span class="snapshot-info">Snapshot: <span id="snapshotDate">—</span></span>
+
+        <div class="ticker-filter">
+          <button id="tickerFilterToggle" class="filter-btn">
+            Tickers: <span id="tickerCount">24/24</span> ▼
+          </button>
+          <div id="tickerFilterPanel" class="filter-panel" hidden>
+            <div class="filter-actions">
+              <button data-action="all">Todos</button>
+              <button data-action="none">Ninguno</button>
+            </div>
+            <div id="tickerCheckboxes" class="checkbox-list"></div>
+          </div>
+        </div>
+
+        <div class="date-filter">
+          <label for="dateInput">Fecha:</label>
+          <input type="date" id="dateInput">
+        </div>
       </div>
+
+      <div id="toast" class="toast" hidden></div>
       <div id="loadingTab1" class="loading">Cargando…</div>
       <div id="errorTab1" class="error" hidden></div>
       <div class="table-wrap">

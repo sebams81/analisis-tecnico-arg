@@ -63,6 +63,22 @@ def _all_tickers():
     return TICKERS_ACCIONES + [t.replace("_BA", "_MEP") for t in TICKERS_ACCIONES]
 
 
+def _calculate_warmup_end_date():
+    """Primer dia donde TODOS los tickers tienen SMA100 calculada (no-NaN)."""
+    firsts = []
+    for ticker in _all_tickers():
+        path = INDICATORS_DIR / f"{ticker}_indicators.csv"
+        if not path.exists():
+            continue
+        ind = pd.read_csv(path)
+        if "sma100" not in ind.columns:
+            continue
+        valid = ind[ind["sma100"].notna()]
+        if not valid.empty:
+            firsts.append(str(valid["date"].iloc[0]))
+    return max(firsts) if firsts else None
+
+
 def _none_if_nan(v):
     """Convierte NaN/inf a None para serialización JSON segura."""
     if v is None:
@@ -92,6 +108,7 @@ def gen_meta():
         "study_start_date": STUDY_START_DATE,
         "study_cutoff_date": STUDY_CUTOFF_DATE,
         "study_end_date": STUDY_END_DATE,
+        "warmup_end_date": _calculate_warmup_end_date(),
         "tickers_count": len(_all_tickers()),
         "period": f"{STUDY_START_DATE} to {STUDY_END_DATE}",
         "methods": METHODS,
@@ -101,6 +118,55 @@ def gen_meta():
     out.write_text(json.dumps(meta, ensure_ascii=False, indent=2), encoding="utf-8")
     logger.info(f"_meta.json generado")
     return meta
+
+
+def gen_daily_panel():
+    """Para cada fecha entre warmup_end_date y la ultima rueda disponible,
+    emite un snapshot de 24 entries con misma estructura que summary.json
+    pero por dia. NO recalcula nada: lee de data_signals/csv/ + sma100 de
+    data_indicators/csv/ para filtrar dias pre-warmup."""
+    warmup = _calculate_warmup_end_date()
+    if warmup is None:
+        logger.warning("No se pudo calcular warmup_end_date - daily_panel.json no generado")
+        return
+
+    panel = {}
+    for ticker in _all_tickers():
+        sig_path = SIGNALS_DIR / f"{ticker}_signals.csv"
+        ind_path = INDICATORS_DIR / f"{ticker}_indicators.csv"
+        if not sig_path.exists() or not ind_path.exists():
+            continue
+        sig = pd.read_csv(sig_path)
+        ind = pd.read_csv(ind_path)[["date", "sma100"]]
+        merged = sig.merge(ind, on="date", how="left")
+        merged = merged[merged["sma100"].notna() & (merged["date"] >= warmup)]
+
+        mercado = "MEP" if ticker.endswith("_MEP") else "BA"
+        for _, row in merged.iterrows():
+            date = str(row["date"])
+            entry = {
+                "ticker": ticker,
+                "mercado": mercado,
+                "signals": {
+                    "HMA16": _none_if_nan(row.get("T_hma16")),
+                    "EMA_12_26": _none_if_nan(row.get("T_ema12_26")),
+                    "SMA_10_50_100": _none_if_nan(row.get("T_sma10_50_100")),
+                },
+                "vma20_cat": _none_if_nan(row.get("vma20_cat")),
+                "candle": _none_if_nan(row.get("candle_pattern")),
+                "last_date": date,
+            }
+            panel.setdefault(date, []).append(entry)
+
+    # Ordenar entries dentro de cada date por (ticker_base, mercado)
+    for date in panel:
+        panel[date].sort(key=lambda e: (e["ticker"].split("_")[0], e["mercado"]))
+
+    out = OUT_DIR / "daily_panel.json"
+    out.write_text(json.dumps(panel, ensure_ascii=False, indent=None), encoding="utf-8")
+    n_dates = len(panel)
+    n_entries = sum(len(v) for v in panel.values())
+    logger.info(f"daily_panel.json generado: {n_dates} fechas, {n_entries} entries totales")
 
 
 def gen_summary():
@@ -351,6 +417,7 @@ def main():
     gen_validators()
     gen_local_vs_mep()
     gen_fundamentals()
+    gen_daily_panel()
 
     n_ok = 0
     for ticker in _all_tickers():
