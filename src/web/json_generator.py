@@ -397,7 +397,7 @@ def gen_fundamentals():
             "fecha": ev.get("fecha"),
             "tickers_afectados": tickers_clean,
             "sector": _sector_for_event(tickers_clean),
-            "fuente": "manual",
+            "fuente": ev.get("fuente") or "manual",
             "evento": ev.get("evento"),
             "impacto": ev.get("impacto"),
         })
