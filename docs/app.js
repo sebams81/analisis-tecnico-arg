@@ -24,6 +24,13 @@ async function init() {
     SUMMARY = summary;
     LOCAL_VS_MEP = lvm;
 
+    SUMMARY.sort((a, b) => {
+      const baseA = a.ticker.split("_")[0];
+      const baseB = b.ticker.split("_")[0];
+      if (baseA !== baseB) return baseA.localeCompare(baseB);
+      return a.mercado.localeCompare(b.mercado);
+    });
+
     populateFooter(meta);
     renderSnapshotInfo();
     renderTable();
@@ -57,19 +64,7 @@ function snapshotDate() {
 }
 
 function renderSnapshotInfo() {
-  const date = snapshotDate();
-  document.getElementById("snapshotDate").textContent = date;
-  const badge = document.getElementById("periodBadge");
-  if (date <= META.studyCutoffDate) {
-    badge.textContent = "IN-SAMPLE";
-    badge.className = "badge badge-is";
-  } else if (date <= META.studyEndDate) {
-    badge.textContent = "OUT-OF-SAMPLE";
-    badge.className = "badge badge-oos";
-  } else {
-    badge.textContent = "POST-ESTUDIO";
-    badge.className = "badge badge-post";
-  }
+  document.getElementById("snapshotDate").textContent = snapshotDate();
 }
 
 function renderTable() {
@@ -131,11 +126,17 @@ function candleLabel(c) {
   return CANDLE_LABELS[c] || c;
 }
 
+function formatDateDDMMYYYY(iso) {
+  const datePart = iso.split("T")[0];
+  const [y, m, d] = datePart.split("-");
+  return `${d}/${m}/${y}`;
+}
+
 function populateFooter(meta) {
-  const date = meta.pipeline_run_date.split("T")[0];
-  const cost = (meta.cost_per_trade * 100).toFixed(2);
+  const dateDDMMYYYY = formatDateDDMMYYYY(meta.pipeline_run_date);
+  const cost = (meta.cost_per_trade * 100).toString().replace(".", ",");
   document.getElementById("appFooter").innerHTML =
-    `Pipeline: ${date} · Período: ${meta.period} · ${meta.tickers_count} tickers · Costo por trade: ${cost}%`;
+    `Última actualización: ${dateDDMMYYYY} · Costo por trade asumido: ${cost}%`;
 }
 
 init();

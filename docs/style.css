@@ -104,19 +104,6 @@ main {
 
 .snapshot-info span { color: var(--text); font-weight: 600; }
 
-.badge {
-  display: inline-block;
-  padding: 4px 10px;
-  border-radius: 4px;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-}
-
-.badge-is { background: var(--accent); color: white; }
-.badge-oos { background: var(--yellow); color: #1f2937; }
-.badge-post { background: #22c55e; color: white; }
-
 .loading, .error {
   padding: 40px;
   text-align: center;
