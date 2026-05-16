@@ -29,14 +29,18 @@ html, body {
 }
 
 header {
-  background: var(--surface);
-  padding: 16px 24px;
+  background: #0b0f16;
+  padding: 12px 16px;
   border-bottom: 1px solid var(--border);
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
 header h1 {
-  margin: 0 0 12px;
-  font-size: 20px;
+  margin: 0 12px 0 0;
+  font-size: 16px;
   font-weight: 600;
 }
 
@@ -249,10 +253,10 @@ tbody tr:last-child td { border-bottom: none; }
   white-space: nowrap;
 }
 
-/* Señal: verde / rojo / amarillo */
-.pill-buy { background: var(--green); color: white; }
-.pill-sell { background: var(--red); color: white; }
-.pill-neutral { background: var(--yellow); color: #1f2937; }
+/* Señal: verde / rojo / amarillo (paleta apagada coherente con Tab 3) */
+.pill-buy     { background: #0f1b17; color: #34d399; }
+.pill-sell    { background: #1b1210; color: #f87171; }
+.pill-neutral { background: #1b1810; color: #facc15; }
 
 /* VMA20 */
 .pill.vma-mh { background: var(--cyan); color: white; }
