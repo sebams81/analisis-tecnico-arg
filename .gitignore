@@ -1,11 +1,24 @@
 # Carpetas de datos
 BUs
 data_fundamentals/meta/
-data_raw/
+
+# data_raw/: ignorar todo excepto los CSVs base (necesarios para el incremental del downloader)
+data_raw/*
+!data_raw/csv/
+data_raw/csv/*
+!data_raw/csv/*.csv
+
+# Derivados regenerables (no se commitean)
 data_normalized/
 data_indicators/
 data_signals/
-data_public/
+
+# data_public/: ignorar todo excepto el snapshot académico
+data_public/*
+!data_public/backtests/
+data_public/backtests/*
+!data_public/backtests/summary_all_tickers.csv
+
 logs/
 
 # Archivos de configuración y temporales
