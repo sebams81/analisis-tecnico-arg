@@ -77,7 +77,7 @@ function setupTabs() {
       if (btn.dataset.tab === "tab2") {
         setupTab2IfNeeded();
       }
-      if (btn.dataset.tab === "tab3" && FUNDAMENTALS === null) {
+      if (btn.dataset.tab === "tab3") {
         loadFundamentals();
       }
     });
@@ -288,27 +288,35 @@ function formatDateDDMMYYYY(iso) {
   return `${d}/${m}/${y}`;
 }
 
+let _fundamentalsPromise = null;
 async function ensureFundamentals() {
   if (FUNDAMENTALS !== null) return true;
-  try {
-    FUNDAMENTALS = await fetch("./data/fundamentals.json").then((r) => {
+  if (_fundamentalsPromise) return _fundamentalsPromise;
+  _fundamentalsPromise = (async () => {
+    try {
+      const r = await fetch("./data/fundamentals.json");
       if (!r.ok) throw new Error("No se pudo cargar fundamentals.json");
-      return r.json();
-    });
-    FUNDAMENTALS.sort((a, b) => b.fecha.localeCompare(a.fecha));
-    return true;
-  } catch (e) {
-    FUNDAMENTALS = null;
-    return false;
-  }
+      FUNDAMENTALS = await r.json();
+      FUNDAMENTALS.sort((a, b) => b.fecha.localeCompare(a.fecha));
+      return true;
+    } catch (e) {
+      FUNDAMENTALS = null;
+      _fundamentalsPromise = null;
+      return false;
+    }
+  })();
+  return _fundamentalsPromise;
 }
 
 async function loadFundamentals() {
   const loading = document.getElementById("loadingTab3");
   const err = document.getElementById("errorTab3");
   const table = document.getElementById("fundamentalsTable");
-  loading.hidden = false;
-  err.hidden = true;
+  const wasCached = FUNDAMENTALS !== null;
+  if (!wasCached) {
+    loading.hidden = false;
+    err.hidden = true;
+  }
   const ok = await ensureFundamentals();
   if (!ok) {
     loading.hidden = true;
@@ -345,6 +353,7 @@ function getCompanyName(ticker) {
   return TICKER_NAMES[cleanTicker(ticker)] || "";
 }
 
+let _fundFiltersInit = false;
 function setupFundFilters() {
   const allTickers = [...new Set(
     FUNDAMENTALS.flatMap((ev) => ev.tickers_afectados.map(cleanTicker))
@@ -356,6 +365,20 @@ function setupFundFilters() {
     .map((t) => `<label><input type="checkbox" value="${t}" checked> ${t}</label>`)
     .join("");
   document.getElementById("fundTickerCount").textContent = `${allTickers.length}/${allTickers.length}`;
+
+  const select = document.getElementById("monthSelect");
+  while (select.options.length > 1) select.remove(1);
+  const months = [...new Set(FUNDAMENTALS.map((ev) => ev.fecha.slice(0, 7)))].sort().reverse();
+  for (const m of months) {
+    const opt = document.createElement("option");
+    opt.value = m;
+    opt.textContent = monthYearLabel(m);
+    select.appendChild(opt);
+  }
+  SELECTED_MONTH = select.value;
+
+  if (_fundFiltersInit) return;
+  _fundFiltersInit = true;
 
   document.getElementById("fundTickerFilterToggle").addEventListener("click", (e) => {
     e.stopPropagation();
@@ -378,14 +401,6 @@ function setupFundFilters() {
   });
   list.addEventListener("change", onFundTickerSelectionChange);
 
-  const months = [...new Set(FUNDAMENTALS.map((ev) => ev.fecha.slice(0, 7)))].sort().reverse();
-  const select = document.getElementById("monthSelect");
-  for (const m of months) {
-    const opt = document.createElement("option");
-    opt.value = m;
-    opt.textContent = monthYearLabel(m);
-    select.appendChild(opt);
-  }
   select.addEventListener("change", (e) => {
     SELECTED_MONTH = e.target.value;
     renderFundamentals();
