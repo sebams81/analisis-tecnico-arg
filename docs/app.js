@@ -9,7 +9,6 @@ let FUNDAMENTALS = null;
 let SELECTED_FUND_TICKERS = null;
 let SELECTED_MONTH = "";
 let TICKER_DATA = {};
-let VALIDATORS = null;
 let CHART = null;
 let CHART_TICKER = null;
 let CHART_MODE = "candles";
@@ -290,9 +289,8 @@ function formatDateDDMMYYYY(iso) {
 
 function populateFooter(meta) {
   const dateDDMMYYYY = formatDateDDMMYYYY(meta.pipeline_run_date);
-  const cost = (meta.cost_per_trade * 100).toString().replace(".", ",");
   document.getElementById("appFooter").innerHTML =
-    `Última actualización: ${dateDDMMYYYY} · Costo por trade asumido: ${cost}%`;
+    `Última actualización: ${dateDDMMYYYY}`;
 }
 
 async function ensureFundamentals() {
@@ -466,7 +464,6 @@ function setupTab2IfNeeded() {
     });
   });
 
-  setupValidatorsSection();
   loadAndRenderTicker("BBAR_BA");
 }
 
@@ -504,10 +501,6 @@ async function loadAndRenderTicker(ticker) {
 
   await ensureFundamentals();
   renderTickerEvents(ticker);
-
-  if (VALIDATORS !== null && document.querySelector(".validators-section").open) {
-    renderValidators(ticker);
-  }
 }
 
 function renderChart() {
@@ -727,17 +720,6 @@ function signalMarkers(ohlc, signalField) {
   return markers;
 }
 
-const METHOD_LABELS = {
-  HMA16:         "HMA 16",
-  EMA_12_26:     "EMA 12/26",
-  SMA_10_50_100: "SMA 10/50/100",
-};
-
-function fmtPct(v) {
-  if (v == null) return "—";
-  return `${(v * 100).toFixed(1)}%`;
-}
-
 function fmtPctSigned(v) {
   if (v == null) return "—";
   const sign = v >= 0 ? "+" : "";
@@ -824,64 +806,6 @@ function renderTickerEvents(ticker) {
     const m = IMPACT_MAP[ev.impacto] || { cls: "", icon: "" };
     return `<li class="${m.cls}"><span class="icon">${m.icon}</span> <strong>${formatDateDDMMYYYY(ev.fecha)}</strong> ${escapeHtml(ev.evento)}</li>`;
   }).join("");
-}
-
-function setupValidatorsSection() {
-  const details = document.querySelector(".validators-section");
-  details.addEventListener("toggle", async () => {
-    if (!details.open) return;
-    if (VALIDATORS === null) {
-      const loading = document.getElementById("validatorsLoading");
-      const err = document.getElementById("validatorsError");
-      loading.hidden = false;
-      err.hidden = true;
-      try {
-        VALIDATORS = await fetch("./data/validators.json").then((r) => {
-          if (!r.ok) throw new Error("No se pudo cargar validators.json");
-          return r.json();
-        });
-        loading.hidden = true;
-      } catch (e) {
-        loading.hidden = true;
-        err.textContent = `Error al cargar validadores: ${e.message}`;
-        err.hidden = false;
-        return;
-      }
-    }
-    renderValidators(CHART_TICKER);
-  });
-}
-
-function renderValidators(ticker) {
-  const table = document.getElementById("validatorsTable");
-  const tbody = table.querySelector("tbody");
-  const entries = VALIDATORS.filter((v) => v.ticker === ticker);
-
-  const rows = [];
-  for (const m of ["HMA16", "EMA_12_26", "SMA_10_50_100"]) {
-    const e = entries.find((x) => x.method === m);
-    if (!e) continue;
-    rows.push(`
-      <tr>
-        <td>${METHOD_LABELS[m]}</td>
-        <td>Volumen</td>
-        <td>${e.vma.n_confirmed}</td>
-        <td>${fmtPct(e.vma.win_rate_confirmed)}</td>
-        <td>${e.vma.n_not_confirmed}</td>
-        <td>${fmtPct(e.vma.win_rate_not_confirmed)}</td>
-      </tr>
-      <tr>
-        <td>${METHOD_LABELS[m]}</td>
-        <td>Velas</td>
-        <td>${e.candle.n_aligned}</td>
-        <td>${fmtPct(e.candle.win_rate_aligned)}</td>
-        <td>${e.candle.n_not_aligned}</td>
-        <td>${fmtPct(e.candle.win_rate_not_aligned)}</td>
-      </tr>
-    `);
-  }
-  tbody.innerHTML = rows.join("");
-  table.hidden = false;
 }
 
 init();

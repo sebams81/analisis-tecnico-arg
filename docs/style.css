@@ -488,44 +488,6 @@ tbody tr:last-child td { border-bottom: none; }
 .events-list .icon { font-weight: 700; margin-right: 4px; }
 .no-events { color: var(--muted); font-size: 12px; font-style: italic; margin: 0; }
 
-/* Tab 2 — sección colapsable de validadores */
-.validators-section {
-  margin-top: 20px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-}
-.validators-section summary {
-  padding: 10px 14px;
-  cursor: pointer;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text);
-  user-select: none;
-}
-.validators-section summary:hover { background: var(--surface-2); }
-.validators-section[open] summary {
-  border-bottom: 1px solid var(--border);
-}
-#validatorsTable {
-  width: 100%;
-  font-size: 12px;
-  border-collapse: collapse;
-}
-#validatorsTable th, #validatorsTable td {
-  padding: 8px 12px;
-  text-align: left;
-  border-bottom: 1px solid var(--border);
-  white-space: nowrap;
-}
-#validatorsTable th {
-  background: var(--surface-2);
-  font-size: 10px;
-  color: var(--muted);
-  text-transform: uppercase;
-}
-#validatorsTable tbody tr:last-child td { border-bottom: none; }
-
 /* Mobile: panel abajo del chart */
 @media (max-width: 900px) {
   .chart-layout { flex-direction: column; }
