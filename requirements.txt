@@ -1,0 +1,5 @@
+numpy==2.3.4
+pandas==2.3.3
+ppi_client==1.2.4
+python-dotenv==1.2.1
+signalrcorePPI==0.9.2

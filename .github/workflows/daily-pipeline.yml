@@ -1,0 +1,58 @@
+name: Daily pipeline
+
+on:
+  schedule:
+    - cron: '0 21 * * 1-5'  # lun-vie 21:00 UTC = lun-vie 18:00 ART
+  workflow_dispatch:        # botón "Run workflow" manual
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run pipeline
+        env:
+          PPI_PUBLIC_KEY: ${{ secrets.PPI_PUBLIC_KEY }}
+          PPI_PRIVATE_KEY: ${{ secrets.PPI_PRIVATE_KEY }}
+        run: |
+          python -m src.ingestion.data_downloader
+          python -m src.processing.data_normalizer
+          python -m src.processing.synthetic_mep_generator
+          python -m src.analysis.indicator_engine
+          python -m src.analysis.signal_generator
+          python -m src.analysis.backtester
+          python -m src.web.json_generator
+
+      - name: Detect changes
+        id: changes
+        run: |
+          git add data_raw/csv/ docs/data/ data_public/backtests/summary_all_tickers.csv 2>/dev/null || true
+          if [ -z "$(git diff --cached --name-only)" ]; then
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+            echo "No hay cambios. Salida limpia."
+          else
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Commit and push
+        if: steps.changes.outputs.has_changes == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "automation: actualización del pipeline $(date -u +%Y-%m-%d)"
+          git push
