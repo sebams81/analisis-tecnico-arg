@@ -682,15 +682,15 @@ function addSmaIndicator(ohlc) {
   const sma50  = ohlc.filter((d) => d.sma50  != null).map((d) => ({ time: d.time, value: d.sma50 }));
   const sma100 = ohlc.filter((d) => d.sma100 != null).map((d) => ({ time: d.time, value: d.sma100 }));
   CHART.addSeries(LightweightCharts.LineSeries, {
-    color: "#fbbf24", lineWidth: 1.5, lastValueVisible: false, priceLineVisible: false,
+    color: "#3b82f6", lineWidth: 1.5, lastValueVisible: false, priceLineVisible: false,
     autoscaleInfoProvider: () => null,
   }).setData(sma10);
   CHART.addSeries(LightweightCharts.LineSeries, {
-    color: "#CC66FF", lineWidth: 1.5, lastValueVisible: false, priceLineVisible: false,
+    color: "#10b981", lineWidth: 1.5, lastValueVisible: false, priceLineVisible: false,
     autoscaleInfoProvider: () => null,
   }).setData(sma50);
   CHART.addSeries(LightweightCharts.LineSeries, {
-    color: "#FF66FF", lineWidth: 1.5, lastValueVisible: false, priceLineVisible: false,
+    color: "#ef4444", lineWidth: 1.5, lastValueVisible: false, priceLineVisible: false,
     autoscaleInfoProvider: () => null,
   }).setData(sma100);
 }
@@ -710,9 +710,9 @@ function renderLegend() {
     items.push({ label: "EMA 26", color: "#dc2626" });
   }
   if (CHART_CLASSIC_METHOD === "sma") {
-    items.push({ label: "SMA 10",  color: "#fbbf24" });
-    items.push({ label: "SMA 50",  color: "#CC66FF" });
-    items.push({ label: "SMA 100", color: "#FF66FF" });
+    items.push({ label: "SMA 10",  color: "#3b82f6" });
+    items.push({ label: "SMA 50",  color: "#10b981" });
+    items.push({ label: "SMA 100", color: "#ef4444" });
   }
   document.querySelector(".chart-legend").innerHTML = items.map((i) =>
     `<div class="legend-item"><span class="swatch" style="background:${i.color}"></span>${i.label}</div>`
