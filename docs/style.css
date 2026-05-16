@@ -248,7 +248,7 @@ tbody tr:last-child td { border-bottom: none; }
   display: inline-block;
   padding: 3px 10px;
   border-radius: 12px;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
   white-space: nowrap;
 }
@@ -258,16 +258,16 @@ tbody tr:last-child td { border-bottom: none; }
 .pill-sell    { background: #1b1210; color: #f87171; }
 .pill-neutral { background: #1b1810; color: #facc15; }
 
-/* VMA20 */
-.pill.vma-mh { background: var(--cyan); color: white; }
-.pill.vma-h { background: var(--accent); color: white; }
-.pill.vma-n { background: var(--gray); color: white; }
-.pill.vma-l { background: var(--orange); color: white; }
-.pill.vma-ml { background: var(--red); color: white; }
+/* VMA20 (paleta apagada coherente con señales) */
+.pill.vma-mh { background: #0a1d24; color: #22d3ee; }
+.pill.vma-h  { background: #0a1828; color: #60a5fa; }
+.pill.vma-n  { background: #1a1d24; color: #94a3b8; }
+.pill.vma-l  { background: #1c1410; color: #fb923c; }
+.pill.vma-ml { background: #1b1210; color: #f87171; }
 
-/* Mercado */
-.pill-mercado-ba { background: var(--accent); color: white; }
-.pill-mercado-mep { background: var(--emerald); color: white; }
+/* Mercado (paleta apagada coherente con señales) */
+.pill-mercado-ba  { background: #0a1828; color: #60a5fa; }
+.pill-mercado-mep { background: #0a1d18; color: #34d399; }
 
 /* Tab 3 — coloreado de fila por impacto */
 .impacto-verde td    { background: #0f1b17; color: #34d399; }

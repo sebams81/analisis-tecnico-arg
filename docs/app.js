@@ -215,7 +215,7 @@ function renderTable() {
       (t, i) => `
     <tr>
       <td>${i + 1}</td>
-      <td><strong>${t.ticker}</strong></td>
+      <td><strong>${cleanTicker(t.ticker)}</strong></td>
       <td>${pillMercado(t.mercado)}</td>
       <td>${pillSignal(t.signals.HMA16)}</td>
       <td>${pillSignal(t.signals.EMA_12_26)}</td>
@@ -307,7 +307,7 @@ async function loadFundamentals() {
 }
 
 function cleanTicker(t) {
-  return t.replace(/_BA$/, "");
+  return t.replace(/_(BA|MEP)$/, "");
 }
 
 function setupFundFilters() {
@@ -391,7 +391,10 @@ function renderFundamentals() {
   const tbody = document.querySelector("#fundamentalsTable tbody");
   tbody.innerHTML = filtered.map((ev) => {
     const m = IMPACT_MAP[ev.impacto] || { cls: "", icon: "" };
-    const tickers = ev.tickers_afectados.map(cleanTicker).join(", ");
+    const tickers = ev.tickers_afectados
+      .map(cleanTicker)
+      .map((t) => `<strong>${t}</strong>`)
+      .join(", ");
     const prefix = m.icon ? `${m.icon} ` : "";
     return `
       <tr class="${m.cls}">
