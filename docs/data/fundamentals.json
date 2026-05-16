@@ -6,7 +6,7 @@
       "TECO2_BA"
     ],
     "sector": "Telecomunicaciones",
-    "fuente": "manual",
+    "fuente": "https://www.bloomberglinea.com/latinoamerica/telecom-argentina-se-suma-al-club-de-empresas-que-colocan-deuda-a-una-decada-en-wall-street/",
     "evento": "Telecom Argentina colocó Obligaciones Negociables por US$600M a 2036 en mercado internacional.",
     "impacto": "Verde"
   },
@@ -17,7 +17,7 @@
       "TXAR_BA"
     ],
     "sector": "Acero / Industria",
-    "fuente": "manual",
+    "fuente": "https://www.ambito.com/negocios/siderurgia-ternium-revirtio-perdidas-operativas-2025-pero-sigue-alerta-el-avance-la-competencia-china-n6246970",
     "evento": "Ternium Argentina cerró 2025 con ganancia neta de $83.400M revirtiendo pérdidas operativas, alerta por competencia china.",
     "impacto": "Amarillo"
   },
@@ -28,7 +28,7 @@
       "GGAL_BA"
     ],
     "sector": "Bancos",
-    "fuente": "manual",
+    "fuente": "https://www.bloomberglinea.com/latinoamerica/argentina/galicia-reporta-perdida-neta-mayor-a-la-esperada-en-el-cuarto-trimestre-y-sube-la-morosidad/",
     "evento": "Grupo Galicia reportó pérdida neta de ARS$83.544M en Q4 2025 y morosidad subió a 8,2%.",
     "impacto": "Rojo"
   },
@@ -42,7 +42,7 @@
       "SUPV_BA"
     ],
     "sector": "Bancos",
-    "fuente": "manual",
+    "fuente": "https://www.bloomberglinea.com/latinoamerica/argentina/cuantos-dividendos-podran-pagar-los-bancos-argentinos-en-2026-tras-la-autorizacion-del-bcra/",
     "evento": "BCRA Com. A8410 autorizó a bancos distribuir 60% de utilidades 2025 en tres cuotas mensuales desde mayo.",
     "impacto": "Amarillo"
   },
@@ -53,7 +53,7 @@
       "EDN_BA"
     ],
     "sector": "Energía",
-    "fuente": "manual",
+    "fuente": "https://www.ambito.com/energia/el-gobierno-oficializo-nuevas-subas-la-luz-abril-cuanto-aumentan-edenor-y-edesur-n6261558",
     "evento": "ENRE oficializó aumento tarifario de Edenor de 2,04% vigente desde el 1 de abril.",
     "impacto": "Verde"
   },
@@ -64,7 +64,7 @@
       "LOMA_BA"
     ],
     "sector": "Materiales / Cemento",
-    "fuente": "manual",
+    "fuente": "https://www.ambito.com/negocios/loma-negra-presento-un-balance-mejoras-significativas-y-sus-acciones-volaron-wall-street-n6274243",
     "evento": "Loma Negra Q1 2026: EBITDA en dólares +11,5% interanual, utilidad neta +44%, acciones subieron 6,7%.",
     "impacto": "Verde"
   },
@@ -75,7 +75,7 @@
       "SUPV_BA"
     ],
     "sector": "Bancos",
-    "fuente": "manual",
+    "fuente": "https://www.bloomberglinea.com/latinoamerica/argentina/supervielle-modera-perdidas-en-primer-trimestre-y-anticipa-mejoras-en-niveles-de-mora-desde-marzo/",
     "evento": "Grupo Supervielle reportó pérdida neta de ARS$17,1B en Q1 2026, NPL en 5,6% y plan de reducción de personal del 9%.",
     "impacto": "Rojo"
   },
@@ -86,7 +86,7 @@
       "YPFD_BA"
     ],
     "sector": "Petróleo y Gas",
-    "fuente": "manual",
+    "fuente": "https://www.ambito.com/energia/ypf-alcanzo-un-record-historico-ebitda-y-supero-los-200000-barriles-diarios-shale-n6275210",
     "evento": "YPF reportó Q1 2026 con EBITDA récord de US$1.594M y superó los 200.000 barriles diarios de shale.",
     "impacto": "Verde"
   },
@@ -98,7 +98,7 @@
       "BBAR_BA"
     ],
     "sector": "Bancos",
-    "fuente": "manual",
+    "fuente": "https://www.bloomberglinea.com/latinoamerica/argentina/fitch-mejoro-la-nota-de-bancos-argentinos-tras-subirle-la-calificacion-al-pais/",
     "evento": "Fitch Ratings mejoró calificación de bancos argentinos Macro y BBVA tras suba soberana a B-.",
     "impacto": "Verde"
   },
@@ -109,7 +109,7 @@
       "CEPU_BA"
     ],
     "sector": "Energía",
-    "fuente": "manual",
+    "fuente": "https://www.bloomberglinea.com/latinoamerica/argentina/central-puerto-mostro-resultados-solidos-y-mantiene-atractivo-por-avance-de-desregulacion/",
     "evento": "Central Puerto Q1 2026: ingresos US$249M (+44% q/q), EBITDA US$120M (+42% q/q), ganancia neta US$142M.",
     "impacto": "Verde"
   },
@@ -120,7 +120,7 @@
       "TGSU2_BA"
     ],
     "sector": "Energía",
-    "fuente": "manual",
+    "fuente": "https://www.ambito.com/energia/oficializan-ingreso-al-rigi-la-ampliacion-del-gasoducto-perito-moreno-us550-millones-n6276980",
     "evento": "Gobierno aprobó ingreso de TGS al RIGI para ampliar Gasoducto Perito Moreno por US$550M (operativo abr-2027).",
     "impacto": "Verde"
   },
@@ -131,7 +131,7 @@
       "PAMP_BA"
     ],
     "sector": "Energía",
-    "fuente": "manual",
+    "fuente": "https://ri.pampa.com/press-release/reapertura-del-bono-internacional-2037-por-500-millones/",
     "evento": "Pampa Energía reabrió bono internacional 2037 por US$500M con spread récord de 315bps en su historia.",
     "impacto": "Verde"
   },
@@ -142,7 +142,7 @@
       "BMA_BA"
     ],
     "sector": "Bancos",
-    "fuente": "manual",
+    "fuente": "https://www.bloomberglinea.com/latinoamerica/argentina/cuantos-dividendos-podran-pagar-los-bancos-argentinos-en-2026-tras-la-autorizacion-del-bcra/",
     "evento": "Banco Macro pone a disposición 2da cuota dividendo en efectivo en cumplimiento Com. A8410 del BCRA.",
     "impacto": "Verde"
   },
@@ -153,7 +153,7 @@
       "YPFD_BA"
     ],
     "sector": "Petróleo y Gas",
-    "fuente": "manual",
+    "fuente": "https://www.sec.gov/Archives/edgar/data/0000904851/000155485526000937/MainDocument.htm",
     "evento": "YPF prevé puesta en operación del revamp de la planta de tratamiento de gas Loma La Lata durante Q2 2026.",
     "impacto": "Verde"
   },
@@ -164,7 +164,7 @@
       "PAMP_BA"
     ],
     "sector": "Energía",
-    "fuente": "manual",
+    "fuente": "https://www.cronista.com/negocios/pampa-gano-escala-en-petroleo-y-gas-y-mejoro-48-su-resultado-operativo-en-el-primer-trimestre/",
     "evento": "Pampa Energía proyecta alcanzar 28.000 barriles diarios en Rincón de Aranda hacia mitad de 2026, desde 24.000 actuales.",
     "impacto": "Verde"
   },
@@ -178,7 +178,7 @@
       "SUPV_BA"
     ],
     "sector": "Bancos",
-    "fuente": "manual",
+    "fuente": "https://www.ambito.com/economia/lanza-un-bono-dolares-buscara-captar-us2000-millones-pagar-vencimientos-julio-n6248579",
     "evento": "Vencimiento semestral capital e intereses AL30/GD30 ~US$4.200M presiona bancos por exposición soberana.",
     "impacto": "Amarillo"
   },
@@ -193,7 +193,7 @@
       "BBAR_BA"
     ],
     "sector": "Bancos / Petróleo y Gas / Energía",
-    "fuente": "manual",
+    "fuente": "https://www.byma.com.ar/productos/productos-financieros/opciones",
     "evento": "BYMA aplica nuevo régimen para opciones desde vencimiento JUL-26: ejercicio automático ITM y sin ajustes por dividendos ordinarios.",
     "impacto": "Amarillo"
   },
@@ -204,7 +204,7 @@
       "YPFD_BA"
     ],
     "sector": "Petróleo y Gas",
-    "fuente": "manual",
+    "fuente": "https://www.sec.gov/Archives/edgar/data/0000904851/000155485526000937/MainDocument.htm",
     "evento": "YPF prevé puesta en operación del proyecto La Angostura Sur de evacuación de shale oil durante Q3 2026.",
     "impacto": "Verde"
   }
