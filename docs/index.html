@@ -100,20 +100,32 @@
 
       <div class="chart-layout">
         <div id="chartContainer"></div>
-        <aside class="metrics-panel">
-          <h3>Métricas</h3>
-          <table id="metricsTable">
-            <thead>
-              <tr>
-                <th>Método</th>
-                <th>Trades</th>
-                <th>Win %</th>
-                <th>Retorno</th>
-                <th>DD</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
+        <aside class="ticker-panel">
+          <section class="ticker-state">
+            <h3>Estado actual</h3>
+            <div class="state-date">—</div>
+            <div class="state-price">
+              <span class="price-value">—</span>
+              <span class="price-change">—</span>
+            </div>
+            <div class="state-variations">
+              <div>Semana: <span class="var-week">—</span></div>
+              <div>Mes: <span class="var-month">—</span></div>
+              <div>Año: <span class="var-year">—</span></div>
+            </div>
+            <div class="state-signals">
+              <div><span class="label">HMA 16:</span> <span class="state-hma">—</span></div>
+              <div><span class="label">EMA 12/26:</span> <span class="state-ema">—</span></div>
+              <div><span class="label">SMA 10/50/100:</span> <span class="state-sma">—</span></div>
+              <div><span class="label">VMA 20:</span> <span class="state-vma">—</span></div>
+              <div><span class="label">Vela:</span> <span class="state-candle">—</span></div>
+            </div>
+          </section>
+          <section class="ticker-events">
+            <h3>Eventos recientes</h3>
+            <ul class="events-list"></ul>
+            <p class="no-events" hidden>No hay eventos registrados para este ticker.</p>
+          </section>
         </aside>
       </div>
 

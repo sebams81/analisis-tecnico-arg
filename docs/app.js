@@ -294,28 +294,38 @@ function populateFooter(meta) {
     `Última actualización: ${dateDDMMYYYY} · Costo por trade asumido: ${cost}%`;
 }
 
-async function loadFundamentals() {
-  const loading = document.getElementById("loadingTab3");
-  const err = document.getElementById("errorTab3");
-  const table = document.getElementById("fundamentalsTable");
-  loading.hidden = false;
-  err.hidden = true;
+async function ensureFundamentals() {
+  if (FUNDAMENTALS !== null) return true;
   try {
     FUNDAMENTALS = await fetch("./data/fundamentals.json").then((r) => {
       if (!r.ok) throw new Error("No se pudo cargar fundamentals.json");
       return r.json();
     });
     FUNDAMENTALS.sort((a, b) => b.fecha.localeCompare(a.fecha));
-    setupFundFilters();
-    renderFundamentals();
-    loading.hidden = true;
-    table.hidden = false;
+    return true;
   } catch (e) {
-    loading.hidden = true;
-    err.textContent = `Error al cargar datos: ${e.message}`;
-    err.hidden = false;
     FUNDAMENTALS = null;
+    return false;
   }
+}
+
+async function loadFundamentals() {
+  const loading = document.getElementById("loadingTab3");
+  const err = document.getElementById("errorTab3");
+  const table = document.getElementById("fundamentalsTable");
+  loading.hidden = false;
+  err.hidden = true;
+  const ok = await ensureFundamentals();
+  if (!ok) {
+    loading.hidden = true;
+    err.textContent = "Error al cargar datos: fundamentals.json";
+    err.hidden = false;
+    return;
+  }
+  setupFundFilters();
+  renderFundamentals();
+  loading.hidden = true;
+  table.hidden = false;
 }
 
 function cleanTicker(t) {
@@ -485,7 +495,10 @@ async function loadAndRenderTicker(ticker) {
 
   CHART_TICKER = ticker;
   renderChart();
-  renderMetrics(ticker);
+  renderTickerState(ticker);
+
+  await ensureFundamentals();
+  renderTickerEvents(ticker);
 
   if (VALIDATORS !== null && document.querySelector(".validators-section").open) {
     renderValidators(ticker);
@@ -639,32 +652,93 @@ function fmtPct(v) {
   if (v == null) return "—";
   return `${(v * 100).toFixed(1)}%`;
 }
-function fmtRet(v) {
+
+function fmtPctSigned(v) {
   if (v == null) return "—";
   const sign = v >= 0 ? "+" : "";
   return `${sign}${(v * 100).toFixed(1)}%`;
 }
 
-function renderMetrics(ticker) {
-  const entry = SUMMARY.find((t) => t.ticker === ticker);
-  const tbody = document.querySelector("#metricsTable tbody");
-  if (!entry || !entry.metrics) { tbody.innerHTML = ""; return; }
+function fmtPrice(p) {
+  if (p == null) return "—";
+  if (p < 100) return `$${p.toFixed(2)}`;
+  return `$${Math.round(p).toLocaleString("es-AR")}`;
+}
 
-  const rows = ["HMA16", "EMA_12_26", "SMA_10_50_100"].map((m) => {
-    const t = entry.metrics[m] && entry.metrics[m].total;
-    if (!t) return `<tr><td>${METHOD_LABELS[m]}</td><td colspan="4">—</td></tr>`;
-    const retClass = t.cumulative_return >= 0 ? "pos" : "neg";
-    return `
-      <tr>
-        <td>${METHOD_LABELS[m]}</td>
-        <td>${t.n_trades}</td>
-        <td>${fmtPct(t.win_rate)}</td>
-        <td class="${retClass}">${fmtRet(t.cumulative_return)}</td>
-        <td class="neg">${fmtRet(t.max_drawdown)}</td>
-      </tr>
-    `;
-  });
-  tbody.innerHTML = rows.join("");
+function variationPct(closes, lookback) {
+  if (closes.length <= lookback) return null;
+  const cur = closes[closes.length - 1];
+  const past = closes[closes.length - 1 - lookback];
+  if (cur == null || past == null || past === 0) return null;
+  return (cur - past) / past;
+}
+
+function setVariation(selector, v) {
+  const el = document.querySelector(selector);
+  if (v == null) {
+    el.textContent = "—";
+    el.className = "";
+  } else {
+    el.textContent = fmtPctSigned(v);
+    el.className = v >= 0 ? "pos" : "neg";
+  }
+}
+
+function renderTickerState(ticker) {
+  const data = TICKER_DATA[ticker];
+  if (!data || !data.ohlc || data.ohlc.length === 0) return;
+  const ohlc = data.ohlc;
+  const last = ohlc[ohlc.length - 1];
+  const closes = ohlc.map((d) => d.close);
+
+  document.querySelector(".state-date").textContent = formatDateDDMMYYYY(last.time);
+  document.querySelector(".price-value").textContent = fmtPrice(last.close);
+
+  const dayVar = variationPct(closes, 1);
+  const dayEl = document.querySelector(".price-change");
+  if (dayVar == null) {
+    dayEl.textContent = "—";
+    dayEl.className = "price-change";
+  } else {
+    const arrow = dayVar >= 0 ? "↑" : "↓";
+    dayEl.textContent = `${arrow} ${fmtPctSigned(dayVar)} día`;
+    dayEl.className = `price-change ${dayVar >= 0 ? "pos" : "neg"}`;
+  }
+
+  setVariation(".var-week",  variationPct(closes, 5));
+  setVariation(".var-month", variationPct(closes, 21));
+  setVariation(".var-year",  variationPct(closes, 252));
+
+  document.querySelector(".state-hma").innerHTML = pillSignal(last.T_hma16);
+  document.querySelector(".state-ema").innerHTML = pillSignal(last.T_ema12_26);
+  document.querySelector(".state-sma").innerHTML = pillSignal(last.T_sma10_50_100);
+  document.querySelector(".state-vma").innerHTML = pillVma(last.vma20_cat);
+  document.querySelector(".state-candle").textContent = last.candle || "—";
+}
+
+function renderTickerEvents(ticker) {
+  const list = document.querySelector(".events-list");
+  const empty = document.querySelector(".no-events");
+  if (FUNDAMENTALS === null) {
+    list.innerHTML = "";
+    empty.hidden = false;
+    return;
+  }
+  const base = cleanTicker(ticker);
+  const matching = FUNDAMENTALS
+    .filter((ev) => ev.tickers_afectados.some((t) => cleanTicker(t) === base))
+    .slice(0, 5);
+
+  if (matching.length === 0) {
+    list.innerHTML = "";
+    empty.hidden = false;
+    return;
+  }
+  empty.hidden = true;
+  list.innerHTML = matching.map((ev) => {
+    const m = IMPACT_MAP[ev.impacto] || { cls: "", icon: "" };
+    return `<li class="${m.cls}"><span class="icon">${m.icon}</span> <strong>${formatDateDDMMYYYY(ev.fecha)}</strong> ${escapeHtml(ev.evento)}</li>`;
+  }).join("");
 }
 
 function setupValidatorsSection() {
