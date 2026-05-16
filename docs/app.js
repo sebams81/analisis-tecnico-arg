@@ -546,7 +546,7 @@ function renderChart() {
     })));
   } else {
     priceSeries = CHART.addSeries(LightweightCharts.LineSeries, {
-      color: "#60a5fa", lineWidth: 2,
+      color: "#fde047", lineWidth: 3,
     });
     priceSeries.setData(ohlc.map((d) => ({ time: d.time, value: d.close })));
   }
@@ -620,38 +620,34 @@ function hmaStateFromSignal(sig) {
 
 function addHmaIndicator(ohlc) {
   const colors = { green: "#34d399", red: "#f87171", gray: "#a8b3c7" };
-  const dataByState = { green: [], red: [], gray: [] };
-  let prevState = null;
+  const segments = [];
+  let current = { state: null, data: [] };
 
   for (const day of ohlc) {
-    if (day.hma16 == null) {
-      for (const s of ["green", "red", "gray"]) {
-        dataByState[s].push({ time: day.time });
-      }
-      continue;
-    }
+    if (day.hma16 == null) continue;
     const state = hmaStateFromSignal(day.T_hma16);
-
-    for (const s of ["green", "red", "gray"]) {
-      if (s === state) {
-        dataByState[s].push({ time: day.time, value: day.hma16 });
-      } else if (s === prevState && prevState !== state) {
-        // Joiner: la serie anterior recibe este día para empalmar visualmente
-        dataByState[s].push({ time: day.time, value: day.hma16 });
-      } else {
-        // Whitespace: rompe conexión visual entre tramos no contiguos
-        dataByState[s].push({ time: day.time });
+    if (state !== current.state) {
+      if (current.state !== null) {
+        // Joiner: el día de transición cierra el segmento anterior antes de empezar el nuevo
+        current.data.push({ time: day.time, value: day.hma16 });
+        segments.push(current);
       }
+      current = { state, data: [{ time: day.time, value: day.hma16 }] };
+    } else {
+      current.data.push({ time: day.time, value: day.hma16 });
     }
-    prevState = state;
   }
+  if (current.data.length > 0) segments.push(current);
 
-  for (const s of ["green", "red", "gray"]) {
+  for (const seg of segments) {
     const series = CHART.addSeries(LightweightCharts.LineSeries, {
-      color: colors[s], lineWidth: 2,
-      lastValueVisible: false, priceLineVisible: false,
+      color: colors[seg.state],
+      lineWidth: 2,
+      lastValueVisible: false,
+      priceLineVisible: false,
+      autoscaleInfoProvider: () => null,
     });
-    series.setData(dataByState[s]);
+    series.setData(seg.data);
   }
 }
 
@@ -659,10 +655,12 @@ function addEmaIndicator(ohlc) {
   const ema12 = ohlc.filter((d) => d.ema12 != null).map((d) => ({ time: d.time, value: d.ema12 }));
   const ema26 = ohlc.filter((d) => d.ema26 != null).map((d) => ({ time: d.time, value: d.ema26 }));
   CHART.addSeries(LightweightCharts.LineSeries, {
-    color: "#fde047", lineWidth: 1.5, lastValueVisible: false, priceLineVisible: false,
+    color: "#60a5fa", lineWidth: 1.5, lastValueVisible: false, priceLineVisible: false,
+    autoscaleInfoProvider: () => null,
   }).setData(ema12);
   CHART.addSeries(LightweightCharts.LineSeries, {
-    color: "#FF66FF", lineWidth: 1.5, lastValueVisible: false, priceLineVisible: false,
+    color: "#dc2626", lineWidth: 1.5, lastValueVisible: false, priceLineVisible: false,
+    autoscaleInfoProvider: () => null,
   }).setData(ema26);
 }
 
@@ -672,12 +670,15 @@ function addSmaIndicator(ohlc) {
   const sma100 = ohlc.filter((d) => d.sma100 != null).map((d) => ({ time: d.time, value: d.sma100 }));
   CHART.addSeries(LightweightCharts.LineSeries, {
     color: "#fbbf24", lineWidth: 1.5, lastValueVisible: false, priceLineVisible: false,
+    autoscaleInfoProvider: () => null,
   }).setData(sma10);
   CHART.addSeries(LightweightCharts.LineSeries, {
     color: "#CC66FF", lineWidth: 1.5, lastValueVisible: false, priceLineVisible: false,
+    autoscaleInfoProvider: () => null,
   }).setData(sma50);
   CHART.addSeries(LightweightCharts.LineSeries, {
     color: "#67e8f9", lineWidth: 1.5, lastValueVisible: false, priceLineVisible: false,
+    autoscaleInfoProvider: () => null,
   }).setData(sma100);
 }
 
@@ -686,14 +687,14 @@ function renderLegend() {
   if (CHART_MODE === "candles") {
     items.push({ label: "Precio (velas)", color: "#34d399" });
   } else {
-    items.push({ label: "Precio", color: "#60a5fa" });
+    items.push({ label: "Precio", color: "#fde047" });
   }
   if (CHART_INDICATORS.hma) {
     items.push({ label: "HMA 16", color: "#34d399" });
   }
   if (CHART_INDICATORS.ema) {
-    items.push({ label: "EMA 12", color: "#fde047" });
-    items.push({ label: "EMA 26", color: "#FF66FF" });
+    items.push({ label: "EMA 12", color: "#60a5fa" });
+    items.push({ label: "EMA 26", color: "#dc2626" });
   }
   if (CHART_INDICATORS.sma) {
     items.push({ label: "SMA 10",  color: "#fbbf24" });
