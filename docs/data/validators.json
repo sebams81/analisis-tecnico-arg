@@ -1549,7 +1549,7 @@
       "win_rate_confirmed": 0.6470588235294118,
       "win_rate_not_confirmed": 0.4230769230769231,
       "cumulative_confirmed": 10.01820178732833,
-      "cumulative_not_confirmed": 0.2514545226446893
+      "cumulative_not_confirmed": 0.251898477166572
     },
     "candle": {
       "n_aligned": 3,
@@ -1560,7 +1560,7 @@
       "win_rate_neutral": 0.5135135135135135,
       "cumulative_aligned": 0.263650337152709,
       "cumulative_not_aligned": 0.0110848023987344,
-      "cumulative_neutral": 9.79223252223372
+      "cumulative_neutral": 9.796061075603228
     }
   },
   {
