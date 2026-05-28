@@ -2,13 +2,13 @@
   {
     "ticker": "PAMP_BA",
     "mercado": "BA",
-    "last_date": "2026-05-26",
+    "last_date": "2026-05-28",
     "signals": {
       "HMA16": "Señal Alcista",
       "EMA_12_26": "Señal Bajista",
       "SMA_10_50_100": "Señal Bajista"
     },
-    "vma20_cat": "Neutro",
+    "vma20_cat": "Alto",
     "candle": null,
     "metrics": {
       "HMA16": {
@@ -96,14 +96,14 @@
   {
     "ticker": "GGAL_BA",
     "mercado": "BA",
-    "last_date": "2026-05-26",
+    "last_date": "2026-05-28",
     "signals": {
       "HMA16": "Señal Alcista",
-      "EMA_12_26": "Señal Bajista",
+      "EMA_12_26": "Compra Confirmada",
       "SMA_10_50_100": "Señal Bajista"
     },
     "vma20_cat": "Muy Alto",
-    "candle": "Marubozu_Alc",
+    "candle": null,
     "metrics": {
       "HMA16": {
         "total": {
@@ -190,13 +190,13 @@
   {
     "ticker": "YPFD_BA",
     "mercado": "BA",
-    "last_date": "2026-05-26",
+    "last_date": "2026-05-28",
     "signals": {
       "HMA16": "Señal Alcista",
       "EMA_12_26": "Señal Alcista",
       "SMA_10_50_100": "Señal Alcista"
     },
-    "vma20_cat": "Neutro",
+    "vma20_cat": "Bajo",
     "candle": null,
     "metrics": {
       "HMA16": {
@@ -223,7 +223,7 @@
         "total": {
           "n_trades": 43,
           "win_rate": 0.5116279069767442,
-          "cumulative_return": 12.793670038670331,
+          "cumulative_return": 13.6105639832559,
           "max_drawdown": -0.3668338202475495
         },
         "is": {
@@ -235,7 +235,7 @@
         "oos": {
           "n_trades": 11,
           "win_rate": 0.4545454545454545,
-          "cumulative_return": 0.85336124003568,
+          "cumulative_return": 0.9631217004403632,
           "max_drawdown": -0.3668338202475495
         }
       },
@@ -284,14 +284,14 @@
   {
     "ticker": "BMA_BA",
     "mercado": "BA",
-    "last_date": "2026-05-26",
+    "last_date": "2026-05-28",
     "signals": {
       "HMA16": "Señal Alcista",
-      "EMA_12_26": "Señal Bajista",
-      "SMA_10_50_100": "Señal Bajista"
+      "EMA_12_26": "Compra Confirmada",
+      "SMA_10_50_100": "Neutra"
     },
     "vma20_cat": "Muy Alto",
-    "candle": "Engulfing_Alc",
+    "candle": null,
     "metrics": {
       "HMA16": {
         "total": {
@@ -378,14 +378,14 @@
   {
     "ticker": "CEPU_BA",
     "mercado": "BA",
-    "last_date": "2026-05-26",
+    "last_date": "2026-05-28",
     "signals": {
       "HMA16": "Señal Alcista",
       "EMA_12_26": "Señal Bajista",
       "SMA_10_50_100": "Señal Bajista"
     },
-    "vma20_cat": "Bajo",
-    "candle": "Engulfing_Alc",
+    "vma20_cat": "Alto",
+    "candle": null,
     "metrics": {
       "HMA16": {
         "total": {
@@ -472,13 +472,13 @@
   {
     "ticker": "SUPV_BA",
     "mercado": "BA",
-    "last_date": "2026-05-26",
+    "last_date": "2026-05-28",
     "signals": {
       "HMA16": "Señal Alcista",
       "EMA_12_26": "Señal Bajista",
       "SMA_10_50_100": "Señal Bajista"
     },
-    "vma20_cat": "Neutro",
+    "vma20_cat": "Alto",
     "candle": null,
     "metrics": {
       "HMA16": {
@@ -566,14 +566,14 @@
   {
     "ticker": "BBAR_BA",
     "mercado": "BA",
-    "last_date": "2026-05-26",
+    "last_date": "2026-05-28",
     "signals": {
       "HMA16": "Señal Alcista",
-      "EMA_12_26": "Compra Temprana",
-      "SMA_10_50_100": "Señal Bajista"
+      "EMA_12_26": "Señal Alcista",
+      "SMA_10_50_100": "Neutra"
     },
     "vma20_cat": "Alto",
-    "candle": "Marubozu_Alc",
+    "candle": null,
     "metrics": {
       "HMA16": {
         "total": {
@@ -660,13 +660,13 @@
   {
     "ticker": "EDN_BA",
     "mercado": "BA",
-    "last_date": "2026-05-26",
+    "last_date": "2026-05-28",
     "signals": {
       "HMA16": "Señal Alcista",
       "EMA_12_26": "Señal Bajista",
       "SMA_10_50_100": "Señal Bajista"
     },
-    "vma20_cat": "Neutro",
+    "vma20_cat": "Alto",
     "candle": null,
     "metrics": {
       "HMA16": {
@@ -754,14 +754,14 @@
   {
     "ticker": "TXAR_BA",
     "mercado": "BA",
-    "last_date": "2026-05-26",
+    "last_date": "2026-05-28",
     "signals": {
       "HMA16": "Señal Alcista",
       "EMA_12_26": "Señal Bajista",
       "SMA_10_50_100": "Señal Bajista"
     },
-    "vma20_cat": "Neutro",
-    "candle": "Doji",
+    "vma20_cat": "Muy Alto",
+    "candle": null,
     "metrics": {
       "HMA16": {
         "total": {
@@ -848,13 +848,13 @@
   {
     "ticker": "LOMA_BA",
     "mercado": "BA",
-    "last_date": "2026-05-26",
+    "last_date": "2026-05-28",
     "signals": {
       "HMA16": "Señal Alcista",
-      "EMA_12_26": "Señal Bajista",
+      "EMA_12_26": "Compra Confirmada",
       "SMA_10_50_100": "Señal Bajista"
     },
-    "vma20_cat": "Neutro",
+    "vma20_cat": "Alto",
     "candle": null,
     "metrics": {
       "HMA16": {
@@ -942,13 +942,13 @@
   {
     "ticker": "TECO2_BA",
     "mercado": "BA",
-    "last_date": "2026-05-26",
+    "last_date": "2026-05-28",
     "signals": {
-      "HMA16": "Compra Temprana",
+      "HMA16": "Señal Alcista",
       "EMA_12_26": "Señal Alcista",
       "SMA_10_50_100": "Neutra"
     },
-    "vma20_cat": "Neutro",
+    "vma20_cat": "Muy Alto",
     "candle": null,
     "metrics": {
       "HMA16": {
@@ -1036,14 +1036,14 @@
   {
     "ticker": "TGSU2_BA",
     "mercado": "BA",
-    "last_date": "2026-05-26",
+    "last_date": "2026-05-28",
     "signals": {
-      "HMA16": "Señal Bajista",
+      "HMA16": "Compra Confirmada",
       "EMA_12_26": "Señal Bajista",
       "SMA_10_50_100": "Neutra"
     },
-    "vma20_cat": "Alto",
-    "candle": "Doji",
+    "vma20_cat": "Neutro",
+    "candle": null,
     "metrics": {
       "HMA16": {
         "total": {
@@ -1130,13 +1130,13 @@
   {
     "ticker": "PAMP_MEP",
     "mercado": "MEP",
-    "last_date": "2026-05-26",
+    "last_date": "2026-05-28",
     "signals": {
-      "HMA16": "Venta Confirmada",
+      "HMA16": "Compra Confirmada",
       "EMA_12_26": "Señal Bajista",
       "SMA_10_50_100": "Neutra"
     },
-    "vma20_cat": "Neutro",
+    "vma20_cat": "Alto",
     "candle": null,
     "metrics": {
       "HMA16": {
@@ -1224,14 +1224,14 @@
   {
     "ticker": "GGAL_MEP",
     "mercado": "MEP",
-    "last_date": "2026-05-26",
+    "last_date": "2026-05-28",
     "signals": {
       "HMA16": "Señal Alcista",
-      "EMA_12_26": "Señal Bajista",
+      "EMA_12_26": "Compra Confirmada",
       "SMA_10_50_100": "Señal Bajista"
     },
     "vma20_cat": "Muy Alto",
-    "candle": "Marubozu_Alc",
+    "candle": null,
     "metrics": {
       "HMA16": {
         "total": {
@@ -1318,13 +1318,13 @@
   {
     "ticker": "YPFD_MEP",
     "mercado": "MEP",
-    "last_date": "2026-05-26",
+    "last_date": "2026-05-28",
     "signals": {
       "HMA16": "Señal Alcista",
       "EMA_12_26": "Señal Alcista",
       "SMA_10_50_100": "Señal Alcista"
     },
-    "vma20_cat": "Neutro",
+    "vma20_cat": "Bajo",
     "candle": null,
     "metrics": {
       "HMA16": {
@@ -1351,7 +1351,7 @@
         "total": {
           "n_trades": 40,
           "win_rate": 0.425,
-          "cumulative_return": 2.359564654863582,
+          "cumulative_return": 2.558239923432929,
           "max_drawdown": -0.3015771833370536
         },
         "is": {
@@ -1363,7 +1363,7 @@
         "oos": {
           "n_trades": 11,
           "win_rate": 0.4545454545454545,
-          "cumulative_return": 0.7960124516368539,
+          "cumulative_return": 0.902223610772094,
           "max_drawdown": -0.3015771833370536
         }
       },
@@ -1371,7 +1371,7 @@
         "total": {
           "n_trades": 24,
           "win_rate": 0.5833333333333334,
-          "cumulative_return": 1.196374503331496,
+          "cumulative_return": 1.3262391274077854,
           "max_drawdown": -0.3577316440929178
         },
         "is": {
@@ -1383,7 +1383,7 @@
         "oos": {
           "n_trades": 8,
           "win_rate": 0.5,
-          "cumulative_return": 0.6035352334159232,
+          "cumulative_return": 0.6983471609650631,
           "max_drawdown": -0.3577316440929179
         }
       },
@@ -1412,14 +1412,14 @@
   {
     "ticker": "BMA_MEP",
     "mercado": "MEP",
-    "last_date": "2026-05-26",
+    "last_date": "2026-05-28",
     "signals": {
       "HMA16": "Señal Alcista",
-      "EMA_12_26": "Señal Bajista",
-      "SMA_10_50_100": "Señal Bajista"
+      "EMA_12_26": "Compra Confirmada",
+      "SMA_10_50_100": "Neutra"
     },
     "vma20_cat": "Muy Alto",
-    "candle": "Engulfing_Alc",
+    "candle": null,
     "metrics": {
       "HMA16": {
         "total": {
@@ -1506,13 +1506,13 @@
   {
     "ticker": "CEPU_MEP",
     "mercado": "MEP",
-    "last_date": "2026-05-26",
+    "last_date": "2026-05-28",
     "signals": {
-      "HMA16": "Señal Bajista",
+      "HMA16": "Compra Confirmada",
       "EMA_12_26": "Señal Bajista",
       "SMA_10_50_100": "Señal Bajista"
     },
-    "vma20_cat": "Bajo",
+    "vma20_cat": "Alto",
     "candle": null,
     "metrics": {
       "HMA16": {
@@ -1600,13 +1600,13 @@
   {
     "ticker": "SUPV_MEP",
     "mercado": "MEP",
-    "last_date": "2026-05-26",
+    "last_date": "2026-05-28",
     "signals": {
-      "HMA16": "Compra Confirmada",
+      "HMA16": "Señal Alcista",
       "EMA_12_26": "Señal Bajista",
       "SMA_10_50_100": "Señal Bajista"
     },
-    "vma20_cat": "Neutro",
+    "vma20_cat": "Alto",
     "candle": null,
     "metrics": {
       "HMA16": {
@@ -1694,14 +1694,14 @@
   {
     "ticker": "BBAR_MEP",
     "mercado": "MEP",
-    "last_date": "2026-05-26",
+    "last_date": "2026-05-28",
     "signals": {
       "HMA16": "Señal Alcista",
-      "EMA_12_26": "Compra Temprana",
-      "SMA_10_50_100": "Señal Bajista"
+      "EMA_12_26": "Señal Alcista",
+      "SMA_10_50_100": "Neutra"
     },
     "vma20_cat": "Alto",
-    "candle": "Marubozu_Alc",
+    "candle": null,
     "metrics": {
       "HMA16": {
         "total": {
@@ -1788,13 +1788,13 @@
   {
     "ticker": "EDN_MEP",
     "mercado": "MEP",
-    "last_date": "2026-05-26",
+    "last_date": "2026-05-28",
     "signals": {
       "HMA16": "Señal Alcista",
       "EMA_12_26": "Señal Bajista",
       "SMA_10_50_100": "Señal Bajista"
     },
-    "vma20_cat": "Neutro",
+    "vma20_cat": "Alto",
     "candle": null,
     "metrics": {
       "HMA16": {
@@ -1882,13 +1882,13 @@
   {
     "ticker": "TXAR_MEP",
     "mercado": "MEP",
-    "last_date": "2026-05-26",
+    "last_date": "2026-05-28",
     "signals": {
-      "HMA16": "Compra Confirmada",
+      "HMA16": "Señal Alcista",
       "EMA_12_26": "Señal Bajista",
       "SMA_10_50_100": "Señal Bajista"
     },
-    "vma20_cat": "Neutro",
+    "vma20_cat": "Muy Alto",
     "candle": "Doji",
     "metrics": {
       "HMA16": {
@@ -1976,14 +1976,14 @@
   {
     "ticker": "LOMA_MEP",
     "mercado": "MEP",
-    "last_date": "2026-05-26",
+    "last_date": "2026-05-28",
     "signals": {
       "HMA16": "Señal Alcista",
-      "EMA_12_26": "Señal Bajista",
+      "EMA_12_26": "Compra Confirmada",
       "SMA_10_50_100": "Señal Bajista"
     },
-    "vma20_cat": "Neutro",
-    "candle": "Marubozu_Alc",
+    "vma20_cat": "Alto",
+    "candle": null,
     "metrics": {
       "HMA16": {
         "total": {
@@ -2070,13 +2070,13 @@
   {
     "ticker": "TECO2_MEP",
     "mercado": "MEP",
-    "last_date": "2026-05-26",
+    "last_date": "2026-05-28",
     "signals": {
-      "HMA16": "Compra Temprana",
+      "HMA16": "Señal Alcista",
       "EMA_12_26": "Señal Alcista",
       "SMA_10_50_100": "Señal Alcista"
     },
-    "vma20_cat": "Neutro",
+    "vma20_cat": "Muy Alto",
     "candle": null,
     "metrics": {
       "HMA16": {
@@ -2164,14 +2164,14 @@
   {
     "ticker": "TGSU2_MEP",
     "mercado": "MEP",
-    "last_date": "2026-05-26",
+    "last_date": "2026-05-28",
     "signals": {
-      "HMA16": "Señal Bajista",
+      "HMA16": "Compra Confirmada",
       "EMA_12_26": "Señal Bajista",
       "SMA_10_50_100": "Neutra"
     },
-    "vma20_cat": "Alto",
-    "candle": "Doji",
+    "vma20_cat": "Neutro",
+    "candle": null,
     "metrics": {
       "HMA16": {
         "total": {

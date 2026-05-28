@@ -1549,7 +1549,7 @@
       "win_rate_confirmed": 0.6470588235294118,
       "win_rate_not_confirmed": 0.4230769230769231,
       "cumulative_confirmed": 10.01820178732833,
-      "cumulative_not_confirmed": 0.251898477166572
+      "cumulative_not_confirmed": 0.3260388823209821
     },
     "candle": {
       "n_aligned": 3,
@@ -1560,7 +1560,7 @@
       "win_rate_neutral": 0.5135135135135135,
       "cumulative_aligned": 0.263650337152709,
       "cumulative_not_aligned": 0.0110848023987344,
-      "cumulative_neutral": 9.796061075603228
+      "cumulative_neutral": 10.435429488310769
     }
   },
   {
@@ -1618,7 +1618,7 @@
       "win_rate_confirmed": 0.4166666666666667,
       "win_rate_not_confirmed": 0.4375,
       "cumulative_confirmed": 0.6157983527741788,
-      "cumulative_not_confirmed": 1.07919796990479
+      "cumulative_not_confirmed": 1.2021559294968638
     },
     "candle": {
       "n_aligned": 1,
@@ -1629,7 +1629,7 @@
       "win_rate_neutral": 0.4210526315789473,
       "cumulative_aligned": 0.0404967502321262,
       "cumulative_not_aligned": -0.056391862955032,
-      "cumulative_neutral": 2.4217682960633486
+      "cumulative_neutral": 2.62412211420413
     }
   },
   {
@@ -1640,7 +1640,7 @@
       "n_not_confirmed": 8,
       "win_rate_confirmed": 0.625,
       "win_rate_not_confirmed": 0.5,
-      "cumulative_confirmed": 0.8537534626621883,
+      "cumulative_confirmed": 0.9633599966087404,
       "cumulative_not_confirmed": 0.1848255701582157
     },
     "candle": {
@@ -1652,7 +1652,7 @@
       "win_rate_neutral": 0.5454545454545454,
       "cumulative_aligned": 0.1560294117647056,
       "cumulative_not_aligned": 0.1643423096841014,
-      "cumulative_neutral": 0.6317620590710489
+      "cumulative_neutral": 0.7282429488563691
     }
   }
 ]

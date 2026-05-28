@@ -2,73 +2,73 @@
   {
     "local_ticker": "BBAR_BA",
     "mep_ticker": "BBAR_MEP",
-    "correlation": 0.6831162768831638,
-    "avg_lag": 0.093592512598992
+    "correlation": 0.683516122958355,
+    "avg_lag": 0.0934579439252336
   },
   {
     "local_ticker": "BMA_BA",
     "mep_ticker": "BMA_MEP",
-    "correlation": 0.6706381537109054,
-    "avg_lag": 0.0763138948884089
+    "correlation": 0.6710663253540012,
+    "avg_lag": 0.0762041696621135
   },
   {
     "local_ticker": "CEPU_BA",
     "mep_ticker": "CEPU_MEP",
-    "correlation": 0.6037581453314609,
-    "avg_lag": 0.1087113030957523
+    "correlation": 0.604276008129452,
+    "avg_lag": 0.1085549964054636
   },
   {
     "local_ticker": "EDN_BA",
     "mep_ticker": "EDN_MEP",
-    "correlation": 0.6135374356699965,
-    "avg_lag": 0.0691144708423326
+    "correlation": 0.6140801198261797,
+    "avg_lag": 0.0690150970524802
   },
   {
     "local_ticker": "GGAL_BA",
     "mep_ticker": "GGAL_MEP",
-    "correlation": 0.6339918512196182,
-    "avg_lag": 0.1195104391648668
+    "correlation": 0.6344508758986264,
+    "avg_lag": 0.1193386053199137
   },
   {
     "local_ticker": "LOMA_BA",
     "mep_ticker": "LOMA_MEP",
-    "correlation": 0.622520374737808,
-    "avg_lag": 0.0892728581713463
+    "correlation": 0.6229612148968824,
+    "avg_lag": 0.0891445003594536
   },
   {
     "local_ticker": "PAMP_BA",
     "mep_ticker": "PAMP_MEP",
-    "correlation": 0.6221669262920921,
-    "avg_lag": 0.1259899208063355
+    "correlation": 0.6225884015598108,
+    "avg_lag": 0.1258087706685837
   },
   {
     "local_ticker": "SUPV_BA",
     "mep_ticker": "SUPV_MEP",
-    "correlation": 0.6482043072544579,
-    "avg_lag": 0.0417566594672426
+    "correlation": 0.6486585244064531,
+    "avg_lag": 0.0416966211358734
   },
   {
     "local_ticker": "TECO2_BA",
     "mep_ticker": "TECO2_MEP",
-    "correlation": 0.6436447205048546,
-    "avg_lag": 0.1036717062634989
+    "correlation": 0.6441283565628175,
+    "avg_lag": 0.1035226455787203
   },
   {
     "local_ticker": "TGSU2_BA",
     "mep_ticker": "TGSU2_MEP",
-    "correlation": 0.6845857270153125,
-    "avg_lag": 0.0863930885529157
+    "correlation": 0.6849567113522359,
+    "avg_lag": 0.0862688713156002
   },
   {
     "local_ticker": "TXAR_BA",
     "mep_ticker": "TXAR_MEP",
-    "correlation": 0.5854052232394472,
-    "avg_lag": 0.0590352771778257
+    "correlation": 0.585986262648436,
+    "avg_lag": 0.0589503953989935
   },
   {
     "local_ticker": "YPFD_BA",
     "mep_ticker": "YPFD_MEP",
-    "correlation": 0.6901646900819678,
-    "avg_lag": 0.1022318214542836
+    "correlation": 0.6905455535690406,
+    "avg_lag": 0.1020848310567936
   }
 ]
