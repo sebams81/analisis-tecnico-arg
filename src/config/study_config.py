@@ -18,10 +18,11 @@ STUDY_CUTOFF_DATE = "2024-08-28"
 # Cierre del snapshot. Datos posteriores no se usan en la tesis.
 STUDY_END_DATE = "2026-05-12"
 
-# Costo total round-trip (entrada + salida) como fracción decimal
-# 0.5% es el costo conservador estimado para inversores minoristas argentinos
-# (comisión de broker + arancel de mercado + costo de bid-ask spread)
-COST_PER_TRADE = 0.005
+# Costo total round-trip (entrada + salida) como fracción decimal.
+# 0.5% por pata (0.5% compra + 0.5% venta) = 1% por trade redondo.
+# Costo conservador para inversores minoristas argentinos
+# (comisión de broker + arancel de mercado + costo de bid-ask spread).
+COST_PER_TRADE = 0.01
 
 # Universo del estudio: bonos para construir el MEP, acciones a analizar.
 # El primer elemento de cada tupla es el código PPI; el segundo es el label
