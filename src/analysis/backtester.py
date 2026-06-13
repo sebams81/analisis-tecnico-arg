@@ -91,10 +91,11 @@ def run_backtest(df_indicators, df_signals, sig_col, max_hold=30, vma_median=Non
             entry_price = row_ind["open"]
             entry_date = row_sig["date"]
             entry_sig_idx = i
-            # VMA y mediana de la barra de señal i (conocidas al cierre de i, antes
-            # del open de i+1 donde se ejecuta) -> sin look-ahead en el validador.
+            # VMA, mediana y patrón de vela de la barra de señal i (conocidos al cierre
+            # de i, antes del open de i+1 donde se ejecuta) -> sin look-ahead en los
+            # validadores. La vela de i+1 sería circular con "el trade arrancó ganando".
             entry_vma = df_indicators.iloc[i].get("vma20_ratio", np.nan)
-            entry_candle_pattern = str(row_sig.get("candle_pattern", "")).strip() or None
+            entry_candle_pattern = str(df_signals.iloc[i].get("candle_pattern", "")).strip() or None
             in_pos = True
             hold = 0
             continue
@@ -362,6 +363,73 @@ def compute_validator_significance(summary_rows):
     return rows
 
 
+def compute_candle_significance(summary_rows):
+    """Pool de trades por patrón de vela: aligned (Marubozu/Engulfing alcista) =
+    confirmado vs not_aligned (bajista) = no-confirmado; neutral (Doji/sin patrón) =
+    baseline. Win-rate con z-test de proporciones y retorno/expectancy con t de Welch,
+    más cobertura (% de trades por categoría). El patrón se toma de la barra de señal i
+    (look-ahead ya corregido). La categoría se deriva de entry_candle_pattern vía
+    _classify_candle para no depender del parseo booleano del CSV."""
+    methods = ["HMA16", "EMA_12_26", "SMA_10_50_100"]
+    pooled = {m: [] for m in methods}
+    for row in summary_rows:
+        method = row.get("method")
+        if method not in methods:
+            continue
+        f = BACKTESTS_DIR / f"{row['ticker']}_{method}_trades.csv"
+        if not f.exists():
+            continue
+        td = pd.read_csv(f)
+        if td.empty or "entry_candle_pattern" not in td.columns:
+            continue
+        sub = td[["return", "entry_candle_pattern"]].dropna(subset=["return"]).copy()
+        sub["aligned"] = sub["entry_candle_pattern"].apply(_classify_candle)
+        pooled[method].append(sub)
+
+    def _stat_row(scope, td):
+        al = td[td["aligned"] == True]["return"]
+        na = td[td["aligned"] == False]["return"]
+        n1, n2, n0 = len(al), len(na), int(td["aligned"].isna().sum())
+        total = n1 + n2 + n0
+        w1, w2 = int((al > 0).sum()), int((na > 0).sum())
+        wr1 = w1 / n1 if n1 else None
+        wr2 = w2 / n2 if n2 else None
+        z, pz = _two_prop_z(w1, n1, w2, n2)
+        diff, t, pt = _welch_t(al.values, na.values)
+        return {
+            "scope": scope,
+            "n_aligned": n1,
+            "n_not_aligned": n2,
+            "n_neutral": n0,
+            "coverage_aligned": (n1 / total) if total else None,
+            "coverage_not_aligned": (n2 / total) if total else None,
+            "coverage_neutral": (n0 / total) if total else None,
+            "win_rate_aligned": wr1,
+            "win_rate_not_aligned": wr2,
+            "win_rate_spread": (wr1 - wr2) if (wr1 is not None and wr2 is not None) else None,
+            "winrate_z": z,
+            "winrate_pvalue": pz,
+            "mean_return_aligned": float(al.mean()) if n1 else None,
+            "mean_return_not_aligned": float(na.mean()) if n2 else None,
+            "expectancy_spread": diff,
+            "return_welch_t": t,
+            "return_pvalue": pt,
+        }
+
+    rows = []
+    all_td = (
+        pd.concat([x for v in pooled.values() for x in v], ignore_index=True)
+        if any(pooled.values())
+        else pd.DataFrame(columns=["return", "aligned"])
+    )
+    if not all_td.empty:
+        rows.append(_stat_row("AGREGADO", all_td))
+    for m in methods:
+        if pooled[m]:
+            rows.append(_stat_row(m, pd.concat(pooled[m], ignore_index=True)))
+    return rows
+
+
 def main():
     """Flujo principal de backtesting."""
     start_time = datetime.now()
@@ -619,6 +687,11 @@ def main():
     sig_rows = compute_validator_significance(summary_rows)
     sig_file = BACKTESTS_DIR / "validators_significance.csv"
     pd.DataFrame(sig_rows).to_csv(sig_file, index=False, encoding="utf-8-sig")
+
+    # Significancia del validador de velas (aligned vs not_aligned) + cobertura
+    candle_sig_rows = compute_candle_significance(summary_rows)
+    candle_sig_file = BACKTESTS_DIR / "validators_candle_significance.csv"
+    pd.DataFrame(candle_sig_rows).to_csv(candle_sig_file, index=False, encoding="utf-8-sig")
 
     df_summary = pd.DataFrame(summary_rows)
 
