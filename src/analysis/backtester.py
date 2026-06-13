@@ -70,6 +70,7 @@ def run_backtest(df_indicators, df_signals, sig_col, max_hold=30, vma_median=Non
     trades = []
     in_pos = False
     entry_idx = None
+    entry_sig_idx = None
     hold = 0
     entry_price = None
     entry_date = None
@@ -89,7 +90,10 @@ def run_backtest(df_indicators, df_signals, sig_col, max_hold=30, vma_median=Non
                 continue
             entry_price = row_ind["open"]
             entry_date = row_sig["date"]
-            entry_vma = row_ind.get("vma20_ratio", np.nan)
+            entry_sig_idx = i
+            # VMA y mediana de la barra de señal i (conocidas al cierre de i, antes
+            # del open de i+1 donde se ejecuta) -> sin look-ahead en el validador.
+            entry_vma = df_indicators.iloc[i].get("vma20_ratio", np.nan)
             entry_candle_pattern = str(row_sig.get("candle_pattern", "")).strip() or None
             in_pos = True
             hold = 0
@@ -115,7 +119,7 @@ def run_backtest(df_indicators, df_signals, sig_col, max_hold=30, vma_median=Non
                 )
                 vma_confirm = None
                 if vma_median is not None and not pd.isna(entry_vma):
-                    vmm = vma_median.iloc[entry_idx]
+                    vmm = vma_median.iloc[entry_sig_idx]
                     if not pd.isna(vmm):
                         vma_confirm = bool(entry_vma > vmm)
                 trades.append(
@@ -136,6 +140,7 @@ def run_backtest(df_indicators, df_signals, sig_col, max_hold=30, vma_median=Non
                 )
                 in_pos = False
                 entry_idx = None
+                entry_sig_idx = None
                 entry_price = None
                 entry_date = None
                 entry_vma = None
@@ -153,7 +158,7 @@ def run_backtest(df_indicators, df_signals, sig_col, max_hold=30, vma_median=Non
             )
             vma_confirm = None
             if vma_median is not None and not pd.isna(entry_vma):
-                vmm = vma_median.iloc[entry_idx]
+                vmm = vma_median.iloc[entry_sig_idx]
                 if not pd.isna(vmm):
                     vma_confirm = bool(entry_vma > vmm)
             trades.append(
@@ -263,6 +268,98 @@ def ensure_cols(df, cols):
         if c not in df.columns:
             df[c] = pd.NA
     return df
+
+
+def _norm_cdf(x):
+    """CDF normal estándar (sin dependencia de scipy)."""
+    from math import erf, sqrt
+    return 0.5 * (1 + erf(x / sqrt(2)))
+
+
+def _two_prop_z(w1, n1, w2, n2):
+    """z-test de diferencia de proporciones (win-rate). Devuelve (z, p_2_lados)."""
+    if n1 == 0 or n2 == 0:
+        return None, None
+    p1, p2 = w1 / n1, w2 / n2
+    p = (w1 + w2) / (n1 + n2)
+    se = np.sqrt(p * (1 - p) * (1 / n1 + 1 / n2))
+    if se == 0:
+        return None, None
+    z = (p1 - p2) / se
+    return float(z), float(2 * (1 - _norm_cdf(abs(z))))
+
+
+def _welch_t(a, b):
+    """t de Welch sobre retorno medio / expectancy. p-valor por aproximación normal
+    (n grande), para no depender de scipy. Devuelve (diff_medias, t, p_2_lados)."""
+    a = np.asarray(a, float)
+    b = np.asarray(b, float)
+    if len(a) < 2 or len(b) < 2:
+        return None, None, None
+    diff = float(a.mean() - b.mean())
+    se = np.sqrt(a.var(ddof=1) / len(a) + b.var(ddof=1) / len(b))
+    if se == 0:
+        return diff, None, None
+    t = diff / se
+    return diff, float(t), float(2 * (1 - _norm_cdf(abs(t))))
+
+
+def compute_validator_significance(summary_rows):
+    """Pool de trades (confirmados vs no-confirmados) por método y agregado.
+    Reporta win-rate con z-test de proporciones y retorno medio/expectancy con
+    t de Welch. El VMA usado para el bucketing es el de la barra de señal i
+    (look-ahead ya corregido)."""
+    methods = ["HMA16", "EMA_12_26", "SMA_10_50_100"]
+    pooled = {m: [] for m in methods}
+    for row in summary_rows:
+        method = row.get("method")
+        if method not in methods:
+            continue
+        f = BACKTESTS_DIR / f"{row['ticker']}_{method}_trades.csv"
+        if not f.exists():
+            continue
+        td = pd.read_csv(f)
+        if td.empty or "vma20_confirm" not in td.columns:
+            continue
+        pooled[method].append(td[["return", "vma20_confirm"]].dropna(subset=["return"]))
+
+    def _stat_row(scope, td):
+        c = td[td["vma20_confirm"] == True]["return"]
+        n = td[td["vma20_confirm"] == False]["return"]
+        n1, n2 = len(c), len(n)
+        w1, w2 = int((c > 0).sum()), int((n > 0).sum())
+        wr1 = w1 / n1 if n1 else None
+        wr2 = w2 / n2 if n2 else None
+        z, pz = _two_prop_z(w1, n1, w2, n2)
+        diff, t, pt = _welch_t(c.values, n.values)
+        return {
+            "scope": scope,
+            "n_confirmed": n1,
+            "n_not_confirmed": n2,
+            "win_rate_confirmed": wr1,
+            "win_rate_not_confirmed": wr2,
+            "win_rate_spread": (wr1 - wr2) if (wr1 is not None and wr2 is not None) else None,
+            "winrate_z": z,
+            "winrate_pvalue": pz,
+            "mean_return_confirmed": float(c.mean()) if n1 else None,
+            "mean_return_not_confirmed": float(n.mean()) if n2 else None,
+            "expectancy_spread": diff,
+            "return_welch_t": t,
+            "return_pvalue": pt,
+        }
+
+    rows = []
+    all_td = (
+        pd.concat([x for v in pooled.values() for x in v], ignore_index=True)
+        if any(pooled.values())
+        else pd.DataFrame(columns=["return", "vma20_confirm"])
+    )
+    if not all_td.empty:
+        rows.append(_stat_row("AGREGADO", all_td))
+    for m in methods:
+        if pooled[m]:
+            rows.append(_stat_row(m, pd.concat(pooled[m], ignore_index=True)))
+    return rows
 
 
 def main():
@@ -517,6 +614,11 @@ def main():
     df_validators = pd.DataFrame(validators_rows)
     validators_file = BACKTESTS_DIR / "validators_effectiveness.csv"
     df_validators.to_csv(validators_file, index=False, encoding="utf-8-sig")
+
+    # Significancia del spread confirmados vs no-confirmados (por método + agregado)
+    sig_rows = compute_validator_significance(summary_rows)
+    sig_file = BACKTESTS_DIR / "validators_significance.csv"
+    pd.DataFrame(sig_rows).to_csv(sig_file, index=False, encoding="utf-8-sig")
 
     df_summary = pd.DataFrame(summary_rows)
 

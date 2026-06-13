@@ -140,7 +140,7 @@ def calculate_sma_crossover_trend_10_50_100(
     sma10_series: pd.Series, sma50_series: pd.Series, sma100_series: pd.Series
 ) -> list:
     """Genera señales basadas en alineación SMA10 > SMA50 > SMA100 (up)
-    o SMA10 < SMA50 < SMA100 (down). Alineación parcial mantiene tendencia previa."""
+    o SMA10 < SMA50 < SMA100 (down). Alineación parcial/mixta -> Neutra."""
     def get_state(i, prev_state):
         s10 = sma10_series.iloc[i]
         s50 = sma50_series.iloc[i]
@@ -151,7 +151,7 @@ def calculate_sma_crossover_trend_10_50_100(
             return "up"
         if s10 < s50 < s100:
             return "down"
-        return None
+        return _NAN   # mixto/parcial -> Neutra (antes: carry-forward de trend[-1])
     return _trend_state_machine(
         len(sma10_series), get_state, reset_opposite_in_continuation=False
     )
