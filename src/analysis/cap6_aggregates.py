@@ -25,7 +25,7 @@ Convención de la curva de equity diaria:
 """
 
 import sys
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 
 import pandas as pd
@@ -49,7 +49,12 @@ BACKTESTS_DIR = project_root / "data_public" / "backtests"
 
 METHODS = ["HMA16", "EMA_12_26", "SMA_10_50_100"]
 CUTS = ["total", "is", "oos"]
-OOS_START_DATE = "2024-08-29"  # STUDY_CUTOFF_DATE + 1 día (inicio OOS)
+# Inicio OOS derivado de la config (única fuente de verdad): cota inferior >= que,
+# al filtrar por fecha, selecciona la primera rueda posterior al cutoff. Misma
+# convención que _OOS_START_DATE en backtester.py -> no se desincroniza.
+OOS_START_DATE = (
+    datetime.strptime(STUDY_CUTOFF_DATE, "%Y-%m-%d") + timedelta(days=1)
+).strftime("%Y-%m-%d")
 
 WINDOWS = {
     "total": (STUDY_START_DATE, STUDY_END_DATE),
