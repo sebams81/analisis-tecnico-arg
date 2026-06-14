@@ -271,6 +271,11 @@ def _print_tables(agg):
 
 
 def main():
+    # Forzar UTF-8 en stdout para que las tablas con acentos/× corran limpias
+    # en consolas Windows (cp1252), sin tocar el cálculo.
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8")
+
     summary = _read_csv(BACKTESTS_DIR / "summary_all_tickers.csv", parse_dates=[])
     per_ticker = build_per_ticker_metrics(summary)
     agg = aggregate(per_ticker)
