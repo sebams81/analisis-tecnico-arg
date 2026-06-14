@@ -11,12 +11,13 @@ resultados reportados en la tesis.
 STUDY_START_DATE = "2020-09-14"
 
 # Fecha de corte para el split in-sample / out-of-sample (70/30).
-# Calculada sobre 1380 ruedas entre STUDY_START_DATE y STUDY_END_DATE.
-# IS: 965 ruedas (69.93%), OOS: 415 ruedas (30.07%).
-STUDY_CUTOFF_DATE = "2024-08-28"
+# Calculada sobre 1383 ruedas entre STUDY_START_DATE y STUDY_END_DATE.
+# IS: 967 ruedas (69.92%), OOS: 416 ruedas (30.08%).
+STUDY_CUTOFF_DATE = "2024-08-30"
 
-# Cierre del snapshot. Datos posteriores no se usan en la tesis.
-STUDY_END_DATE = "2026-05-12"
+# Cierre del snapshot (última rueda disponible; lunes 2026-05-18 sin datos).
+# Datos posteriores no se usan en la tesis.
+STUDY_END_DATE = "2026-05-15"
 
 # Costo total round-trip (entrada + salida) como fracción decimal.
 # 0.5% por pata (0.5% compra + 0.5% venta) = 1% por trade redondo.
