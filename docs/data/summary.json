@@ -752,95 +752,95 @@
     }
   },
   {
-    "ticker": "TXAR_BA",
+    "ticker": "CRES_BA",
     "mercado": "BA",
-    "last_date": "2026-05-15",
+    "last_date": "2026-06-19",
     "signals": {
-      "HMA16": "Señal Bajista",
-      "EMA_12_26": "Señal Bajista",
-      "SMA_10_50_100": "Señal Bajista"
+      "HMA16": "Señal Alcista",
+      "EMA_12_26": "Señal Alcista",
+      "SMA_10_50_100": "Neutra"
     },
-    "vma20_cat": "Neutro",
-    "candle": "Doji",
+    "vma20_cat": "Muy Bajo",
+    "candle": null,
     "metrics": {
       "HMA16": {
         "total": {
-          "n_trades": 85,
-          "win_rate": 0.4470588235294118,
-          "cumulative_return": 1.5914472929956331,
-          "max_drawdown": -0.6241931503698122
+          "n_trades": 80,
+          "win_rate": 0.5,
+          "cumulative_return": 6.533080624243367,
+          "max_drawdown": -0.2430894738192363
         },
         "is": {
-          "n_trades": 58,
-          "win_rate": 0.5,
-          "cumulative_return": 3.434995855470798,
-          "max_drawdown": -0.3256352208529384
+          "n_trades": 52,
+          "win_rate": 0.5769230769230769,
+          "cumulative_return": 7.068075789417648,
+          "max_drawdown": -0.2206437839241076
         },
         "oos": {
-          "n_trades": 27,
-          "win_rate": 0.3333333333333333,
-          "cumulative_return": -0.4156821387332419,
-          "max_drawdown": -0.4936180886016216
+          "n_trades": 28,
+          "win_rate": 0.3571428571428571,
+          "cumulative_return": -0.0663101313297028,
+          "max_drawdown": -0.2430894738192364
         }
       },
       "EMA_12_26": {
         "total": {
-          "n_trades": 42,
-          "win_rate": 0.4285714285714285,
-          "cumulative_return": 2.465949909961012,
-          "max_drawdown": -0.5415161381462776
+          "n_trades": 40,
+          "win_rate": 0.475,
+          "cumulative_return": 4.2291653147616834,
+          "max_drawdown": -0.3314003650866611
         },
         "is": {
-          "n_trades": 32,
-          "win_rate": 0.5,
-          "cumulative_return": 3.92752821658049,
-          "max_drawdown": -0.3481751829020454
+          "n_trades": 26,
+          "win_rate": 0.5384615384615384,
+          "cumulative_return": 4.12412146076429,
+          "max_drawdown": -0.2596585459048461
         },
         "oos": {
-          "n_trades": 10,
-          "win_rate": 0.2,
-          "cumulative_return": -0.2966149035334708,
-          "max_drawdown": -0.3301707716095683
+          "n_trades": 14,
+          "win_rate": 0.3571428571428571,
+          "cumulative_return": 0.0204998758912566,
+          "max_drawdown": -0.3314003650866613
         }
       },
       "SMA_10_50_100": {
         "total": {
-          "n_trades": 25,
-          "win_rate": 0.56,
-          "cumulative_return": 1.9708113324581429,
-          "max_drawdown": -0.5992936436927142
+          "n_trades": 28,
+          "win_rate": 0.5714285714285714,
+          "cumulative_return": 2.2933089049857878,
+          "max_drawdown": -0.3961083716817299
         },
         "is": {
-          "n_trades": 22,
-          "win_rate": 0.6363636363636364,
-          "cumulative_return": 4.313218094672704,
-          "max_drawdown": -0.2833471988877179
+          "n_trades": 20,
+          "win_rate": 0.6,
+          "cumulative_return": 2.173449360378076,
+          "max_drawdown": -0.3184362279127635
         },
         "oos": {
-          "n_trades": 3,
-          "win_rate": 0.0,
-          "cumulative_return": -0.4408640339012575,
-          "max_drawdown": -0.3532089642437468
+          "n_trades": 8,
+          "win_rate": 0.5,
+          "cumulative_return": 0.0377694839262952,
+          "max_drawdown": -0.3550581202188793
         }
       },
       "B&H": {
         "total": {
           "n_trades": 1,
           "win_rate": 1.0,
-          "cumulative_return": 14.718900255754477,
+          "cumulative_return": 36.74903614457831,
           "max_drawdown": 0.0
         },
         "is": {
           "n_trades": 1,
           "win_rate": 1.0,
-          "cumulative_return": 20.319923273657288,
+          "cumulative_return": 23.929759036144574,
           "max_drawdown": 0.0
         },
         "oos": {
           "n_trades": 1,
-          "win_rate": 0.0,
-          "cumulative_return": -0.2752329749103942,
-          "max_drawdown": -0.2752329749103942
+          "win_rate": 1.0,
+          "cumulative_return": 0.5113592233009709,
+          "max_drawdown": 0.0
         }
       }
     }
@@ -1122,6 +1122,100 @@
           "n_trades": 1,
           "win_rate": 1.0,
           "cumulative_return": 0.729562624254473,
+          "max_drawdown": 0.0
+        }
+      }
+    }
+  },
+  {
+    "ticker": "IRSA_BA",
+    "mercado": "BA",
+    "last_date": "2026-06-19",
+    "signals": {
+      "HMA16": "Señal Alcista",
+      "EMA_12_26": "Señal Alcista",
+      "SMA_10_50_100": "Neutra"
+    },
+    "vma20_cat": "Muy Bajo",
+    "candle": "Doji",
+    "metrics": {
+      "HMA16": {
+        "total": {
+          "n_trades": 87,
+          "win_rate": 0.3908045977011494,
+          "cumulative_return": 5.667218594030175,
+          "max_drawdown": -0.4259382808239779
+        },
+        "is": {
+          "n_trades": 58,
+          "win_rate": 0.4310344827586206,
+          "cumulative_return": 7.272545788333286,
+          "max_drawdown": -0.3387373323516746
+        },
+        "oos": {
+          "n_trades": 29,
+          "win_rate": 0.3103448275862069,
+          "cumulative_return": -0.1940547970815819,
+          "max_drawdown": -0.425938280823978
+        }
+      },
+      "EMA_12_26": {
+        "total": {
+          "n_trades": 45,
+          "win_rate": 0.5111111111111111,
+          "cumulative_return": 4.108284068258828,
+          "max_drawdown": -0.3513883386085525
+        },
+        "is": {
+          "n_trades": 32,
+          "win_rate": 0.53125,
+          "cumulative_return": 4.401292100923241,
+          "max_drawdown": -0.3513883386085525
+        },
+        "oos": {
+          "n_trades": 13,
+          "win_rate": 0.4615384615384615,
+          "cumulative_return": -0.0542477664954148,
+          "max_drawdown": -0.2280334244080146
+        }
+      },
+      "SMA_10_50_100": {
+        "total": {
+          "n_trades": 30,
+          "win_rate": 0.6,
+          "cumulative_return": 5.886020577586948,
+          "max_drawdown": -0.2916290292590364
+        },
+        "is": {
+          "n_trades": 21,
+          "win_rate": 0.6190476190476191,
+          "cumulative_return": 4.244437644597388,
+          "max_drawdown": -0.2916290292590364
+        },
+        "oos": {
+          "n_trades": 9,
+          "win_rate": 0.5555555555555556,
+          "cumulative_return": 0.3130141006978422,
+          "max_drawdown": -0.1890657355679701
+        }
+      },
+      "B&H": {
+        "total": {
+          "n_trades": 1,
+          "win_rate": 1.0,
+          "cumulative_return": 47.70481028151775,
+          "max_drawdown": 0.0
+        },
+        "is": {
+          "n_trades": 1,
+          "win_rate": 1.0,
+          "cumulative_return": 30.93614443084455,
+          "max_drawdown": 0.0
+        },
+        "oos": {
+          "n_trades": 1,
+          "win_rate": 1.0,
+          "cumulative_return": 0.4750746268656716,
           "max_drawdown": 0.0
         }
       }
@@ -1880,7 +1974,7 @@
     }
   },
   {
-    "ticker": "TXAR_MEP",
+    "ticker": "CRES_MEP",
     "mercado": "MEP",
     "last_date": "2026-05-15",
     "signals": {
@@ -1893,82 +1987,82 @@
     "metrics": {
       "HMA16": {
         "total": {
-          "n_trades": 72,
-          "win_rate": 0.4027777777777778,
-          "cumulative_return": -0.2916902341374153,
-          "max_drawdown": -0.6104101337457838
+          "n_trades": 67,
+          "win_rate": 0.373134328358209,
+          "cumulative_return": 0.184118376332711,
+          "max_drawdown": -0.4194787219483646
         },
         "is": {
-          "n_trades": 51,
-          "win_rate": 0.4509803921568627,
-          "cumulative_return": -0.0423100229265555,
-          "max_drawdown": -0.4045805806119368
+          "n_trades": 47,
+          "win_rate": 0.3829787234042553,
+          "cumulative_return": 0.2122256587803022,
+          "max_drawdown": -0.3941213995076399
         },
         "oos": {
-          "n_trades": 21,
-          "win_rate": 0.2857142857142857,
-          "cumulative_return": -0.2603976413880072,
-          "max_drawdown": -0.4131086852245419
+          "n_trades": 20,
+          "win_rate": 0.35,
+          "cumulative_return": -0.0231865100726145,
+          "max_drawdown": -0.3883870435660191
         }
       },
       "EMA_12_26": {
         "total": {
-          "n_trades": 35,
-          "win_rate": 0.3142857142857143,
-          "cumulative_return": -0.7173104690950085,
-          "max_drawdown": -0.7720245718508133
+          "n_trades": 34,
+          "win_rate": 0.3823529411764705,
+          "cumulative_return": -0.2074554655457582,
+          "max_drawdown": -0.6359410075703086
         },
         "is": {
-          "n_trades": 28,
-          "win_rate": 0.3571428571428571,
-          "cumulative_return": -0.5039856827493903,
-          "max_drawdown": -0.5999884538301534
+          "n_trades": 22,
+          "win_rate": 0.3636363636363636,
+          "cumulative_return": -0.3640791860192048,
+          "max_drawdown": -0.6359410075703086
         },
         "oos": {
-          "n_trades": 7,
-          "win_rate": 0.1428571428571428,
-          "cumulative_return": -0.430077880671006,
-          "max_drawdown": -0.3890574524804047
+          "n_trades": 12,
+          "win_rate": 0.4166666666666667,
+          "cumulative_return": 0.2462943766425867,
+          "max_drawdown": -0.2451651391162031
         }
       },
       "SMA_10_50_100": {
         "total": {
-          "n_trades": 16,
-          "win_rate": 0.4375,
-          "cumulative_return": -0.1651629694502376,
-          "max_drawdown": -0.3911707224512252
+          "n_trades": 21,
+          "win_rate": 0.2857142857142857,
+          "cumulative_return": -0.8188767458072782,
+          "max_drawdown": -0.8391056796034245
         },
         "is": {
           "n_trades": 14,
-          "win_rate": 0.5,
-          "cumulative_return": 0.0031255902148272,
-          "max_drawdown": -0.3135806369662972
+          "win_rate": 0.2142857142857142,
+          "cumulative_return": -0.7782973956202192,
+          "max_drawdown": -0.8030584751758008
         },
         "oos": {
-          "n_trades": 2,
-          "win_rate": 0.0,
-          "cumulative_return": -0.1677641975308641,
-          "max_drawdown": -0.0285185185185184
+          "n_trades": 7,
+          "win_rate": 0.4285714285714285,
+          "cumulative_return": -0.1830350631224244,
+          "max_drawdown": -0.4122388879800366
         }
       },
       "B&H": {
         "total": {
           "n_trades": 1,
           "win_rate": 1.0,
-          "cumulative_return": 0.33375,
+          "cumulative_return": 2.225294117647059,
           "max_drawdown": 0.0
         },
         "is": {
           "n_trades": 1,
           "win_rate": 1.0,
-          "cumulative_return": 1.02125,
+          "cumulative_return": 1.3723529411764706,
           "max_drawdown": 0.0
         },
         "oos": {
           "n_trades": 1,
-          "win_rate": 0.0,
-          "cumulative_return": -0.3484615384615385,
-          "max_drawdown": -0.3484615384615385
+          "win_rate": 1.0,
+          "cumulative_return": 0.365,
+          "max_drawdown": 0.0
         }
       }
     }
@@ -2250,6 +2344,100 @@
           "n_trades": 1,
           "win_rate": 1.0,
           "cumulative_return": 0.5577749360613811,
+          "max_drawdown": 0.0
+        }
+      }
+    }
+  },
+  {
+    "ticker": "IRSA_MEP",
+    "mercado": "MEP",
+    "last_date": "2026-05-15",
+    "signals": {
+      "HMA16": "Señal Bajista",
+      "EMA_12_26": "Señal Bajista",
+      "SMA_10_50_100": "Señal Bajista"
+    },
+    "vma20_cat": "Bajo",
+    "candle": null,
+    "metrics": {
+      "HMA16": {
+        "total": {
+          "n_trades": 72,
+          "win_rate": 0.3194444444444444,
+          "cumulative_return": -0.6874332072327488,
+          "max_drawdown": -0.6842759669017665
+        },
+        "is": {
+          "n_trades": 48,
+          "win_rate": 0.3541666666666667,
+          "cumulative_return": -0.4060167922708432,
+          "max_drawdown": -0.5309942314052354
+        },
+        "oos": {
+          "n_trades": 24,
+          "win_rate": 0.25,
+          "cumulative_return": -0.473778401981736,
+          "max_drawdown": -0.6526719968530608
+        }
+      },
+      "EMA_12_26": {
+        "total": {
+          "n_trades": 37,
+          "win_rate": 0.3783783783783784,
+          "cumulative_return": -0.3866965701934843,
+          "max_drawdown": -0.5497275888173765
+        },
+        "is": {
+          "n_trades": 26,
+          "win_rate": 0.3846153846153846,
+          "cumulative_return": -0.3335846983284894,
+          "max_drawdown": -0.5487891052265993
+        },
+        "oos": {
+          "n_trades": 11,
+          "win_rate": 0.3636363636363636,
+          "cumulative_return": -0.0796978576749052,
+          "max_drawdown": -0.2869839354902395
+        }
+      },
+      "SMA_10_50_100": {
+        "total": {
+          "n_trades": 22,
+          "win_rate": 0.4090909090909091,
+          "cumulative_return": -0.2437755975806843,
+          "max_drawdown": -0.3643629279594808
+        },
+        "is": {
+          "n_trades": 14,
+          "win_rate": 0.3571428571428571,
+          "cumulative_return": -0.0498628455516561,
+          "max_drawdown": -0.3105811777736579
+        },
+        "oos": {
+          "n_trades": 8,
+          "win_rate": 0.5,
+          "cumulative_return": -0.2040892213520638,
+          "max_drawdown": -0.3643629279594807
+        }
+      },
+      "B&H": {
+        "total": {
+          "n_trades": 1,
+          "win_rate": 1.0,
+          "cumulative_return": 3.2324242424242424,
+          "max_drawdown": 0.0
+        },
+        "is": {
+          "n_trades": 1,
+          "win_rate": 1.0,
+          "cumulative_return": 2.080909090909091,
+          "max_drawdown": 0.0
+        },
+        "oos": {
+          "n_trades": 1,
+          "win_rate": 1.0,
+          "cumulative_return": 0.336153846153846,
           "max_drawdown": 0.0
         }
       }

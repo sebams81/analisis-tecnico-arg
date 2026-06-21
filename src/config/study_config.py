@@ -36,8 +36,9 @@ BONOS = [
 ACCIONES = [
     ("PAMP", "PAMP_BA"), ("GGAL", "GGAL_BA"), ("YPFD", "YPFD_BA"),
     ("BMA", "BMA_BA"), ("CEPU", "CEPU_BA"), ("SUPV", "SUPV_BA"),
-    ("BBAR", "BBAR_BA"), ("EDN", "EDN_BA"), ("TXAR", "TXAR_BA"),
+    ("BBAR", "BBAR_BA"), ("EDN", "EDN_BA"), ("CRES", "CRES_BA"),
     ("LOMA", "LOMA_BA"), ("TECO2", "TECO2_BA"), ("TGSU2", "TGSU2_BA"),
+    ("IRSA", "IRSA_BA"),
 ]
 
 # Solo los labels (XXX_BA) — para módulos que solo necesitan iterar
