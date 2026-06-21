@@ -88,6 +88,15 @@ def _none_if_nan(v):
     return v
 
 
+def _round_corr(v):
+    """Redondea el coeficiente de Pearson a 6 decimales (precisión significativa).
+    Si no es float finito, lo deja como está (vía _none_if_nan: NaN/inf -> None)."""
+    v = _none_if_nan(v)
+    if isinstance(v, float) and math.isfinite(v):
+        return round(float(v), 6)
+    return v
+
+
 def _row_to_dict(row, cols):
     return {c: _none_if_nan(row[c]) for c in cols if c in row.index}
 
@@ -279,7 +288,7 @@ def gen_local_vs_mep():
         out_rows.append({
             "local_ticker": r["local_ticker"],
             "mep_ticker": r["adr_ticker"],
-            "correlation": _none_if_nan(r["correlation"]),
+            "correlation": _round_corr(r["correlation"]),
             "avg_lag": _none_if_nan(r["avg_lag"]),
         })
     out = OUT_DIR / "local_vs_mep.json"
