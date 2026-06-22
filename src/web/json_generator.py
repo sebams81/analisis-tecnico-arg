@@ -52,9 +52,10 @@ SECTOR_MAP = {
     "GGAL": "Bancos",
     "BBAR": "Bancos",
     "SUPV": "Bancos",
-    "TXAR": "Acero / Industria",
     "LOMA": "Materiales / Cemento",
     "TECO2": "Telecomunicaciones",
+    "CRES": "Agropecuario",
+    "IRSA": "Inmobiliario",
 }
 
 
