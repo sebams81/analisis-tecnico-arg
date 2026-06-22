@@ -102,26 +102,37 @@ def main():
     OUT_DIR.mkdir(parents=True, exist_ok=True)
 
     raw_files = list(RAW_DIR.glob("*.csv"))
-    processed = 0
+    processed = []
+    failed = []
 
     for f in raw_files:
         ticker = f.stem
-        df = read_raw_ohlcv(ticker, splits_config)
+        try:
+            df = read_raw_ohlcv(ticker, splits_config)
 
-        if df.empty:
-            continue
+            if df.empty:
+                continue
 
-        df["ticker"] = ticker
-        for c in ["open", "high", "low", "close"]:
-            df[c] = df[c].round(2)
+            df["ticker"] = ticker
+            for c in ["open", "high", "low", "close"]:
+                df[c] = df[c].round(2)
 
-        out_path = OUT_DIR / f"{ticker}_normalized.csv"
-        df[NORMAL_COLUMNS].to_csv(out_path, index=False)
+            out_path = OUT_DIR / f"{ticker}_normalized.csv"
+            df[NORMAL_COLUMNS].to_csv(out_path, index=False)
 
-        logger.info(f"✓ {ticker} normalizado correctamente.", extra={"summary": True})
-        processed += 1
+            logger.info(f"✓ {ticker} normalizado correctamente.", extra={"summary": True})
+            processed.append(ticker)
+        except Exception as e:
+            logger.error(f"✗ Error en {ticker}: {e}", extra={"summary": True})
+            failed.append(ticker)
 
-    logger.info(f"Proceso finalizado. {processed} activos listos.", extra={"summary": True})
+    sep = "=" * 60
+    logger.info(sep)
+    logger.info(f"  Procesados exitosamente: {len(processed)}")
+    logger.info(f"  Fallidos: {len(failed)}")
+    if failed:
+        logger.info(f"  Lista fallidos: {', '.join(failed)}")
+    logger.info(sep)
 
 if __name__ == "__main__":
     main()
