@@ -7,13 +7,6 @@
     "fuente": "https://www.bloomberglinea.com/latinoamerica/telecom-argentina-se-suma-al-club-de-empresas-que-colocan-deuda-a-una-decada-en-wall-street/"
   },
   {
-    "fecha": "2026-02-18",
-    "tickers_afectados": ["TXAR_BA"],
-    "evento": "Ternium Argentina cerró 2025 con ganancia neta de $83.400M revirtiendo pérdidas operativas, alerta por competencia china.",
-    "impacto": "Amarillo",
-    "fuente": "https://www.ambito.com/negocios/siderurgia-ternium-revirtio-perdidas-operativas-2025-pero-sigue-alerta-el-avance-la-competencia-china-n6246970"
-  },
-  {
     "fecha": "2026-03-05",
     "tickers_afectados": ["GGAL_BA"],
     "evento": "Grupo Galicia reportó pérdida neta de ARS$83.544M en Q4 2025 y morosidad subió a 8,2%.",
