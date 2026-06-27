@@ -426,12 +426,6 @@ function monthYearLabel(iso) {
   return `${MONTHS_ES[parseInt(m, 10) - 1]} ${y}`;
 }
 
-const IMPACT_MAP = {
-  Verde:    { cls: "impacto-verde",    icon: "↑" },
-  Amarillo: { cls: "impacto-amarillo", icon: "→" },
-  Rojo:     { cls: "impacto-rojo",     icon: "↓" },
-};
-
 function formatFuente(fuente) {
   if (!fuente) return "—";
   if (/^https?:\/\//i.test(fuente)) {
@@ -442,23 +436,26 @@ function formatFuente(fuente) {
 
 function renderFundamentals() {
   const filtered = FUNDAMENTALS.filter((ev) => {
-    const tickerMatch = ev.tickers_afectados.some((t) => SELECTED_FUND_TICKERS.has(cleanTicker(t)));
+    const tickerMatch =
+      ev.tickers_afectados.includes("MERCADO") ||
+      ev.tickers_afectados.some((t) => SELECTED_FUND_TICKERS.has(cleanTicker(t)));
     const monthMatch = !SELECTED_MONTH || ev.fecha.startsWith(SELECTED_MONTH);
     return tickerMatch && monthMatch;
   });
   const tbody = document.querySelector("#fundamentalsTable tbody");
   tbody.innerHTML = filtered.map((ev) => {
-    const m = IMPACT_MAP[ev.impacto] || { cls: "", icon: "" };
     const tickers = ev.tickers_afectados
       .map(cleanTicker)
       .map((t) => `<strong>${escapeHtml(t)}</strong>`)
       .join(", ");
-    const prefix = m.icon ? `${m.icon} ` : "";
+    const tipo = ev.tipo
+      ? `<span class="evento-tipo">${escapeHtml(ev.tipo)}</span> `
+      : "";
     return `
-      <tr class="${m.cls}">
+      <tr>
         <td>${formatDateDDMMYYYY(ev.fecha)}</td>
         <td>${tickers}</td>
-        <td>${prefix}${escapeHtml(ev.evento)}</td>
+        <td>${tipo}${escapeHtml(ev.evento)}</td>
         <td>${formatFuente(ev.fuente)}</td>
       </tr>
     `;
@@ -856,8 +853,8 @@ function renderTickerEvents(ticker) {
   }
   empty.hidden = true;
   list.innerHTML = matching.map((ev) => {
-    const m = IMPACT_MAP[ev.impacto] || { cls: "", icon: "" };
-    return `<li class="${m.cls}"><span class="icon">${m.icon}</span> <strong>${formatDateDDMMYYYY(ev.fecha)}</strong> ${escapeHtml(ev.evento)}</li>`;
+    const tipo = ev.tipo ? `<span class="evento-tipo">${escapeHtml(ev.tipo)}</span> ` : "";
+    return `<li>${tipo}<strong>${formatDateDDMMYYYY(ev.fecha)}</strong> ${escapeHtml(ev.evento)}</li>`;
   }).join("");
 }
 

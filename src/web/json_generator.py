@@ -409,7 +409,7 @@ def gen_fundamentals():
             "sector": _sector_for_event(tickers_clean),
             "fuente": ev.get("fuente") or "manual",
             "evento": ev.get("evento"),
-            "impacto": ev.get("impacto"),
+            "tipo": ev.get("tipo"),
         })
     (OUT_DIR / "fundamentals.json").write_text(
         json.dumps(out_rows, ensure_ascii=False, indent=2), encoding="utf-8"

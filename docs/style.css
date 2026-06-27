@@ -271,13 +271,8 @@ tbody tr:last-child td { border-bottom: none; }
 .pill.vma-l  { color: #f87171; background: #1b1210; border-color: #553020; }
 .pill.vma-ml { color: #fda4af; background: #2a1212; border-color: #7a2222; }
 
-/* Tab 3 — coloreado de fila por impacto */
-.impacto-verde td    { background: #0f1b17; color: #34d399; }
-.impacto-amarillo td { background: #1b1810; color: #facc15; }
-.impacto-rojo td     { background: #1b1210; color: #f87171; }
-.impacto-verde:hover td,
-.impacto-amarillo:hover td,
-.impacto-rojo:hover td { background: #222b3d; }
+/* Tab 3 — etiqueta de tipo de evento (texto simple, sin semáforo de color) */
+.evento-tipo { color: #93a1b5; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.04em; margin-right: 4px; }
 
 /* Tab 3 — celda evento wrappea natural */
 #fundamentalsTable td:nth-child(3) {
@@ -489,9 +484,6 @@ tbody tr:last-child td { border-bottom: none; }
   border-radius: 4px;
   line-height: 1.4;
 }
-.events-list li.impacto-verde    { background: #0f1b17; color: #34d399; }
-.events-list li.impacto-amarillo { background: #1b1810; color: #facc15; }
-.events-list li.impacto-rojo     { background: #1b1210; color: #f87171; }
 .events-list .icon { font-weight: 700; margin-right: 4px; }
 .no-events { color: var(--muted); font-size: 12px; font-style: italic; margin: 0; }
 
