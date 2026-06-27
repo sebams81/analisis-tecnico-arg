@@ -1,39 +1,215 @@
 [
   {
     "id": 1,
+    "fecha": "2020-09-15",
+    "tickers_afectados": [
+      "MERCADO"
+    ],
+    "sector": "",
+    "fuente": "https://www.ambito.com",
+    "evento": "El BCRA endureció el cepo cambiario para empresas y personas; los habilitados para comprar dólares cayeron cerca del 70% y se disparó la brecha con el dólar paralelo.",
+    "tipo": "macro"
+  },
+  {
+    "id": 2,
+    "fecha": "2021-06-22",
+    "tickers_afectados": [
+      "MERCADO"
+    ],
+    "sector": "",
+    "fuente": "https://www.argentina.gob.ar",
+    "evento": "El Gobierno acordó un puente con el Club de París para evitar el default: pago parcial y aplazamiento del saldo hasta marzo de 2022.",
+    "tipo": "macro"
+  },
+  {
+    "id": 3,
+    "fecha": "2021-09-12",
+    "tickers_afectados": [
+      "MERCADO"
+    ],
+    "sector": "",
+    "fuente": "https://www.argentina.gob.ar/dine",
+    "evento": "PASO de las elecciones legislativas nacionales de medio término. La reacción del mercado se observa en la rueda hábil siguiente.",
+    "tipo": "elección"
+  },
+  {
+    "id": 4,
+    "fecha": "2021-11-14",
+    "tickers_afectados": [
+      "MERCADO"
+    ],
+    "sector": "",
+    "fuente": "https://www.argentina.gob.ar/dine",
+    "evento": "Elecciones generales legislativas nacionales de medio término. La reacción del mercado se observa en la rueda hábil siguiente.",
+    "tipo": "elección"
+  },
+  {
+    "id": 5,
+    "fecha": "2022-03-25",
+    "tickers_afectados": [
+      "MERCADO"
+    ],
+    "sector": "",
+    "fuente": "https://www.argentina.gob.ar",
+    "evento": "El Directorio del FMI aprobó el Programa de Facilidades Extendidas para refinanciar la deuda de unos US$45.000M del Stand-By de 2018.",
+    "tipo": "macro"
+  },
+  {
+    "id": 6,
+    "fecha": "2022-07-02",
+    "tickers_afectados": [
+      "MERCADO"
+    ],
+    "sector": "",
+    "fuente": "https://www.ambito.com",
+    "evento": "Renuncia del ministro de Economía en medio de aceleración inflacionaria; provocó un fuerte salto del dólar paralelo y caída de bonos en las ruedas siguientes.",
+    "tipo": "macro"
+  },
+  {
+    "id": 7,
+    "fecha": "2023-08-13",
+    "tickers_afectados": [
+      "MERCADO"
+    ],
+    "sector": "",
+    "fuente": "https://www.argentina.gob.ar/dine",
+    "evento": "PASO de las elecciones presidenciales, simultáneas con las primarias provinciales de PBA, CABA y otros distritos. La reacción del mercado se observa en la rueda hábil siguiente.",
+    "tipo": "elección"
+  },
+  {
+    "id": 8,
+    "fecha": "2023-08-14",
+    "tickers_afectados": [
+      "MERCADO"
+    ],
+    "sector": "",
+    "fuente": "https://www.cronista.com",
+    "evento": "Tras las PASO, el Gobierno aplicó una devaluación del 22% del tipo de cambio oficial, consensuada con el FMI, en reemplazo de las micro devaluaciones diarias.",
+    "tipo": "macro"
+  },
+  {
+    "id": 9,
+    "fecha": "2023-10-22",
+    "tickers_afectados": [
+      "MERCADO"
+    ],
+    "sector": "",
+    "fuente": "https://www.argentina.gob.ar/dine",
+    "evento": "Elecciones generales presidenciales (primera vuelta), junto con las generales de PBA y CABA. La reacción del mercado se observa en la rueda hábil siguiente.",
+    "tipo": "elección"
+  },
+  {
+    "id": 10,
+    "fecha": "2023-11-19",
+    "tickers_afectados": [
+      "MERCADO"
+    ],
+    "sector": "",
+    "fuente": "https://www.argentina.gob.ar/dine",
+    "evento": "Ballotage presidencial. La reacción del mercado se observa en la rueda hábil siguiente.",
+    "tipo": "elección"
+  },
+  {
+    "id": 11,
+    "fecha": "2023-12-13",
+    "tickers_afectados": [
+      "MERCADO"
+    ],
+    "sector": "",
+    "fuente": "https://www.cronista.com",
+    "evento": "El nuevo Gobierno dispuso un salto devaluatorio que llevó el dólar oficial de $366 a $800 como primera medida económica.",
+    "tipo": "macro"
+  },
+  {
+    "id": 12,
+    "fecha": "2025-04-11",
+    "tickers_afectados": [
+      "MERCADO"
+    ],
+    "sector": "",
+    "fuente": "https://www.lanacion.com.ar",
+    "evento": "El Gobierno levantó el cepo para personas y adoptó una flotación entre bandas ($1.000-$1.400), en el marco de un nuevo acuerdo con el FMI por US$20.000M.",
+    "tipo": "macro"
+  },
+  {
+    "id": 13,
+    "fecha": "2025-09-07",
+    "tickers_afectados": [
+      "MERCADO"
+    ],
+    "sector": "",
+    "fuente": "https://www.gba.gob.ar",
+    "evento": "Elecciones legislativas provinciales de la Provincia de Buenos Aires, desdobladas de las nacionales. La reacción del mercado se observa en la rueda hábil siguiente.",
+    "tipo": "elección"
+  },
+  {
+    "id": 14,
+    "fecha": "2025-10-09",
+    "tickers_afectados": [
+      "MERCADO"
+    ],
+    "sector": "",
+    "fuente": "https://www.infobae.com",
+    "evento": "El Tesoro de Estados Unidos intervino comprando pesos y confirmó un swap por US$20.000M con el BCRA, primer paso del paquete de asistencia anunciado el 23 de septiembre, en la antesala de las elecciones.",
+    "tipo": "macro"
+  },
+  {
+    "id": 15,
+    "fecha": "2025-10-26",
+    "tickers_afectados": [
+      "MERCADO"
+    ],
+    "sector": "",
+    "fuente": "https://www.argentina.gob.ar/dine",
+    "evento": "Elecciones legislativas nacionales de medio término, sin PASO y con el primer uso de la Boleta Única de Papel a nivel nacional. La reacción del mercado se observa en la rueda hábil siguiente.",
+    "tipo": "elección"
+  },
+  {
+    "id": 16,
     "fecha": "2026-01-15",
     "tickers_afectados": [
       "TECO2_BA"
     ],
     "sector": "Telecomunicaciones",
-    "fuente": "https://www.bloomberglinea.com/latinoamerica/telecom-argentina-se-suma-al-club-de-empresas-que-colocan-deuda-a-una-decada-en-wall-street/",
-    "evento": "Telecom Argentina colocó Obligaciones Negociables por US$600M a 2036 en mercado internacional.",
-    "impacto": "Verde"
+    "fuente": "https://www.bloomberglinea.com",
+    "evento": "Telecom Argentina colocó Obligaciones Negociables por US$600M a 2036 en el mercado internacional.",
+    "tipo": "deuda"
   },
   {
-    "id": 2,
-    "fecha": "2026-02-18",
+    "id": 17,
+    "fecha": "2026-02-03",
     "tickers_afectados": [
-      "TXAR_BA"
+      "IRSA_BA"
     ],
-    "sector": "Acero / Industria",
-    "fuente": "https://www.ambito.com/negocios/siderurgia-ternium-revirtio-perdidas-operativas-2025-pero-sigue-alerta-el-avance-la-competencia-china-n6246970",
-    "evento": "Ternium Argentina cerró 2025 con ganancia neta de $83.400M revirtiendo pérdidas operativas, alerta por competencia china.",
-    "impacto": "Amarillo"
+    "sector": "Inmobiliario",
+    "fuente": "https://www.cronista.com",
+    "evento": "IRSA presentó su balance semestral del ejercicio fiscal 2026, abriendo la temporada de resultados de las empresas argentinas.",
+    "tipo": "resultados"
   },
   {
-    "id": 3,
+    "id": 18,
+    "fecha": "2026-02-10",
+    "tickers_afectados": [
+      "CRES_BA"
+    ],
+    "sector": "Agropecuario",
+    "fuente": "https://www.cronista.com",
+    "evento": "Cresud reportó una ganancia de ARS$193.932M en el primer semestre fiscal 2026 (revirtió la pérdida del año previo), explicada principalmente por los resultados de IRSA.",
+    "tipo": "resultados"
+  },
+  {
+    "id": 19,
     "fecha": "2026-03-05",
     "tickers_afectados": [
       "GGAL_BA"
     ],
     "sector": "Bancos",
-    "fuente": "https://www.bloomberglinea.com/latinoamerica/argentina/galicia-reporta-perdida-neta-mayor-a-la-esperada-en-el-cuarto-trimestre-y-sube-la-morosidad/",
-    "evento": "Grupo Galicia reportó pérdida neta de ARS$83.544M en Q4 2025 y morosidad subió a 8,2%.",
-    "impacto": "Rojo"
+    "fuente": "https://www.bloomberglinea.com",
+    "evento": "Grupo Galicia reportó pérdida neta de ARS$83.544M en Q4 2025 y morosidad en 8,2%.",
+    "tipo": "resultados"
   },
   {
-    "id": 4,
+    "id": 20,
     "fecha": "2026-03-22",
     "tickers_afectados": [
       "GGAL_BA",
@@ -42,134 +218,145 @@
       "SUPV_BA"
     ],
     "sector": "Bancos",
-    "fuente": "https://www.bloomberglinea.com/latinoamerica/argentina/cuantos-dividendos-podran-pagar-los-bancos-argentinos-en-2026-tras-la-autorizacion-del-bcra/",
-    "evento": "BCRA Com. A8410 autorizó a bancos distribuir 60% de utilidades 2025 en tres cuotas mensuales desde mayo.",
-    "impacto": "Amarillo"
+    "fuente": "https://www.bloomberglinea.com",
+    "evento": "El BCRA, mediante la Comunicación A8410, autorizó a los bancos a distribuir el 60% de las utilidades 2025 en tres cuotas mensuales desde mayo.",
+    "tipo": "regulatorio"
   },
   {
-    "id": 5,
+    "id": 21,
     "fecha": "2026-03-31",
     "tickers_afectados": [
       "EDN_BA"
     ],
     "sector": "Energía",
-    "fuente": "https://www.ambito.com/energia/el-gobierno-oficializo-nuevas-subas-la-luz-abril-cuanto-aumentan-edenor-y-edesur-n6261558",
-    "evento": "ENRE oficializó aumento tarifario de Edenor de 2,04% vigente desde el 1 de abril.",
-    "impacto": "Verde"
+    "fuente": "https://www.ambito.com",
+    "evento": "El ENRE oficializó un aumento tarifario de Edenor del 2,04% vigente desde el 1 de abril.",
+    "tipo": "regulatorio"
   },
   {
-    "id": 6,
+    "id": 22,
     "fecha": "2026-05-05",
     "tickers_afectados": [
       "LOMA_BA"
     ],
     "sector": "Materiales / Cemento",
-    "fuente": "https://www.ambito.com/negocios/loma-negra-presento-un-balance-mejoras-significativas-y-sus-acciones-volaron-wall-street-n6274243",
-    "evento": "Loma Negra Q1 2026: EBITDA en dólares +11,5% interanual, utilidad neta +44%, acciones subieron 6,7%.",
-    "impacto": "Verde"
+    "fuente": "https://www.ambito.com",
+    "evento": "Loma Negra reportó Q1 2026 con EBITDA en dólares +11,5% interanual, utilidad neta +44% y suba de la acción del 6,7%.",
+    "tipo": "resultados"
   },
   {
-    "id": 7,
+    "id": 23,
     "fecha": "2026-05-06",
     "tickers_afectados": [
       "SUPV_BA"
     ],
     "sector": "Bancos",
-    "fuente": "https://www.bloomberglinea.com/latinoamerica/argentina/supervielle-modera-perdidas-en-primer-trimestre-y-anticipa-mejoras-en-niveles-de-mora-desde-marzo/",
-    "evento": "Grupo Supervielle reportó pérdida neta de ARS$17,1B en Q1 2026, NPL en 5,6% y plan de reducción de personal del 9%.",
-    "impacto": "Rojo"
+    "fuente": "https://www.bloomberglinea.com",
+    "evento": "Grupo Supervielle reportó pérdida neta de ARS$17,1B en Q1 2026, NPL en 5,6% y un plan de reducción de personal del 9%.",
+    "tipo": "resultados"
   },
   {
-    "id": 8,
+    "id": 24,
+    "fecha": "2026-05-06",
+    "tickers_afectados": [
+      "TGSU2_BA"
+    ],
+    "sector": "Energía",
+    "fuente": "https://www.cronista.com",
+    "evento": "Transportadora de Gas del Sur reportó Q1 2026 con utilidad neta +12,5% interanual; el negocio no regulado ya representa el 54% de su EBITDA.",
+    "tipo": "resultados"
+  },
+  {
+    "id": 25,
     "fecha": "2026-05-07",
     "tickers_afectados": [
       "YPFD_BA"
     ],
     "sector": "Petróleo y Gas",
-    "fuente": "https://www.ambito.com/energia/ypf-alcanzo-un-record-historico-ebitda-y-supero-los-200000-barriles-diarios-shale-n6275210",
+    "fuente": "https://www.ambito.com",
     "evento": "YPF reportó Q1 2026 con EBITDA récord de US$1.594M y superó los 200.000 barriles diarios de shale.",
-    "impacto": "Verde"
+    "tipo": "resultados"
   },
   {
-    "id": 9,
+    "id": 26,
     "fecha": "2026-05-12",
     "tickers_afectados": [
       "BMA_BA",
       "BBAR_BA"
     ],
     "sector": "Bancos",
-    "fuente": "https://www.bloomberglinea.com/latinoamerica/argentina/fitch-mejoro-la-nota-de-bancos-argentinos-tras-subirle-la-calificacion-al-pais/",
-    "evento": "Fitch Ratings mejoró calificación de bancos argentinos Macro y BBVA tras suba soberana a B-.",
-    "impacto": "Verde"
+    "fuente": "https://www.bloomberglinea.com",
+    "evento": "Fitch Ratings mejoró la calificación de los bancos Macro y BBVA tras la suba soberana a B-.",
+    "tipo": "calificación"
   },
   {
-    "id": 10,
+    "id": 27,
     "fecha": "2026-05-13",
     "tickers_afectados": [
       "CEPU_BA"
     ],
     "sector": "Energía",
-    "fuente": "https://www.bloomberglinea.com/latinoamerica/argentina/central-puerto-mostro-resultados-solidos-y-mantiene-atractivo-por-avance-de-desregulacion/",
-    "evento": "Central Puerto Q1 2026: ingresos US$249M (+44% q/q), EBITDA US$120M (+42% q/q), ganancia neta US$142M.",
-    "impacto": "Verde"
+    "fuente": "https://www.bloomberglinea.com",
+    "evento": "Central Puerto reportó Q1 2026 con ingresos por US$249M, EBITDA de US$120M y ganancia neta de US$142M.",
+    "tipo": "resultados"
   },
   {
-    "id": 11,
+    "id": 28,
     "fecha": "2026-05-13",
     "tickers_afectados": [
       "TGSU2_BA"
     ],
     "sector": "Energía",
-    "fuente": "https://www.ambito.com/energia/oficializan-ingreso-al-rigi-la-ampliacion-del-gasoducto-perito-moreno-us550-millones-n6276980",
-    "evento": "Gobierno aprobó ingreso de TGS al RIGI para ampliar Gasoducto Perito Moreno por US$550M (operativo abr-2027).",
-    "impacto": "Verde"
+    "fuente": "https://www.ambito.com",
+    "evento": "El Gobierno aprobó el ingreso de TGS al RIGI para ampliar el Gasoducto Perito Moreno por US$550M.",
+    "tipo": "regulatorio"
   },
   {
-    "id": 12,
+    "id": 29,
     "fecha": "2026-05-14",
     "tickers_afectados": [
       "PAMP_BA"
     ],
     "sector": "Energía",
-    "fuente": "https://ri.pampa.com/press-release/reapertura-del-bono-internacional-2037-por-500-millones/",
-    "evento": "Pampa Energía reabrió bono internacional 2037 por US$500M con spread récord de 315bps en su historia.",
-    "impacto": "Verde"
+    "fuente": "https://ri.pampa.com",
+    "evento": "Pampa Energía reabrió su bono internacional 2037 por US$500M con un spread de 315bps, récord en su historia.",
+    "tipo": "deuda"
   },
   {
-    "id": 13,
+    "id": 30,
     "fecha": "2026-06-03",
     "tickers_afectados": [
       "BMA_BA"
     ],
     "sector": "Bancos",
-    "fuente": "https://www.bloomberglinea.com/latinoamerica/argentina/cuantos-dividendos-podran-pagar-los-bancos-argentinos-en-2026-tras-la-autorizacion-del-bcra/",
-    "evento": "Banco Macro pone a disposición 2da cuota dividendo en efectivo en cumplimiento Com. A8410 del BCRA.",
-    "impacto": "Verde"
+    "fuente": "https://www.bloomberglinea.com",
+    "evento": "Banco Macro puso a disposición la segunda cuota de dividendo en efectivo, en cumplimiento de la Comunicación A8410 del BCRA.",
+    "tipo": "dividendo"
   },
   {
-    "id": 14,
+    "id": 31,
     "fecha": "2026-06-30",
     "tickers_afectados": [
       "YPFD_BA"
     ],
     "sector": "Petróleo y Gas",
-    "fuente": "https://www.sec.gov/Archives/edgar/data/0000904851/000155485526000937/MainDocument.htm",
-    "evento": "YPF prevé puesta en operación del revamp de la planta de tratamiento de gas Loma La Lata durante Q2 2026.",
-    "impacto": "Verde"
+    "fuente": "https://www.ambito.com",
+    "evento": "YPF prevé la puesta en operación del revamp de la planta de tratamiento de gas Loma La Lata durante el segundo trimestre de 2026.",
+    "tipo": "operativo"
   },
   {
-    "id": 15,
+    "id": 32,
     "fecha": "2026-07-01",
     "tickers_afectados": [
       "PAMP_BA"
     ],
     "sector": "Energía",
-    "fuente": "https://www.cronista.com/negocios/pampa-gano-escala-en-petroleo-y-gas-y-mejoro-48-su-resultado-operativo-en-el-primer-trimestre/",
-    "evento": "Pampa Energía proyecta alcanzar 28.000 barriles diarios en Rincón de Aranda hacia mitad de 2026, desde 24.000 actuales.",
-    "impacto": "Verde"
+    "fuente": "https://www.cronista.com",
+    "evento": "Pampa Energía proyecta alcanzar 28.000 barriles diarios en Rincón de Aranda hacia mediados de 2026, desde los 24.000 actuales.",
+    "tipo": "operativo"
   },
   {
-    "id": 16,
+    "id": 33,
     "fecha": "2026-07-09",
     "tickers_afectados": [
       "GGAL_BA",
@@ -178,12 +365,12 @@
       "SUPV_BA"
     ],
     "sector": "Bancos",
-    "fuente": "https://www.ambito.com/economia/lanza-un-bono-dolares-buscara-captar-us2000-millones-pagar-vencimientos-julio-n6248579",
-    "evento": "Vencimiento semestral capital e intereses AL30/GD30 ~US$4.200M presiona bancos por exposición soberana.",
-    "impacto": "Amarillo"
+    "fuente": "https://www.ambito.com",
+    "evento": "Vencimiento semestral de capital e intereses de los bonos AL30/GD30 por unos US$4.200M, que presiona a los bancos por su exposición soberana.",
+    "tipo": "deuda"
   },
   {
-    "id": 17,
+    "id": 34,
     "fecha": "2026-07-17",
     "tickers_afectados": [
       "GGAL_BA",
@@ -193,19 +380,8 @@
       "BBAR_BA"
     ],
     "sector": "Bancos / Petróleo y Gas / Energía",
-    "fuente": "https://www.byma.com.ar/productos/productos-financieros/opciones",
-    "evento": "BYMA aplica nuevo régimen para opciones desde vencimiento JUL-26: ejercicio automático ITM y sin ajustes por dividendos ordinarios.",
-    "impacto": "Amarillo"
-  },
-  {
-    "id": 18,
-    "fecha": "2026-08-15",
-    "tickers_afectados": [
-      "YPFD_BA"
-    ],
-    "sector": "Petróleo y Gas",
-    "fuente": "https://www.sec.gov/Archives/edgar/data/0000904851/000155485526000937/MainDocument.htm",
-    "evento": "YPF prevé puesta en operación del proyecto La Angostura Sur de evacuación de shale oil durante Q3 2026.",
-    "impacto": "Verde"
+    "fuente": "https://www.byma.com.ar",
+    "evento": "BYMA aplica un nuevo régimen para opciones desde el vencimiento de julio de 2026: ejercicio automático ITM y sin ajustes por dividendos ordinarios.",
+    "tipo": "regulatorio"
   }
 ]
