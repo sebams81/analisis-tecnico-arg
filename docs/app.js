@@ -1,4 +1,4 @@
-const META = { studyCutoffDate: null, studyEndDate: null, warmupEndDate: null };
+const META = { studyCutoffDate: null, studyEndDate: null, warmupEndDate: null, tickersCount: null };
 let SUMMARY = null;
 let LOCAL_VS_MEP = null;
 let DAILY_PANEL = null;
@@ -37,6 +37,7 @@ async function init() {
     META.studyCutoffDate = meta.study_cutoff_date;
     META.studyEndDate = meta.study_end_date;
     META.warmupEndDate = meta.warmup_end_date;
+    META.tickersCount = meta.tickers_count;
     SUMMARY = summary;
     LOCAL_VS_MEP = lvm;
 
@@ -54,6 +55,7 @@ async function init() {
     setupDatePicker();
     renderSnapshotInfo();
     renderTable();
+    updateTickerCount();
     document.getElementById("loadingTab1").hidden = true;
     document.getElementById("signalsTable").hidden = false;
   } catch (e) {
@@ -140,11 +142,16 @@ function setupTickerFilter() {
   list.addEventListener("change", onTickerSelectionChange);
 }
 
+function updateTickerCount() {
+  document.getElementById("tickerCount").textContent =
+    `${SELECTED_TICKERS.size}/${META.tickersCount}`;
+}
+
 function onTickerSelectionChange() {
   SELECTED_TICKERS = new Set(
     [...document.querySelectorAll("#tickerCheckboxes input:checked")].map((cb) => cb.value)
   );
-  document.getElementById("tickerCount").textContent = `${SELECTED_TICKERS.size}/24`;
+  updateTickerCount();
   renderTable();
 }
 
