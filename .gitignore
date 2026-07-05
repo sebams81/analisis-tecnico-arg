@@ -43,6 +43,9 @@ data_public/charts/adr_validation/*
 
 logs/
 
+# Directorios de trabajo efímeros del benchmark de escalabilidad (regenerables)
+validation/benchmark/tmp_*/
+
 # Archivos de configuración y temporales
 .env
 .claude/settings.local.json
