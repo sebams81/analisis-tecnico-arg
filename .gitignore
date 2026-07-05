@@ -21,7 +21,19 @@ data_signals/
 data_public/*
 !data_public/backtests/
 data_public/backtests/*
+# --- snapshot académico versionado (agregados de Cap.6): whitelist explícito ---
 !data_public/backtests/summary_all_tickers.csv
+!data_public/backtests/validators_significance.csv
+!data_public/backtests/validators_candle_significance.csv
+!data_public/backtests/cap6_aggregates_LOCAL.csv
+!data_public/backtests/cap6_aggregates_MEP.csv
+!data_public/backtests/cost_sensitivity_LOCAL.csv
+!data_public/backtests/cost_sensitivity_MEP.csv
+!data_public/backtests/bh_alarm_LOCAL.csv
+!data_public/backtests/bh_alarm_MEP.csv
+!data_public/backtests/regime_episode_LOCAL.csv
+!data_public/backtests/regime_episode_MEP.csv
+# los *_trades.csv por ticker NO se versionan (regenerables)
 # figuras de validación MEP/ADR (sección 6.4): versionadas
 !data_public/charts/
 data_public/charts/*
