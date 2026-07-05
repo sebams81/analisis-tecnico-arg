@@ -304,6 +304,21 @@ tbody tr:last-child td { border-bottom: none; }
   font-size: 13px;
 }
 
+/* Tab 3 — toggle de eventos market-wide, alineado como los demás controles */
+.market-filter label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 0;
+  color: var(--text);
+  font-size: 13px;
+  cursor: pointer;
+}
+.market-filter input {
+  margin: 0;
+  cursor: pointer;
+}
+
 /* Botón "?" e info-panel por tab */
 .tab-info { margin-bottom: 12px; }
 .info-toggle {

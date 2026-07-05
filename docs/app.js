@@ -364,7 +364,7 @@ let _fundFiltersInit = false;
 function setupFundFilters() {
   const allTickers = [...new Set(
     FUNDAMENTALS.flatMap((ev) => ev.tickers_afectados.map(cleanTicker))
-  )].sort();
+  )].filter((t) => t !== "MERCADO").sort();
   SELECTED_FUND_TICKERS = new Set(allTickers);
 
   const list = document.getElementById("fundTickerCheckboxes");
@@ -408,6 +408,8 @@ function setupFundFilters() {
   });
   list.addEventListener("change", onFundTickerSelectionChange);
 
+  document.getElementById("fundMarketToggle").addEventListener("change", renderFundamentals);
+
   select.addEventListener("change", (e) => {
     SELECTED_MONTH = e.target.value;
     renderFundamentals();
@@ -442,10 +444,14 @@ function formatFuente(fuente) {
 }
 
 function renderFundamentals() {
+  const marketToggle = document.getElementById("fundMarketToggle");
+  const showMarket = !marketToggle || marketToggle.checked;
   const filtered = FUNDAMENTALS.filter((ev) => {
-    const tickerMatch =
-      ev.tickers_afectados.includes("MERCADO") ||
-      ev.tickers_afectados.some((t) => SELECTED_FUND_TICKERS.has(cleanTicker(t)));
+    const isMarketWide = ev.tickers_afectados.includes("MERCADO");
+    const companyMatch = ev.tickers_afectados.some(
+      (t) => t !== "MERCADO" && SELECTED_FUND_TICKERS.has(cleanTicker(t))
+    );
+    const tickerMatch = (showMarket && isMarketWide) || companyMatch;
     const monthMatch = !SELECTED_MONTH || ev.fecha.startsWith(SELECTED_MONTH);
     return tickerMatch && monthMatch;
   });
