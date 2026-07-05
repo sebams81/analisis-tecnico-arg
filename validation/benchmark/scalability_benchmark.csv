@@ -1,0 +1,13 @@
+granularidad,n_tickers,filas_por_serie,filas_totales,seg,pico_MB,fuente
+diario,26,1400,36400,1.71,0.0,medido
+diario,100,1400,140000,7.369,0.0,medido
+diario,500,1400,700000,33.712,0.0,medido
+diario,1000,1400,1400000,63.99,0.0,medido
+intradia_60m,26,9000,234000,7.787,0.0,medido
+intradia_60m,100,9000,900000,29.011,0.0,medido
+intradia_60m,500,9000,4500000,153.908,0.0,medido
+intradia_60m,1000,9000,9000000,289.996,0.0,medido
+intradia_1m,26,550000,14300000,429.363,0.0,medido
+intradia_1m,100,550000,55000000,1526.651,0.0,modelado
+intradia_1m,500,550000,275000000,7633.257,0.0,modelado
+intradia_1m,1000,550000,550000000,15266.515,0.0,modelado
