@@ -35,7 +35,7 @@
       <div class="tab-info">
         <button class="info-toggle" aria-label="Información">?</button>
         <div class="info-panel" hidden>
-          <p>Señales técnicas del día por ticker. Cada acción se muestra en su versión local (sufijo BA, cotización en pesos argentinos) y MEP (sufijo MEP, cotización en dólares calculada por arbitraje de bonos AL30/AL30D). Los métodos HMA, EMA y SMA son distintos algoritmos de detección de tendencia; pueden coincidir o discrepar. VMA 20 indica la fuerza del volumen del día.</p>
+          <p>Señales técnicas del día por ticker. Cada acción se muestra en su versión local (sufijo BA, cotización en pesos argentinos) y MEP (sufijo MEP, cotización en dólares calculada por arbitraje de bonos AL30/AL30D). Se aplican tres reglas de análisis técnico: HMA 16, EMA 12/26 y SMA 10/50/100. Son algoritmos distintos de detección de tendencia y no siempre coinciden. VMA 20 compara el volumen del día contra su promedio de 20 ruedas e indica si se operó por encima o por debajo de lo habitual. La columna Vela del día identifica patrones de vela japonesa como lectura adicional del precio de la jornada.</p>
         </div>
       </div>
       <div class="controls">
@@ -86,7 +86,7 @@
       <div class="tab-info">
         <button class="info-toggle" aria-label="Información">?</button>
         <div class="info-panel" hidden>
-          <p>Gráfico de un ticker en detalle. Permite alternar entre velas japonesas (muestra apertura, máximo, mínimo y cierre del día) o línea simple (solo cierre). Los indicadores se pueden activar/desactivar para ver cómo evolucionan junto al precio.</p>
+          <p>Gráfico de un ticker en detalle. Permite alternar entre velas japonesas (muestra apertura, máximo, mínimo y cierre del día) o línea simple (solo precios de cierre). Los indicadores se pueden activar/desactivar para ver cómo evolucionan junto al precio.</p>
         </div>
       </div>
 
@@ -158,7 +158,7 @@
       <div class="tab-info">
         <button class="info-toggle" aria-label="Información">?</button>
         <div class="info-panel" hidden>
-          <p>Eventos relevantes para las empresas analizadas: cambios regulatorios, resultados financieros, anuncios sectoriales. Cada evento tiene un impacto estimado: positivo (↑ verde), neutro/incierto (→ amarillo), negativo (↓ rojo).</p>
+          <p>Fechas de eventos de alta sensibilidad conocidas de antemano. Cada evento se etiqueta por categoría (macro, regulatorio, resultados, dividendo, deuda, calificación, elección, operativo). El panel señala cuándo ocurren. No estima ni interpreta el resultado, que queda a criterio del usuario.</p>
         </div>
       </div>
 
