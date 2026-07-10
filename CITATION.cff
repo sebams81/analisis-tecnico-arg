@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: "Si utiliza este software, por favor cítelo como se indica a continuación."
+title: "Diseño e implementación de una plataforma de análisis técnico para inversores minoristas argentinos"
+authors:
+  - family-names: "Schiuma"
+    given-names: "Sebastián Martín"
+type: software
+license: MIT
+repository-code: "https://github.com/sebams81/analisis-tecnico-arg"
+url: "https://sebams81.github.io/analisis-tecnico-arg/"
+version: "v1.1-tf"
+date-released: "2026-07-04"
+abstract: "Plataforma de análisis técnico sobre acciones argentinas y sus versiones sintéticas en dólares MEP. Pipeline en Python, backtest con controles anti-look-ahead, e interfaz web estática."
+keywords:
+  - analisis-tecnico
+  - backtesting
+  - mercado-argentino
+  - python
