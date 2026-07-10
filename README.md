@@ -1,74 +1,41 @@
 # Análisis técnico de acciones argentinas
 
-Plataforma de análisis técnico con señales, gráficos interactivos y eventos fundamentales para 12 acciones líderes del panel BYMA (versión local en pesos y sintético MEP en dólares vía arbitraje AL30/AL30D).
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21288495.svg)](https://doi.org/10.5281/zenodo.21288495)
+
+Plataforma de análisis técnico con señales, gráficos interactivos y eventos
+fundamentales sobre **13 acciones líderes del panel BYMA**, en dos universos:
+la serie local en pesos y una serie sintética en dólares MEP construida por
+arbitraje AL30/AL30D. En total, **26 series**.
 
 **Sitio publicado:** https://sebams81.github.io/analisis-tecnico-arg/
 
-## Estructura del repositorio
+Repositorio de apoyo al Trabajo Final de la Licenciatura en Gestión de
+Tecnología Informática (UAI, 2026).
 
-```
-src/
-  ingestion/        # data_downloader.py — extracción desde API PPI
-  processing/       # data_normalizer.py, synthetic_mep_generator.py
-  analysis/         # indicator_engine.py, signal_generator.py, backtester.py
-  web/              # json_generator.py — serializa JSONs para el frontend
-  config/           # study_config.py, logging_conf.py
+## Estado congelado y reproducibilidad
 
-docs/               # GitHub Pages (frontend estático)
-  data/             # JSONs consumidos por la web
-  vendor/           # Lightweight Charts v5.2 (bundle local)
-
-data_raw/csv/                       # OHLCV crudo por instrumento (seed commiteado)
-data_public/backtests/              # snapshot académico (solo summary_all_tickers.csv commiteado)
-data_fundamentals/fundamentals.json # eventos curados manualmente
-
-.github/workflows/  # automatización CI/CD
-```
-
-## Automatización
-
-El pipeline corre automáticamente vía GitHub Actions:
-
-- **Cuándo:** lunes a viernes a las **18:00 ART** (21:00 UTC), con 60 min de margen tras el cierre de rueda BYMA (17:00 ART).
-- **Trigger manual:** Actions tab → "Daily pipeline" → "Run workflow" para forzar una corrida fuera de schedule.
-- **Credenciales:** `PPI_PUBLIC_KEY` y `PPI_PRIVATE_KEY` se cargan desde GitHub Secrets — nunca aparecen en el repo ni en los logs (las enmascara GitHub automáticamente).
-- **Qué se commitea automáticamente:**
-  - `data_raw/csv/*.csv` — OHLCV crudo (necesario para que el incremental del downloader funcione en la próxima corrida).
-  - `docs/data/*.json` — datos consumidos por el frontend.
-  - `data_public/backtests/summary_all_tickers.csv` — snapshot académico de métricas.
-- **Skip de commits vacíos:** si los outputs no cambiaron respecto a `main` (ej. fin de semana, feriado), el workflow termina en verde sin crear commits.
-- **Mensaje de commit:** `automation: actualización del pipeline YYYY-MM-DD` (fecha UTC), firmado por `github-actions[bot]`.
-- **Despliegue:** GitHub Pages detecta el push a `main` y re-deploya el frontend en ~1-3 minutos.
-
-Workflow definido en [.github/workflows/daily-pipeline.yml](.github/workflows/daily-pipeline.yml).
-
-## Desarrollo local
+El estado que respalda los resultados del trabajo está etiquetado como
+`v1.1-tf` (commit `7cb8d13`) y archivado en Zenodo con DOI permanente.
+La rama `main` diverge de ese tag por las corridas diarias automáticas: la
+verificación opera sobre el tag, no sobre `main`.
 
 ```bash
-# Setup
-pip install -r requirements.txt
-
-# Credenciales PPI (crear .env en raíz)
-echo 'PPI_PUBLIC_KEY=...' >> .env
-echo 'PPI_PRIVATE_KEY=...' >> .env
-
-# Correr el pipeline completo
-python -m src.ingestion.data_downloader
-python -m src.processing.data_normalizer
-python -m src.processing.synthetic_mep_generator
-python -m src.analysis.indicator_engine
-python -m src.analysis.signal_generator
-python -m src.analysis.backtester
-python -m src.web.json_generator
-
-# Servir el frontend
-cd docs && python -m http.server 8765
-# → http://localhost:8765
+git clone https://github.com/sebams81/analisis-tecnico-arg.git
+cd analisis-tecnico-arg
+git config core.autocrlf true   # materialización CRLF, la del digest sellado
+git checkout v1.1-tf
+git ls-files data_raw | LC_ALL=C sort | xargs sha256sum | sha256sum
 ```
 
-## Stack técnico
+| Materialización | Digest esperado de `data_raw/` (29 archivos) |
+|---|---|
+| CRLF (`autocrlf=true`) | `46d5f326d4caf6cee4dd0e1fb7171093c2502146a94c58b0643b9425b6f46988` |
+| LF (`autocrlf=false`) | `b45c463abdf3bb04528f5815364fbcd6165f2782b51c48c74578d3e5da3fbc91` |
 
-- **Pipeline:** Python 3.11, pandas, numpy, ppi-client.
-- **Frontend:** vanilla HTML/CSS/JS, sin build step. Lightweight Charts v5 servido como bundle local.
-- **Hosting:** GitHub Pages desde `docs/` en branch `main`.
-- **Automatización:** GitHub Actions con cron lun-vie.
+El repositorio no incluye `.gitattributes`, de modo que la conversión de fin
+de línea la determina la configuración de quien clona. Ambos digests
+corresponden a idénticos objetos en la base de Git.
+
+El protocolo completo está en el Anexo III del trabajo.
+
+## Estructura del repositorio
