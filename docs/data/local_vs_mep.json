@@ -32,8 +32,8 @@
   {
     "local_ticker": "GGAL_BA",
     "mep_ticker": "GGAL_MEP",
-    "correlation": 0.655334,
-    "avg_lag": 0.1100671140939597
+    "correlation": 0.654327,
+    "avg_lag": 0.1113346747149564
   },
   {
     "local_ticker": "IRSA_BA",
